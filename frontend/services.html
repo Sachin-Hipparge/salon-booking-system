@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Services | Luxe Salon</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="services-page">
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+                <span class="logo-icon">✦</span>
+
+                <span>
+                    LUXE
+                    <small>SALON</small>
+                </span>
+            </a>
+
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="services.html" class="active">
+                    Services
+                </a>
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+            </nav>
+
+
+            <div class="nav-actions">
+
+                <span
+                    id="navUserName"
+                    class="dashboard-user-name"
+                >
+                    Customer
+                </span>
+
+                <button
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+
+            <button
+                class="menu-btn"
+                id="menuBtn"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MOBILE MENU ================= -->
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="services.html">
+            Services
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <button
+            id="mobileLogoutBtn"
+            class="mobile-logout"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- ================= PAGE HERO ================= -->
+
+    <section class="services-hero">
+
+        <div class="container">
+
+            <span class="section-label">
+                OUR SERVICES
+            </span>
+
+            <h1>
+                Find your perfect
+                <span>salon experience.</span>
+            </h1>
+
+            <p>
+                Choose from our carefully selected beauty and
+                wellness services and book your appointment
+                with ease.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SERVICES ================= -->
+
+    <main class="services-main">
+
+        <div class="container">
+
+
+            <!-- LOADING -->
+
+            <div
+                id="servicesLoading"
+                class="services-loading"
+            >
+
+                <div class="loading-spinner"></div>
+
+                <p>
+                    Loading our services...
+                </p>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="servicesMessage"
+                class="dashboard-message"
+            ></div>
+
+
+            <!-- SERVICE GRID -->
+
+            <div
+                id="servicesGrid"
+                class="services-page-grid"
+            ></div>
+
+
+            <!-- EMPTY -->
+
+            <div
+                id="servicesEmpty"
+                class="empty-state"
+                style="display: none;"
+            >
+
+                <div class="empty-icon">
+                    ✦
+                </div>
+
+                <h3>
+                    No services available
+                </h3>
+
+                <p>
+                    Please check back later for available
+                    salon services.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= CTA ================= -->
+
+    <section class="services-cta">
+
+        <div class="container">
+
+            <div class="services-cta-box">
+
+                <div>
+
+                    <span class="section-label">
+                        NEED HELP CHOOSING?
+                    </span>
+
+                    <h2>
+                        Let's find what works
+                        <span>for you.</span>
+                    </h2>
+
+                    <p>
+                        Browse our services and choose the
+                        treatment that suits your needs.
+                    </p>
+
+                </div>
+
+                <a
+                    href="dashboard.html"
+                    class="btn btn-outline"
+                >
+                    My Dashboard
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="container footer-container">
+
+            <div class="footer-brand">
+
+                <a
+                    href="index.html"
+                    class="logo footer-logo"
+                >
+                    <span class="logo-icon">✦</span>
+
+                    <span>
+                        LUXE
+                        <small>SALON</small>
+                    </span>
+                </a>
+
+                <p>
+                    Beauty, style and confidence —
+                    all in one place.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <div>
+
+                    <h4>
+                        Explore
+                    </h4>
+
+                    <a href="index.html">
+                        Home
+                    </a>
+
+                    <a href="services.html">
+                        Services
+                    </a>
+
+                    <a href="dashboard.html">
+                        Dashboard
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        Account
+                    </h4>
+
+                    <a href="login.html">
+                        Login
+                    </a>
+
+                    <a href="register.html">
+                        Register
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        Contact
+                    </h4>
+
+                    <span>
+                        Mon – Sun
+                    </span>
+
+                    <span>
+                        9:00 AM – 9:00 PM
+                    </span>
+
+                    <span>
+                        +91 98765 43210
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="container footer-bottom">
+
+            <span>
+                © 2026 Luxe Salon. All rights reserved.
+            </span>
+
+            <span>
+                Salon Appointment Booking System
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        const API_URL = "http://localhost:5000";
+
+        const token =
+            localStorage.getItem("token");
+
+
+        // =================================================
+        // AUTH CHECK
+        // =================================================
+
+        if (!token) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        // =================================================
+        // ELEMENTS
+        // =================================================
+
+        const servicesLoading =
+            document.getElementById(
+                "servicesLoading"
+            );
+
+        const servicesGrid =
+            document.getElementById(
+                "servicesGrid"
+            );
+
+        const servicesEmpty =
+            document.getElementById(
+                "servicesEmpty"
+            );
+
+        const servicesMessage =
+            document.getElementById(
+                "servicesMessage"
+            );
+
+
+        // =================================================
+        // LOAD USER
+        // =================================================
+
+        async function loadUser() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/users/profile`,
+                        {
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const user =
+                    data.user || data;
+
+
+                if (user.name) {
+
+                    document.getElementById(
+                        "navUserName"
+                    ).textContent =
+                        user.name;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "User loading error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =================================================
+        // LOAD SERVICES
+        // =================================================
+
+        async function loadServices() {
+
+            servicesLoading.style.display =
+                "flex";
+
+            servicesGrid.innerHTML = "";
+
+            servicesEmpty.style.display =
+                "none";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/services`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load services"
+                    );
+
+                }
+
+
+                /*
+                    Support both:
+
+                    [
+                        {...}
+                    ]
+
+                    and:
+
+                    {
+                        services: [...]
+                    }
+                */
+
+                let services =
+                    Array.isArray(data)
+                        ? data
+                        : (
+                            data.services ||
+                            data.data ||
+                            []
+                        );
+
+
+                // Show only active services
+
+                services =
+                    services.filter(
+                        service =>
+                            service.status === "ACTIVE"
+                    );
+
+
+                servicesLoading.style.display =
+                    "none";
+
+
+                if (!services.length) {
+
+                    servicesEmpty.style.display =
+                        "flex";
+
+                    return;
+
+                }
+
+
+                servicesGrid.innerHTML =
+                    services
+                        .map(
+                            service =>
+                                createServiceCard(
+                                    service
+                                )
+                        )
+                        .join("");
+
+
+            } catch (error) {
+
+                servicesLoading.style.display =
+                    "none";
+
+
+                servicesMessage.className =
+                    "dashboard-message error";
+
+                servicesMessage.textContent =
+                    error.message ||
+                    "Unable to load services.";
+
+            }
+
+        }
+
+
+        // =================================================
+        // CREATE SERVICE CARD
+        // =================================================
+
+        function createServiceCard(service) {
+
+            const serviceId =
+                service.id ||
+                service.service_id;
+
+
+            const name =
+                service.name ||
+                "Salon Service";
+
+
+            const description =
+                service.description ||
+                "Professional salon service tailored to you.";
+
+
+            const duration =
+                service.duration ||
+                "-";
+
+
+            const price =
+                Number(service.price || 0);
+
+
+            return `
+
+                <article
+                    class="service-page-card"
+                >
+
+                    <div class="service-page-top">
+
+                        <span class="service-page-number">
+                            ${String(serviceId)
+                                .padStart(2, "0")}
+                        </span>
+
+                        <div class="service-page-icon">
+                            ✦
+                        </div>
+
+                    </div>
+
+
+                    <div class="service-page-content">
+
+                        <h2>
+                            ${name}
+                        </h2>
+
+                        <p>
+                            ${description}
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-page-info">
+
+                        <div>
+
+                            <span>
+                                DURATION
+                            </span>
+
+                            <strong>
+                                ${duration} mins
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                PRICE
+                            </span>
+
+                            <strong>
+                                ₹${price.toLocaleString("en-IN")}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-primary service-book-btn"
+                        onclick="bookService(${serviceId})"
+                    >
+                        Book This Service
+                        <span>→</span>
+                    </button>
+
+                </article>
+
+            `;
+
+        }
+
+
+        // =================================================
+        // BOOK SERVICE
+        // =================================================
+
+        function bookService(serviceId) {
+
+            window.location.href =
+                `booking.html?serviceId=${serviceId}`;
+
+        }
+
+
+        // =================================================
+        // LOGOUT
+        // =================================================
+
+        function logout() {
+
+            localStorage.removeItem("token");
+
+            localStorage.removeItem("user");
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        document
+            .getElementById("mobileLogoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        // =================================================
+        // MOBILE MENU
+        // =================================================
+
+        const menuBtn =
+            document.getElementById(
+                "menuBtn"
+            );
+
+        const mobileMenu =
+            document.getElementById(
+                "mobileMenu"
+            );
+
+
+        menuBtn.addEventListener(
+            "click",
+            () => {
+
+                mobileMenu.classList.toggle(
+                    "show"
+                );
+
+                menuBtn.textContent =
+                    mobileMenu.classList.contains("show")
+                        ? "✕"
+                        : "☰";
+
+            }
+        );
+
+
+        // =================================================
+        // INITIAL LOAD
+        // =================================================
+
+        loadUser();
+
+        loadServices();
+
+    </script>
+
+</body>
+</html>

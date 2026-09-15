@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Book Appointment | Luxe Salon</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="booking-page">
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+            <a
+                href="index.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">
+                    ✦
+                </span>
+
+                <span>
+                    LUXE
+                    <small>SALON</small>
+                </span>
+
+            </a>
+
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a
+                    href="services.html"
+                    class="active"
+                >
+                    Services
+                </a>
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+            </nav>
+
+
+            <div class="nav-actions">
+
+                <span
+                    id="navUserName"
+                    class="dashboard-user-name"
+                >
+                    Customer
+                </span>
+
+                <button
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+
+            <button
+                class="menu-btn"
+                id="menuBtn"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MOBILE MENU ================= -->
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="services.html">
+            Services
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <button
+            id="mobileLogoutBtn"
+            class="mobile-logout"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="booking-hero">
+
+        <div class="container">
+
+            <span class="section-label">
+                RESERVE YOUR VISIT
+            </span>
+
+            <h1>
+                Book your
+                <span>salon experience.</span>
+            </h1>
+
+            <p>
+                Choose your preferred professional, date and
+                time. We'll take care of the rest.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= BOOKING MAIN ================= -->
+
+    <main class="booking-main">
+
+        <div class="container booking-layout">
+
+
+            <!-- ================= LEFT FORM ================= -->
+
+            <section class="booking-card">
+
+                <div class="booking-card-header">
+
+                    <span class="section-label">
+                        APPOINTMENT DETAILS
+                    </span>
+
+                    <h2>
+                        Make a reservation
+                    </h2>
+
+                    <p>
+                        Select the details for your visit.
+                    </p>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="bookingMessage"
+                    class="dashboard-message"
+                ></div>
+
+
+                <!-- ================= SERVICE ================= -->
+
+                <div class="booking-step">
+
+                    <div class="booking-step-number">
+                        01
+                    </div>
+
+                    <div class="booking-step-content">
+
+                        <label>
+                            Selected Service
+                        </label>
+
+
+                        <div
+                            id="serviceLoading"
+                            class="booking-small-loading"
+                        >
+                            Loading service...
+                        </div>
+
+
+                        <div
+                            id="serviceSummary"
+                            class="selected-service"
+                            style="display: none;"
+                        >
+
+                            <div class="selected-service-icon">
+                                ✦
+                            </div>
+
+                            <div>
+
+                                <strong id="serviceName">
+                                    -
+                                </strong>
+
+                                <span id="serviceDetails">
+                                    -
+                                </span>
+
+                            </div>
+
+                            <div class="selected-service-price">
+                                ₹<span id="servicePrice">0</span>
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="services.html"
+                            class="change-service"
+                        >
+                            ← Choose another service
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= STAFF ================= -->
+
+                <div class="booking-step">
+
+                    <div class="booking-step-number">
+                        02
+                    </div>
+
+                    <div class="booking-step-content">
+
+                        <label for="staff">
+                            Choose Professional
+                        </label>
+
+                        <select
+                            id="staff"
+                            required
+                        >
+
+                            <option value="">
+                                Select a professional
+                            </option>
+
+                        </select>
+
+                        <small class="field-hint">
+                            Choose the professional you prefer
+                            for your service.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= DATE ================= -->
+
+                <div class="booking-step">
+
+                    <div class="booking-step-number">
+                        03
+                    </div>
+
+                    <div class="booking-step-content">
+
+                        <label for="appointmentDate">
+                            Choose Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="appointmentDate"
+                            required
+                        >
+
+                        <small class="field-hint">
+                            Select a future date for your visit.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= TIME ================= -->
+
+                <div class="booking-step">
+
+                    <div class="booking-step-number">
+                        04
+                    </div>
+
+                    <div class="booking-step-content">
+
+                        <label>
+                            Preferred Time
+                        </label>
+
+                        <p class="time-description">
+                            Choose a convenient appointment time.
+                            Final availability is verified by the
+                            salon system when you confirm.
+                        </p>
+
+
+                        <div
+                            id="timeSlots"
+                            class="time-slots"
+                        >
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="09:00:00"
+                            >
+                                9:00 AM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="10:00:00"
+                            >
+                                10:00 AM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="11:00:00"
+                            >
+                                11:00 AM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="12:00:00"
+                            >
+                                12:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="13:00:00"
+                            >
+                                1:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="14:00:00"
+                            >
+                                2:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="15:00:00"
+                            >
+                                3:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="16:00:00"
+                            >
+                                4:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="17:00:00"
+                            >
+                                5:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="18:00:00"
+                            >
+                                6:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="19:00:00"
+                            >
+                                7:00 PM
+                            </button>
+
+                            <button
+                                type="button"
+                                class="time-slot"
+                                data-time="20:00:00"
+                            >
+                                8:00 PM
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= CONFIRM ================= -->
+
+                <button
+                    id="confirmBookingBtn"
+                    class="btn btn-primary booking-submit"
+                    type="button"
+                >
+                    Confirm Appointment
+                    <span>→</span>
+                </button>
+
+
+                <p class="booking-note">
+                    Your appointment will initially be marked
+                    as <strong>Pending Payment</strong>.
+                </p>
+
+            </section>
+
+
+            <!-- ================= RIGHT SUMMARY ================= -->
+
+            <aside class="booking-summary">
+
+                <div class="booking-summary-inner">
+
+                    <span class="section-label">
+                        YOUR BOOKING
+                    </span>
+
+                    <h2>
+                        Appointment summary
+                    </h2>
+
+
+                    <!-- SERVICE -->
+
+                    <div class="summary-row">
+
+                        <span>
+                            Service
+                        </span>
+
+                        <strong id="summaryService">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <!-- STAFF -->
+
+                    <div class="summary-row">
+
+                        <span>
+                            Professional
+                        </span>
+
+                        <strong id="summaryStaff">
+                            Not selected
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="summary-row">
+
+                        <span>
+                            Date
+                        </span>
+
+                        <strong id="summaryDate">
+                            Not selected
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TIME -->
+
+                    <div class="summary-row">
+
+                        <span>
+                            Time
+                        </span>
+
+                        <strong id="summaryTime">
+                            Not selected
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-divider"></div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="summary-total">
+
+                        <span>
+                            Service Price
+                        </span>
+
+                        <strong>
+                            ₹<span id="summaryPrice">
+                                0
+                            </span>
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-info">
+
+                        <span class="summary-info-icon">
+                            ✓
+                        </span>
+
+                        <p>
+                            Your booking will be securely
+                            saved before proceeding to payment.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="container footer-bottom">
+
+            <span>
+                © 2026 Luxe Salon. All rights reserved.
+            </span>
+
+            <span>
+                Beauty • Style • Confidence
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        const API_URL =
+            "http://localhost:5000";
+
+        const token =
+            localStorage.getItem("token");
+
+
+        // =================================================
+        // AUTH CHECK
+        // =================================================
+
+        if (!token) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        // =================================================
+        // URL PARAMETERS
+        // =================================================
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const serviceId =
+            urlParams.get("serviceId");
+
+
+        if (!serviceId) {
+
+            window.location.href =
+                "services.html";
+
+        }
+
+
+        // =================================================
+        // STATE
+        // =================================================
+
+        let selectedService = null;
+
+        let selectedTime = null;
+
+
+        // =================================================
+        // ELEMENTS
+        // =================================================
+
+        const staffSelect =
+            document.getElementById("staff");
+
+        const appointmentDate =
+            document.getElementById(
+                "appointmentDate"
+            );
+
+        const confirmBookingBtn =
+            document.getElementById(
+                "confirmBookingBtn"
+            );
+
+        const bookingMessage =
+            document.getElementById(
+                "bookingMessage"
+            );
+
+
+        // =================================================
+        // MINIMUM DATE
+        // =================================================
+
+        const today =
+            new Date();
+
+        const localToday =
+            new Date(
+                today.getTime() -
+                today.getTimezoneOffset() * 60000
+            )
+            .toISOString()
+            .split("T")[0];
+
+
+        appointmentDate.min =
+            localToday;
+
+
+        // =================================================
+        // SHOW MESSAGE
+        // =================================================
+
+        function showMessage(
+            text,
+            type = "error"
+        ) {
+
+            bookingMessage.className =
+                `dashboard-message ${type}`;
+
+            bookingMessage.textContent =
+                text;
+
+            bookingMessage.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+        }
+
+
+        // =================================================
+        // FORMAT TIME
+        // =================================================
+
+        function formatTime(time) {
+
+            const parts =
+                time.split(":");
+
+            let hour =
+                parseInt(parts[0]);
+
+            const minute =
+                parts[1];
+
+            const period =
+                hour >= 12
+                    ? "PM"
+                    : "AM";
+
+            hour =
+                hour % 12 || 12;
+
+            return `${hour}:${minute} ${period}`;
+
+        }
+
+
+        // =================================================
+        // FORMAT DATE
+        // =================================================
+
+        function formatDate(dateValue) {
+
+            if (!dateValue) {
+                return "Not selected";
+            }
+
+            const date =
+                new Date(
+                    `${dateValue}T00:00:00`
+                );
+
+            return date.toLocaleDateString(
+                "en-IN",
+                {
+                    weekday: "short",
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+
+        // =================================================
+        // LOAD SERVICE
+        // =================================================
+
+        async function loadService() {
+
+            const serviceLoading =
+                document.getElementById(
+                    "serviceLoading"
+                );
+
+            const serviceSummary =
+                document.getElementById(
+                    "serviceSummary"
+                );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/services`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load service"
+                    );
+
+                }
+
+
+                const services =
+                    Array.isArray(data)
+                        ? data
+                        : (
+                            data.services ||
+                            data.data ||
+                            []
+                        );
+
+
+                selectedService =
+                    services.find(
+                        service =>
+                            String(
+                                service.id
+                            ) === String(
+                                serviceId
+                            )
+                    );
+
+
+                if (!selectedService) {
+
+                    throw new Error(
+                        "Selected service was not found."
+                    );
+
+                }
+
+
+                serviceLoading.style.display =
+                    "none";
+
+                serviceSummary.style.display =
+                    "flex";
+
+
+                document.getElementById(
+                    "serviceName"
+                ).textContent =
+                    selectedService.name;
+
+
+                document.getElementById(
+                    "serviceDetails"
+                ).textContent =
+                    `${selectedService.duration} minutes`;
+
+
+                document.getElementById(
+                    "servicePrice"
+                ).textContent =
+                    Number(
+                        selectedService.price
+                    ).toLocaleString("en-IN");
+
+
+                document.getElementById(
+                    "summaryService"
+                ).textContent =
+                    selectedService.name;
+
+
+                document.getElementById(
+                    "summaryPrice"
+                ).textContent =
+                    Number(
+                        selectedService.price
+                    ).toLocaleString("en-IN");
+
+
+            } catch (error) {
+
+                serviceLoading.textContent =
+                    error.message;
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        // =================================================
+        // LOAD USER
+        // =================================================
+
+        async function loadUser() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/users/profile`,
+                        {
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const user =
+                    data.user || data;
+
+
+                if (user.name) {
+
+                    document.getElementById(
+                        "navUserName"
+                    ).textContent =
+                        user.name;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "User error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =================================================
+        // LOAD STAFF
+        // =================================================
+
+        async function loadStaff() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/staff`,
+                        {
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load professionals"
+                    );
+
+                }
+
+
+                let staffList =
+                    Array.isArray(data)
+                        ? data
+                        : (
+                            data.staff ||
+                            data.data ||
+                            []
+                        );
+
+
+                /*
+                    Only show active staff.
+                */
+
+                staffList =
+                    staffList.filter(
+                        staff =>
+                            !staff.status ||
+                            staff.status === "ACTIVE"
+                    );
+
+
+                staffSelect.innerHTML = `
+                    <option value="">
+                        Select a professional
+                    </option>
+                `;
+
+
+                if (!staffList.length) {
+
+                    staffSelect.innerHTML = `
+                        <option value="">
+                            No professionals available
+                        </option>
+                    `;
+
+                    return;
+
+                }
+
+
+                staffList.forEach(
+                    staff => {
+
+                        const id =
+                            staff.id ||
+                            staff.staff_id;
+
+
+                        const name =
+                            staff.name ||
+                            staff.staff_name ||
+                            "Salon Professional";
+
+
+                        const specialization =
+                            staff.specialization
+                                ? ` — ${staff.specialization}`
+                                : "";
+
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        option.value =
+                            id;
+
+                        option.textContent =
+                            `${name}${specialization}`;
+
+
+                        staffSelect.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Staff error:",
+                    error
+                );
+
+
+                /*
+                    Don't hide the whole booking page
+                    if the staff endpoint has an issue.
+                */
+
+                staffSelect.innerHTML = `
+                    <option value="">
+                        Unable to load professionals
+                    </option>
+                `;
+
+            }
+
+        }
+
+
+        // =================================================
+        // STAFF CHANGE
+        // =================================================
+
+        staffSelect.addEventListener(
+            "change",
+            () => {
+
+                const option =
+                    staffSelect.options[
+                        staffSelect.selectedIndex
+                    ];
+
+
+                document.getElementById(
+                    "summaryStaff"
+                ).textContent =
+                    staffSelect.value
+                        ? option.textContent
+                        : "Not selected";
+
+            }
+        );
+
+
+        // =================================================
+        // DATE CHANGE
+        // =================================================
+
+        appointmentDate.addEventListener(
+            "change",
+            () => {
+
+                document.getElementById(
+                    "summaryDate"
+                ).textContent =
+                    formatDate(
+                        appointmentDate.value
+                    );
+
+            }
+        );
+
+
+        // =================================================
+        // TIME SLOT
+        // =================================================
+
+        document
+            .querySelectorAll(".time-slot")
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            document
+                                .querySelectorAll(
+                                    ".time-slot"
+                                )
+                                .forEach(
+                                    slot =>
+                                        slot.classList.remove(
+                                            "selected"
+                                        )
+                                );
+
+
+                            button.classList.add(
+                                "selected"
+                            );
+
+
+                            selectedTime =
+                                button.dataset.time;
+
+
+                            document.getElementById(
+                                "summaryTime"
+                            ).textContent =
+                                formatTime(
+                                    selectedTime
+                                );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        // =================================================
+        // CREATE APPOINTMENT
+        // =================================================
+
+        confirmBookingBtn.addEventListener(
+            "click",
+            async () => {
+
+                // Validate service
+
+                if (!selectedService) {
+
+                    showMessage(
+                        "Please select a valid service."
+                    );
+
+                    return;
+
+                }
+
+
+                // Validate staff
+
+                if (!staffSelect.value) {
+
+                    showMessage(
+                        "Please select a professional."
+                    );
+
+                    staffSelect.focus();
+
+                    return;
+
+                }
+
+
+                // Validate date
+
+                if (!appointmentDate.value) {
+
+                    showMessage(
+                        "Please select an appointment date."
+                    );
+
+                    appointmentDate.focus();
+
+                    return;
+
+                }
+
+
+                // Validate time
+
+                if (!selectedTime) {
+
+                    showMessage(
+                        "Please select an appointment time."
+                    );
+
+                    return;
+
+                }
+
+
+                // Disable button
+
+                confirmBookingBtn.disabled =
+                    true;
+
+                confirmBookingBtn.innerHTML =
+                    "Booking appointment...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `${API_URL}/api/appointments`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        `Bearer ${token}`
+                                },
+
+                                body: JSON.stringify({
+
+                                    staff_id:
+                                        Number(
+                                            staffSelect.value
+                                        ),
+
+                                    service_id:
+                                        Number(
+                                            serviceId
+                                        ),
+
+                                    appointment_date:
+                                        appointmentDate.value,
+
+                                    start_time:
+                                        selectedTime
+
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to book appointment"
+                        );
+
+                    }
+
+
+                    const appointmentId =
+                        data.appointmentId ||
+                        data.appointment?.id;
+
+
+                    showMessage(
+                        data.message ||
+                        "Appointment booked successfully!",
+                        "success"
+                    );
+
+
+                    /*
+                        After booking, payment will be
+                        the next step.
+                    */
+
+                    setTimeout(
+                        () => {
+
+                            if (appointmentId) {
+
+                                window.location.href =
+                                    `payment.html?appointmentId=${appointmentId}`;
+
+                            } else {
+
+                                window.location.href =
+                                    "dashboard.html";
+
+                            }
+
+                        },
+                        1200
+                    );
+
+
+                } catch (error) {
+
+                    showMessage(
+                        error.message ||
+                        "Unable to book appointment.",
+                        "error"
+                    );
+
+
+                    confirmBookingBtn.disabled =
+                        false;
+
+                    confirmBookingBtn.innerHTML =
+                        'Confirm Appointment <span>→</span>';
+
+                }
+
+            }
+        );
+
+
+        // =================================================
+        // LOGOUT
+        // =================================================
+
+        function logout() {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            localStorage.removeItem(
+                "user"
+            );
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        document
+            .getElementById("mobileLogoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        // =================================================
+        // MOBILE MENU
+        // =================================================
+
+        const menuBtn =
+            document.getElementById(
+                "menuBtn"
+            );
+
+        const mobileMenu =
+            document.getElementById(
+                "mobileMenu"
+            );
+
+
+        menuBtn.addEventListener(
+            "click",
+            () => {
+
+                mobileMenu.classList.toggle(
+                    "show"
+                );
+
+
+                menuBtn.textContent =
+                    mobileMenu.classList.contains(
+                        "show"
+                    )
+                        ? "✕"
+                        : "☰";
+
+            }
+        );
+
+
+        // =================================================
+        // INITIAL LOAD
+        // =================================================
+
+        loadUser();
+
+        loadService();
+
+        loadStaff();
+
+    </script>
+
+</body>
+
+</html>

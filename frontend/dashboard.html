@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Luxe Salon</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="dashboard-page">
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+                <span class="logo-icon">✦</span>
+
+                <span>
+                    LUXE
+                    <small>SALON</small>
+                </span>
+            </a>
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="dashboard.html" class="active">
+                    Dashboard
+                </a>
+
+                <a href="services.html">
+                    Services
+                </a>
+
+            </nav>
+
+            <div class="nav-actions">
+
+                <span id="navUserName" class="dashboard-user-name">
+                    Customer
+                </span>
+
+                <button
+                    id="logoutBtn"
+                    class="logout-btn">
+                    Logout
+                </button>
+
+            </div>
+
+            <button
+                class="menu-btn"
+                id="menuBtn">
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MOBILE MENU ================= -->
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="services.html">
+            Services
+        </a>
+
+        <button
+            id="mobileLogoutBtn"
+            class="mobile-logout">
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="dashboard-main">
+
+        <div class="container">
+
+            <!-- ================= WELCOME ================= -->
+
+            <section class="dashboard-welcome">
+
+                <div>
+
+                    <span class="section-label">
+                        CUSTOMER DASHBOARD
+                    </span>
+
+                    <h1>
+                        Hello,
+                        <span id="welcomeName">
+                            there
+                        </span>!
+                    </h1>
+
+                    <p>
+                        Manage your appointments and keep track
+                        of your salon visits.
+                    </p>
+
+                </div>
+
+                <a
+                    href="services.html"
+                    class="btn btn-primary">
+                    Book Appointment
+                    <span>→</span>
+                </a>
+
+            </section>
+
+
+            <!-- ================= MESSAGE ================= -->
+
+            <div
+                id="dashboardMessage"
+                class="dashboard-message">
+            </div>
+
+
+            <!-- ================= SUMMARY CARDS ================= -->
+
+            <section class="dashboard-stats">
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        📅
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Upcoming
+                        </span>
+
+                        <strong id="upcomingCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Completed
+                        </span>
+
+                        <strong id="completedCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        ₹
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Paid Appointments
+                        </span>
+
+                        <strong id="paidCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-stat-card">
+
+                    <div class="stat-icon">
+                        ★
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Reviews
+                        </span>
+
+                        <strong id="reviewCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= APPOINTMENTS ================= -->
+
+            <section class="dashboard-section">
+
+                <div class="dashboard-section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            YOUR VISITS
+                        </span>
+
+                        <h2>
+                            My appointments
+                        </h2>
+
+                    </div>
+
+                    <button
+                        id="refreshBtn"
+                        class="refresh-btn">
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+
+                <!-- LOADING -->
+
+                <div
+                    id="appointmentsLoading"
+                    class="loading-state">
+
+                    <div class="loading-spinner"></div>
+
+                    <p>
+                        Loading your appointments...
+                    </p>
+
+                </div>
+
+
+                <!-- EMPTY -->
+
+                <div
+                    id="emptyAppointments"
+                    class="empty-state"
+                    style="display: none;">
+
+                    <div class="empty-icon">
+                        📅
+                    </div>
+
+                    <h3>
+                        No appointments yet
+                    </h3>
+
+                    <p>
+                        Your next great salon experience
+                        is just a booking away.
+                    </p>
+
+                    <a
+                        href="services.html"
+                        class="btn btn-primary">
+                        Book Appointment
+                    </a>
+
+                </div>
+
+
+                <!-- APPOINTMENT LIST -->
+
+                <div
+                    id="appointmentsList"
+                    class="appointments-list">
+                </div>
+
+            </section>
+
+
+            <!-- ================= PROFILE ================= -->
+
+            <section class="dashboard-section profile-section">
+
+                <div class="dashboard-section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            MY ACCOUNT
+                        </span>
+
+                        <h2>
+                            Profile
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-card">
+
+                    <div class="profile-avatar">
+
+                        <span id="profileInitial">
+                            C
+                        </span>
+
+                    </div>
+
+
+                    <div class="profile-info">
+
+                        <div class="profile-field">
+
+                            <span>
+                                Full Name
+                            </span>
+
+                            <strong id="profileName">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong id="profileEmail">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Phone
+                            </span>
+
+                            <strong id="profilePhone">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Account Type
+                            </span>
+
+                            <strong>
+                                Customer
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= QUICK ACTIONS ================= -->
+
+            <section class="quick-actions">
+
+                <div>
+
+                    <span class="section-label">
+                        QUICK ACTIONS
+                    </span>
+
+                    <h2>
+                        What would you like to do?
+                    </h2>
+
+                </div>
+
+
+                <div class="quick-actions-grid">
+
+                    <a
+                        href="services.html"
+                        class="quick-action-card">
+
+                        <div class="quick-action-icon">
+                            ✂
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Book Appointment
+                            </strong>
+
+                            <span>
+                                Choose a service and time
+                            </span>
+
+                        </div>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+
+                    <!-- VIEW LATEST INVOICE -->
+
+                    <a
+                        href="#"
+                        class="quick-action-card"
+                        onclick="viewLatestInvoice(event)">
+
+                        <div class="quick-action-icon">
+                            ▣
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                View Invoice
+                            </strong>
+
+                            <span>
+                                Access your latest invoice
+                            </span>
+
+                        </div>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+
+                    <a
+                        href="reviews.html"
+                        class="quick-action-card">
+
+                        <div class="quick-action-icon">
+                            ★
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                My Reviews
+                            </strong>
+
+                            <span>
+                                Share your salon experience
+                            </span>
+
+                        </div>
+
+                        <b>
+                            →
+                        </b>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer dashboard-footer">
+
+        <div class="container footer-bottom">
+
+            <span>
+                © 2026 Luxe Salon
+            </span>
+
+            <span>
+                Beauty • Style • Confidence
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        const API_URL = "http://localhost:5000";
+
+        const token = localStorage.getItem("token");
+
+        let appointments = [];
+
+
+        // =================================================
+        // AUTH CHECK
+        // =================================================
+
+        if (!token) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        // =================================================
+        // ELEMENTS
+        // =================================================
+
+        const welcomeName =
+            document.getElementById("welcomeName");
+
+        const navUserName =
+            document.getElementById("navUserName");
+
+        const profileName =
+            document.getElementById("profileName");
+
+        const profileEmail =
+            document.getElementById("profileEmail");
+
+        const profilePhone =
+            document.getElementById("profilePhone");
+
+        const profileInitial =
+            document.getElementById("profileInitial");
+
+        const appointmentsList =
+            document.getElementById("appointmentsList");
+
+        const appointmentsLoading =
+            document.getElementById("appointmentsLoading");
+
+        const emptyAppointments =
+            document.getElementById("emptyAppointments");
+
+        const dashboardMessage =
+            document.getElementById("dashboardMessage");
+
+
+        // =================================================
+        // SHOW MESSAGE
+        // =================================================
+
+        function showMessage(text, type = "success") {
+
+            dashboardMessage.className =
+                `dashboard-message ${type}`;
+
+            dashboardMessage.textContent = text;
+
+            setTimeout(() => {
+
+                dashboardMessage.className =
+                    "dashboard-message";
+
+                dashboardMessage.textContent = "";
+
+            }, 3500);
+
+        }
+
+
+        // =================================================
+        // FORMAT DATE
+        // =================================================
+
+        function formatDate(dateValue) {
+
+            if (!dateValue) {
+                return "-";
+            }
+
+            const date =
+                new Date(dateValue);
+
+            if (isNaN(date.getTime())) {
+                return dateValue;
+            }
+
+            return date.toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+
+        // =================================================
+        // FORMAT TIME
+        // =================================================
+
+        function formatTime(timeValue) {
+
+            if (!timeValue) {
+                return "-";
+            }
+
+            const parts =
+                String(timeValue).split(":");
+
+            if (parts.length < 2) {
+                return timeValue;
+            }
+
+            let hour =
+                parseInt(parts[0]);
+
+            const minute =
+                parts[1];
+
+            const period =
+                hour >= 12 ? "PM" : "AM";
+
+            hour =
+                hour % 12 || 12;
+
+            return `${hour}:${minute} ${period}`;
+
+        }
+
+
+        // =================================================
+        // STATUS CLASS
+        // =================================================
+
+        function getStatusClass(status) {
+
+            switch (status) {
+
+                case "BOOKED":
+                    return "status-booked";
+
+                case "COMPLETED":
+                    return "status-completed";
+
+                case "CANCELLED":
+                    return "status-cancelled";
+
+                case "RESCHEDULED":
+                    return "status-rescheduled";
+
+                default:
+                    return "";
+
+            }
+
+        }
+
+
+        // =================================================
+        // PAYMENT CLASS
+        // =================================================
+
+        function getPaymentClass(status) {
+
+            if (status === "PAID") {
+                return "payment-paid";
+            }
+
+            if (status === "FAILED") {
+                return "payment-failed";
+            }
+
+            return "payment-pending";
+
+        }
+
+
+        // =================================================
+        // LOAD PROFILE
+        // =================================================
+
+        async function loadProfile() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/users/profile`,
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load profile"
+                    );
+
+                }
+
+
+                const user =
+                    data.user || data;
+
+
+                const name =
+                    user.name || "Customer";
+
+
+                welcomeName.textContent =
+                    name.split(" ")[0];
+
+                navUserName.textContent =
+                    name;
+
+                profileName.textContent =
+                    user.name || "-";
+
+                profileEmail.textContent =
+                    user.email || "-";
+
+                profilePhone.textContent =
+                    user.phone || "-";
+
+                profileInitial.textContent =
+                    name.charAt(0).toUpperCase();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Profile error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =================================================
+        // LOAD APPOINTMENTS
+        // =================================================
+
+        async function loadAppointments() {
+
+            appointmentsLoading.style.display =
+                "flex";
+
+            emptyAppointments.style.display =
+                "none";
+
+            appointmentsList.innerHTML =
+                "";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/appointments/my`,
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load appointments"
+                    );
+
+                }
+
+
+                appointments =
+                    Array.isArray(data)
+                        ? data
+                        : (
+                            data.appointments ||
+                            data.data ||
+                            []
+                        );
+
+
+                appointmentsLoading.style.display =
+                    "none";
+
+
+                updateStats();
+
+                renderAppointments();
+
+
+            } catch (error) {
+
+                appointmentsLoading.style.display =
+                    "none";
+
+                console.error(
+                    "Appointments error:",
+                    error
+                );
+
+
+                appointmentsList.innerHTML = `
+                    <div class="error-state">
+                        <div class="empty-icon">!</div>
+
+                        <h3>
+                            Unable to load appointments
+                        </h3>
+
+                        <p>
+                            ${error.message}
+                        </p>
+
+                        <button
+                            class="btn btn-primary"
+                            onclick="loadAppointments()">
+                            Try Again
+                        </button>
+
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        // =================================================
+        // UPDATE STATS
+        // =================================================
+
+        function updateStats() {
+
+            const upcoming =
+                appointments.filter(
+                    appointment =>
+                        appointment.status === "BOOKED" ||
+                        appointment.status === "RESCHEDULED"
+                ).length;
+
+
+            const completed =
+                appointments.filter(
+                    appointment =>
+                        appointment.status === "COMPLETED"
+                ).length;
+
+
+            const paid =
+                appointments.filter(
+                    appointment =>
+                        appointment.payment_status === "PAID"
+                ).length;
+
+
+            document.getElementById(
+                "upcomingCount"
+            ).textContent = upcoming;
+
+
+            document.getElementById(
+                "completedCount"
+            ).textContent = completed;
+
+
+            document.getElementById(
+                "paidCount"
+            ).textContent = paid;
+
+
+            const reviews =
+                appointments.filter(
+                    appointment =>
+                        appointment.review_id ||
+                        appointment.has_review === true
+                ).length;
+
+
+            document.getElementById(
+                "reviewCount"
+            ).textContent = reviews;
+
+        }
+
+
+        // =================================================
+        // RENDER APPOINTMENTS
+        // =================================================
+
+        function renderAppointments() {
+
+            if (!appointments.length) {
+
+                emptyAppointments.style.display =
+                    "flex";
+
+                return;
+
+            }
+
+
+            const sortedAppointments =
+                [...appointments].sort(
+                    (a, b) => {
+
+                        const dateA =
+                            new Date(
+                                `${a.appointment_date} ${a.start_time || ""}`
+                            );
+
+                        const dateB =
+                            new Date(
+                                `${b.appointment_date} ${b.start_time || ""}`
+                            );
+
+                        return dateB - dateA;
+
+                    }
+                );
+
+
+            appointmentsList.innerHTML =
+                sortedAppointments.map(
+                    appointment =>
+                        createAppointmentCard(
+                            appointment
+                        )
+                ).join("");
+
+        }
+
+
+        // =================================================
+        // APPOINTMENT CARD
+        // =================================================
+
+        function createAppointmentCard(
+            appointment
+        ) {
+
+            const appointmentId =
+                appointment.id ||
+                appointment.appointment_id;
+
+
+            const serviceName =
+                appointment.service_name ||
+                appointment.service ||
+                "Salon Service";
+
+
+            const staffName =
+                appointment.staff_name ||
+                appointment.staff ||
+                "Salon Professional";
+
+
+            const status =
+                appointment.status ||
+                "BOOKED";
+
+
+            const paymentStatus =
+                appointment.payment_status ||
+                "PENDING";
+
+
+            const canCancel =
+                status === "BOOKED" ||
+                status === "RESCHEDULED";
+
+
+            const canPay =
+                paymentStatus !== "PAID" &&
+                (
+                    status === "BOOKED" ||
+                    status === "RESCHEDULED"
+                );
+
+
+            const canReview =
+                status === "COMPLETED";
+
+
+            return `
+
+                <article
+                    class="appointment-card"
+                    data-id="${appointmentId}">
+
+                    <div class="appointment-date">
+
+                        <span class="appointment-date-label">
+                            VISIT
+                        </span>
+
+                        <strong>
+                            ${formatDate(
+                                appointment.appointment_date
+                            )}
+                        </strong>
+
+                        <span>
+                            ${formatTime(
+                                appointment.start_time
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div class="appointment-details">
+
+                        <div class="appointment-main">
+
+                            <h3>
+                                ${serviceName}
+                            </h3>
+
+                            <p>
+                                With ${staffName}
+                            </p>
+
+                        </div>
+
+
+                        <div class="appointment-status">
+
+                            <span
+                                class="status-badge
+                                ${getStatusClass(status)}">
+
+                                ${status}
+
+                            </span>
+
+                            <span
+                                class="payment-badge
+                                ${getPaymentClass(paymentStatus)}">
+
+                                Payment: ${paymentStatus}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="appointment-actions">
+
+                        ${
+                            canPay
+                                ? `
+                                    <button
+                                        class="appointment-action primary-action"
+                                        onclick="goToPayment(${appointmentId})">
+
+                                        Pay Now
+
+                                    </button>
+                                `
+                                : ""
+                        }
+
+
+                        ${
+                            canReview
+                                ? `
+                                    <button
+                                        class="appointment-action"
+                                        onclick="goToReview(${appointmentId})">
+
+                                        ★ Review
+
+                                    </button>
+                                `
+                                : ""
+                        }
+
+
+                        ${
+                            canCancel
+                                ? `
+                                    <button
+                                        class="appointment-action danger-action"
+                                        onclick="cancelAppointment(${appointmentId})">
+
+                                        Cancel
+
+                                    </button>
+                                `
+                                : ""
+                        }
+
+
+                        ${
+                            status === "COMPLETED" &&
+                            paymentStatus === "PAID"
+                                ? `
+                                    <button
+                                        class="appointment-action"
+                                        onclick="viewInvoice(${appointmentId})">
+
+                                        Invoice
+
+                                    </button>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }
+
+
+        // =================================================
+        // CANCEL APPOINTMENT
+        // =================================================
+
+        async function cancelAppointment(
+            appointmentId
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to cancel this appointment?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/appointments/${appointmentId}/cancel`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to cancel appointment"
+                    );
+
+                }
+
+
+                showMessage(
+                    "Appointment cancelled successfully."
+                );
+
+
+                loadAppointments();
+
+
+            } catch (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        // =================================================
+        // NAVIGATION HELPERS
+        // =================================================
+
+        function goToPayment(
+            appointmentId
+        ) {
+
+            window.location.href =
+                `payment.html?appointmentId=${appointmentId}`;
+
+        }
+
+
+        function goToReview(
+            appointmentId
+        ) {
+
+            window.location.href =
+                `reviews.html?appointmentId=${appointmentId}`;
+
+        }
+
+
+        function viewInvoice(
+            appointmentId
+        ) {
+
+            window.location.href =
+                `invoice.html?appointmentId=${appointmentId}`;
+
+        }
+
+
+        // =================================================
+        // VIEW LATEST PAID INVOICE
+        // =================================================
+
+        function viewLatestInvoice(event) {
+
+            event.preventDefault();
+
+            const paidAppointments =
+                appointments.filter(
+                    appointment =>
+                        appointment.payment_status === "PAID"
+                );
+
+
+            if (!paidAppointments.length) {
+
+                showMessage(
+                    "No paid appointment found.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            paidAppointments.sort((a, b) => {
+
+                const dateA =
+                    new Date(
+                        `${a.appointment_date} ${a.start_time || ""}`
+                    );
+
+                const dateB =
+                    new Date(
+                        `${b.appointment_date} ${b.start_time || ""}`
+                    );
+
+                return dateB - dateA;
+
+            });
+
+
+            const latestAppointment =
+                paidAppointments[0];
+
+
+            const appointmentId =
+                latestAppointment.id ||
+                latestAppointment.appointment_id;
+
+
+            if (!appointmentId) {
+
+                showMessage(
+                    "Unable to find appointment ID.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            window.location.href =
+                `invoice.html?appointmentId=${appointmentId}`;
+
+        }
+
+
+        // =================================================
+        // LOGOUT
+        // =================================================
+
+        function logout() {
+
+            localStorage.removeItem("token");
+
+            localStorage.removeItem("user");
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        document
+            .getElementById("mobileLogoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        // =================================================
+        // REFRESH
+        // =================================================
+
+        document
+            .getElementById("refreshBtn")
+            .addEventListener(
+                "click",
+                loadAppointments
+            );
+
+
+        // =================================================
+        // MOBILE MENU
+        // =================================================
+
+        const menuBtn =
+            document.getElementById("menuBtn");
+
+        const mobileMenu =
+            document.getElementById("mobileMenu");
+
+
+        menuBtn.addEventListener(
+            "click",
+            () => {
+
+                mobileMenu.classList.toggle(
+                    "show"
+                );
+
+                menuBtn.textContent =
+                    mobileMenu.classList.contains("show")
+                        ? "✕"
+                        : "☰";
+
+            }
+        );
+
+
+        // =================================================
+        // INITIAL LOAD
+        // =================================================
+
+        loadProfile();
+
+        loadAppointments();
+
+    </script>
+
+</body>
+
+</html>

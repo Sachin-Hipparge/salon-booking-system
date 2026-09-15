@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Salon Booking</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        button {
+            border: none;
+            padding: 9px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 25px auto;
+        }
+
+        .welcome {
+            margin-bottom: 20px;
+        }
+
+        .welcome h2 {
+            margin-bottom: 5px;
+        }
+
+        /* Dashboard Cards */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            font-size: 15px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Sections */
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            margin-bottom: 15px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            padding: 11px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f1f1f1;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        select {
+            padding: 7px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .update-btn {
+            background: #27ae60;
+            color: white;
+            margin-left: 5px;
+        }
+
+        .service-btn {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .status {
+            padding: 5px 9px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .BOOKED {
+            background: #d6eaf8;
+            color: #21618c;
+        }
+
+        .COMPLETED {
+            background: #d5f5e3;
+            color: #196f3d;
+        }
+
+        .CANCELLED {
+            background: #fadbd8;
+            color: #922b21;
+        }
+
+        .RESCHEDULED {
+            background: #fcf3cf;
+            color: #7d6608;
+        }
+
+        .ACTIVE {
+            background: #d5f5e3;
+            color: #196f3d;
+        }
+
+        .INACTIVE {
+            background: #fadbd8;
+            color: #922b21;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success {
+            background: #d5f5e3;
+            color: #196f3d;
+        }
+
+        .error {
+            background: #fadbd8;
+            color: #922b21;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 19px;
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Salon Admin Dashboard</h1>
+
+    <div class="header-right">
+        <button class="refresh-btn" onclick="loadDashboard()">
+            Refresh
+        </button>
+
+        <button class="logout-btn" onclick="logout()">
+            Logout
+        </button>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="welcome">
+        <h2>Admin Panel</h2>
+        <p>Manage salon bookings, users, services, payments and reviews.</p>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <!-- DASHBOARD STATISTICS -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>Total Customers</h3>
+            <p id="totalCustomers">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Staff</h3>
+            <p id="totalStaff">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Services</h3>
+            <p id="totalServices">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Appointments</h3>
+            <p id="totalAppointments">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Booked</h3>
+            <p id="bookedAppointments">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Completed</h3>
+            <p id="completedAppointments">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Cancelled</h3>
+            <p id="cancelledAppointments">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Revenue</h3>
+            <p id="totalRevenue">₹0</p>
+        </div>
+
+    </div>
+
+
+    <!-- APPOINTMENTS -->
+
+    <div class="section">
+
+        <h2>All Appointments</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Staff</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+
+                <tbody id="appointmentsTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- USERS -->
+
+    <div class="section">
+
+        <h2>All Users</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+
+                <tbody id="usersTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- SERVICES -->
+
+    <div class="section">
+
+        <h2>All Services</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Duration</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="servicesTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENTS -->
+
+    <div class="section">
+
+        <h2>All Payments</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Appointment</th>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Gateway</th>
+                        <th>Transaction ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="paymentsTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- REVIEWS -->
+
+    <div class="section">
+
+        <h2>All Reviews</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Staff</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Staff Response</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reviewsTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- STAFF -->
+
+    <div class="section">
+
+        <h2>All Staff</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Specialization</th>
+                        <th>Status</th>
+                        <th>Services</th>
+                    </tr>
+                </thead>
+
+                <tbody id="staffTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://localhost:5000";
+
+const token = localStorage.getItem("token");
+
+
+/* --------------------------------
+   AUTHENTICATION CHECK
+-------------------------------- */
+
+if (!token) {
+
+    alert("Please login first.");
+
+    window.location.href = "index.html";
+
+}
+
+
+/* --------------------------------
+   COMMON FETCH FUNCTION
+-------------------------------- */
+
+async function apiRequest(url, options = {}) {
+
+    const response = await fetch(API_URL + url, {
+
+        ...options,
+
+        headers: {
+
+            "Content-Type": "application/json",
+
+            "Authorization": `Bearer ${token}`,
+
+            ...(options.headers || {})
+
+        }
+
+    });
+
+
+    const data = await response.json();
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.message || "Something went wrong"
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+/* --------------------------------
+   MESSAGE
+-------------------------------- */
+
+function showMessage(message, type = "success") {
+
+    const element = document.getElementById("message");
+
+    element.textContent = message;
+
+    element.className = `message ${type}`;
+
+    element.style.display = "block";
+
+
+    setTimeout(() => {
+
+        element.style.display = "none";
+
+    }, 3000);
+
+}
+
+
+/* --------------------------------
+   LOAD DASHBOARD
+-------------------------------- */
+
+async function loadDashboard() {
+
+    try {
+
+        await Promise.all([
+
+            loadStatistics(),
+
+            loadAppointments(),
+
+            loadUsers(),
+
+            loadServices(),
+
+            loadPayments(),
+
+            loadReviews(),
+
+            loadStaff()
+
+        ]);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* --------------------------------
+   STATISTICS
+-------------------------------- */
+
+async function loadStatistics() {
+
+    const data =
+        await apiRequest("/api/admin/dashboard");
+
+
+    console.log("Dashboard:", data);
+
+
+    /*
+       Depending on backend response,
+       data may directly contain the statistics
+       or may contain them inside data.dashboard.
+    */
+
+    const dashboard =
+        data.dashboard || data;
+
+
+    document.getElementById("totalCustomers").textContent =
+        dashboard.total_customers || 0;
+
+
+    document.getElementById("totalStaff").textContent =
+        dashboard.total_staff || 0;
+
+
+    document.getElementById("totalServices").textContent =
+        dashboard.total_services || 0;
+
+
+    document.getElementById("totalAppointments").textContent =
+        dashboard.total_appointments || 0;
+
+
+    document.getElementById("bookedAppointments").textContent =
+        dashboard.booked_appointments || 0;
+
+
+    document.getElementById("completedAppointments").textContent =
+        dashboard.completed_appointments || 0;
+
+
+    document.getElementById("cancelledAppointments").textContent =
+        dashboard.cancelled_appointments || 0;
+
+
+    document.getElementById("totalRevenue").textContent =
+        "₹" + (dashboard.total_revenue || 0);
+
+}
+
+
+/* --------------------------------
+   APPOINTMENTS
+-------------------------------- */
+
+async function loadAppointments() {
+
+    const data =
+        await apiRequest("/api/admin/appointments");
+
+
+    const appointments =
+        data.appointments || data;
+
+
+    const table =
+        document.getElementById("appointmentsTable");
+
+
+    table.innerHTML = "";
+
+
+    if (!Array.isArray(appointments) ||
+        appointments.length === 0) {
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="9">
+                    No appointments found
+                </td>
+             </tr>`;
+
+        return;
+
+    }
+
+
+    appointments.forEach(appointment => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${appointment.id}</td>
+
+                <td>
+                    ${appointment.customer_name || "-"}
+                </td>
+
+                <td>
+                    ${appointment.staff_name || "-"}
+                </td>
+
+                <td>
+                    ${appointment.service_name || "-"}
+                </td>
+
+                <td>
+                    ${appointment.appointment_date || "-"}
+                </td>
+
+                <td>
+                    ${appointment.start_time || "-"}
+                    -
+                    ${appointment.end_time || "-"}
+                </td>
+
+                <td>
+
+                    <span class="status ${appointment.status}">
+                        ${appointment.status}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${appointment.payment_status || "-"}
+                </td>
+
+                <td>
+
+                    <select id="status-${appointment.id}">
+
+                        <option value="BOOKED"
+                            ${appointment.status === "BOOKED" ? "selected" : ""}>
+                            BOOKED
+                        </option>
+
+                        <option value="COMPLETED"
+                            ${appointment.status === "COMPLETED" ? "selected" : ""}>
+                            COMPLETED
+                        </option>
+
+                        <option value="CANCELLED"
+                            ${appointment.status === "CANCELLED" ? "selected" : ""}>
+                            CANCELLED
+                        </option>
+
+                        <option value="RESCHEDULED"
+                            ${appointment.status === "RESCHEDULED" ? "selected" : ""}>
+                            RESCHEDULED
+                        </option>
+
+                    </select>
+
+                    <button
+                        class="update-btn"
+                        onclick="updateAppointmentStatus(${appointment.id})">
+                        Update
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* --------------------------------
+   UPDATE APPOINTMENT STATUS
+-------------------------------- */
+
+async function updateAppointmentStatus(
+    appointmentId
+) {
+
+    const select =
+        document.getElementById(
+            `status-${appointmentId}`
+        );
+
+
+    const status = select.value;
+
+
+    try {
+
+        await apiRequest(
+            `/api/admin/appointments/${appointmentId}/status`,
+            {
+
+                method: "PUT",
+
+                body: JSON.stringify({
+                    status: status
+                })
+
+            }
+        );
+
+
+        showMessage(
+            "Appointment status updated successfully"
+        );
+
+
+        loadAppointments();
+
+
+    }
+
+    catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* --------------------------------
+   USERS
+-------------------------------- */
+
+async function loadUsers() {
+
+    const data =
+        await apiRequest("/api/admin/users");
+
+
+    const users =
+        data.users || data;
+
+
+    const table =
+        document.getElementById("usersTable");
+
+
+    table.innerHTML = "";
+
+
+    if (!Array.isArray(users) ||
+        users.length === 0) {
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="6">
+                    No users found
+                </td>
+             </tr>`;
+
+        return;
+
+    }
+
+
+    users.forEach(user => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${user.id}</td>
+
+                <td>${user.name}</td>
+
+                <td>${user.email}</td>
+
+                <td>${user.phone || "-"}</td>
+
+                <td>${user.role}</td>
+
+                <td>${formatDate(user.created_at)}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* --------------------------------
+   SERVICES
+-------------------------------- */
+
+async function loadServices() {
+
+    const data =
+        await apiRequest("/api/admin/services");
+
+
+    const services =
+        data.services || data;
+
+
+    const table =
+        document.getElementById("servicesTable");
+
+
+    table.innerHTML = "";
+
+
+    if (!Array.isArray(services) ||
+        services.length === 0) {
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="7">
+                    No services found
+                </td>
+             </tr>`;
+
+        return;
+
+    }
+
+
+    services.forEach(service => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${service.id}</td>
+
+                <td>${service.name}</td>
+
+                <td>${service.description || "-"}</td>
+
+                <td>${service.duration} mins</td>
+
+                <td>₹${service.price}</td>
+
+                <td>
+
+                    <span class="status ${service.status}">
+                        ${service.status}
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="service-btn"
+                        onclick="toggleServiceStatus(
+                            ${service.id},
+                            '${service.status}'
+                        )">
+
+                        ${service.status === "ACTIVE"
+                            ? "Deactivate"
+                            : "Activate"}
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* --------------------------------
+   SERVICE STATUS
+-------------------------------- */
+
+async function toggleServiceStatus(
+    serviceId,
+    currentStatus
+) {
+
+    const newStatus =
+        currentStatus === "ACTIVE"
+            ? "INACTIVE"
+            : "ACTIVE";
+
+
+    try {
+
+        await apiRequest(
+            `/api/admin/services/${serviceId}/status`,
+            {
+
+                method: "PUT",
+
+                body: JSON.stringify({
+                    status: newStatus
+                })
+
+            }
+        );
+
+
+        showMessage(
+            `Service ${newStatus.toLowerCase()} successfully`
+        );
+
+
+        loadServices();
+
+    }
+
+    catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* --------------------------------
+   PAYMENTS
+-------------------------------- */
+
+async function loadPayments() {
+
+    const data =
+        await apiRequest("/api/admin/payments");
+
+
+    const payments =
+        data.payments || data;
+
+
+    const table =
+        document.getElementById("paymentsTable");
+
+
+    table.innerHTML = "";
+
+
+    if (!Array.isArray(payments) ||
+        payments.length === 0) {
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="8">
+                    No payments found
+                </td>
+             </tr>`;
+
+        return;
+
+    }
+
+
+    payments.forEach(payment => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${payment.id}</td>
+
+                <td>${payment.appointment_id}</td>
+
+                <td>${payment.customer_name || "-"}</td>
+
+                <td>${payment.service_name || "-"}</td>
+
+                <td>${payment.payment_gateway || "-"}</td>
+
+                <td>${payment.transaction_id || "-"}</td>
+
+                <td>₹${payment.amount || 0}</td>
+
+                <td>${payment.status}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* --------------------------------
+   REVIEWS
+-------------------------------- */
+
+async function loadReviews() {
+
+    const data =
+        await apiRequest("/api/admin/reviews");
+
+
+    const reviews =
+        data.reviews || data;
+
+
+    const table =
+        document.getElementById("reviewsTable");
+
+
+    table.innerHTML = "";
+
+
+    if (!Array.isArray(reviews) ||
+        reviews.length === 0) {
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="7">
+                    No reviews found
+                </td>
+             </tr>`;
+
+        return;
+
+    }
+
+
+    reviews.forEach(review => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${review.id}</td>
+
+                <td>${review.customer_name || "-"}</td>
+
+                <td>${review.service_name || "-"}</td>
+
+                <td>${review.staff_name || "-"}</td>
+
+                <td>
+                    ${"⭐".repeat(review.rating)}
+                </td>
+
+                <td>${review.comment || "-"}</td>
+
+                <td>${review.staff_response || "-"}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* --------------------------------
+   STAFF
+-------------------------------- */
+
+async function loadStaff() {
+
+    const data =
+        await apiRequest("/api/admin/staff");
+
+
+    const staff =
+        data.staff || data;
+
+
+    const table =
+        document.getElementById("staffTable");
+
+
+    table.innerHTML = "";
+
+
+    if (!Array.isArray(staff) ||
+        staff.length === 0) {
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="7">
+                    No staff found
+                </td>
+             </tr>`;
+
+        return;
+
+    }
+
+
+    staff.forEach(member => {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>${member.staff_id}</td>
+
+                <td>${member.name || "-"}</td>
+
+                <td>${member.email || "-"}</td>
+
+                <td>${member.phone || "-"}</td>
+
+                <td>${member.specialization || "-"}</td>
+
+                <td>${member.status || "-"}</td>
+
+                <td>${member.services || "-"}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* --------------------------------
+   FORMAT DATE
+-------------------------------- */
+
+function formatDate(date) {
+
+    if (!date) {
+        return "-";
+    }
+
+    return new Date(date).toLocaleDateString();
+
+}
+
+
+/* --------------------------------
+   LOGOUT
+-------------------------------- */
+
+function logout() {
+
+    localStorage.removeItem("token");
+
+    localStorage.removeItem("user");
+
+    window.location.href = "index.html";
+
+}
+
+
+/* --------------------------------
+   INITIAL LOAD
+-------------------------------- */
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>

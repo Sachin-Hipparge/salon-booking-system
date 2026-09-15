@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reviews | Luxe Salon</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        .reviews-page {
+            background: #faf8f5;
+            min-height: 100vh;
+        }
+
+        .reviews-main {
+            padding: 70px 0;
+        }
+
+        .reviews-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .reviews-header h1 {
+            margin: 10px 0;
+        }
+
+        .reviews-header p {
+            max-width: 650px;
+            margin: 0 auto;
+            color: #777;
+        }
+
+        .review-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .review-card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .review-card-subtitle {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .rating-star {
+            border: none;
+            background: transparent;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            opacity: 0.35;
+        }
+
+        .rating-star.active {
+            opacity: 1;
+        }
+
+        .submit-review-btn {
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .review-message {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px 15px;
+            border-radius: 8px;
+        }
+
+        .review-message.success {
+            display: block;
+            background: #eaf7ee;
+            color: #26733f;
+        }
+
+        .review-message.error {
+            display: block;
+            background: #fdecec;
+            color: #a33a3a;
+        }
+
+        .existing-reviews {
+            margin-top: 50px;
+        }
+
+        .existing-reviews h2 {
+            margin-bottom: 25px;
+        }
+
+        .service-review-section {
+            margin-bottom: 30px;
+        }
+
+        .service-review-section h3 {
+            margin-bottom: 15px;
+        }
+
+        .review-item {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .review-customer {
+            font-weight: 700;
+        }
+
+        .review-rating {
+            letter-spacing: 2px;
+        }
+
+        .review-comment {
+            margin: 12px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .staff-response {
+            margin-top: 15px;
+            padding: 15px;
+            background: #faf6f0;
+            border-left: 3px solid #b68b5c;
+            border-radius: 6px;
+        }
+
+        .staff-response strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .no-reviews {
+            text-align: center;
+            padding: 35px;
+            color: #777;
+            background: white;
+            border-radius: 14px;
+        }
+
+        .loading-reviews {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .appointment-info {
+            background: #faf8f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .appointment-info p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+
+            .review-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-main {
+                padding: 45px 0;
+            }
+
+            .review-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body class="reviews-page">
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+
+                <span class="logo-icon">
+                    ✦
+                </span>
+
+                <span>
+                    LUXE
+                    <small>SALON</small>
+                </span>
+
+            </a>
+
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="services.html">
+                    Services
+                </a>
+
+            </nav>
+
+
+            <div class="nav-actions">
+
+                <span id="navUserName" class="dashboard-user-name">
+                    Customer
+                </span>
+
+                <button
+                    id="logoutBtn"
+                    class="logout-btn">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+
+            <button
+                class="menu-btn"
+                id="menuBtn">
+
+                ☰
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MOBILE MENU ================= -->
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="services.html">
+            Services
+        </a>
+
+        <button
+            id="mobileLogoutBtn"
+            class="mobile-logout">
+
+            Logout
+
+        </button>
+
+    </div>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="reviews-main">
+
+        <div class="container">
+
+
+            <!-- ================= HEADER ================= -->
+
+            <section class="reviews-header">
+
+                <span class="section-label">
+                    CUSTOMER REVIEWS
+                </span>
+
+                <h1>
+                    Share Your Experience
+                </h1>
+
+                <p>
+                    Tell us about your salon experience
+                    and help other customers make the
+                    right choice.
+                </p>
+
+            </section>
+
+
+            <!-- ================= REVIEW LAYOUT ================= -->
+
+            <section class="review-layout">
+
+
+                <!-- ================= SUBMIT REVIEW ================= -->
+
+                <div class="review-card">
+
+                    <h2>
+                        Write a Review
+                    </h2>
+
+                    <p class="review-card-subtitle">
+                        Review a completed appointment.
+                    </p>
+
+
+                    <div
+                        id="reviewMessage"
+                        class="review-message">
+                    </div>
+
+
+                    <div
+                        id="appointmentInfo"
+                        class="appointment-info"
+                        style="display: none;">
+
+                    </div>
+
+
+                    <form id="reviewForm">
+
+
+                        <!-- APPOINTMENT ID -->
+
+                        <div class="form-group">
+
+                            <label for="appointmentId">
+                                Appointment ID
+                            </label>
+
+                            <input
+                                type="number"
+                                id="appointmentId"
+                                placeholder="Enter appointment ID"
+                                required>
+
+                        </div>
+
+
+                        <!-- RATING -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Rating
+                            </label>
+
+                            <div class="rating-stars">
+
+                                <button
+                                    type="button"
+                                    class="rating-star"
+                                    data-rating="1">
+                                    ★
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="rating-star"
+                                    data-rating="2">
+                                    ★
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="rating-star"
+                                    data-rating="3">
+                                    ★
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="rating-star"
+                                    data-rating="4">
+                                    ★
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="rating-star"
+                                    data-rating="5">
+                                    ★
+                                </button>
+
+                            </div>
+
+                            <input
+                                type="hidden"
+                                id="rating"
+                                value="0">
+
+                        </div>
+
+
+                        <!-- COMMENT -->
+
+                        <div class="form-group">
+
+                            <label for="comment">
+                                Your Comment
+                            </label>
+
+                            <textarea
+                                id="comment"
+                                placeholder="Tell us about your experience..."
+                                required></textarea>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary submit-review-btn">
+
+                            Submit Review
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- ================= MY REVIEW INFO ================= -->
+
+                <div class="review-card">
+
+                    <h2>
+                        How Reviews Work
+                    </h2>
+
+                    <p class="review-card-subtitle">
+                        A few things to know before submitting.
+                    </p>
+
+
+                    <div class="appointment-info">
+
+                        <p>
+                            <strong>1.</strong>
+                            You can review only a completed appointment.
+                        </p>
+
+                        <p>
+                            <strong>2.</strong>
+                            The appointment must belong to your account.
+                        </p>
+
+                        <p>
+                            <strong>3.</strong>
+                            Each appointment can have only one review.
+                        </p>
+
+                        <p>
+                            <strong>4.</strong>
+                            You can rate your experience from 1 to 5 stars.
+                        </p>
+
+                        <p>
+                            <strong>5.</strong>
+                            The salon staff can respond to your review.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        id="selectedAppointment"
+                        style="display: none;">
+
+                        <h3>
+                            Selected Appointment
+                        </h3>
+
+                        <div
+                            id="selectedAppointmentDetails"
+                            class="appointment-info">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= EXISTING REVIEWS ================= -->
+
+            <section class="existing-reviews">
+
+                <span class="section-label">
+                    CUSTOMER FEEDBACK
+                </span>
+
+                <h2>
+                    Reviews
+                </h2>
+
+
+                <div
+                    id="reviewsContainer">
+
+                    <div class="loading-reviews">
+                        Loading reviews...
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="container footer-bottom">
+
+            <span>
+                © 2026 Luxe Salon
+            </span>
+
+            <span>
+                Beauty • Style • Confidence
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script>
+
+        const API_URL =
+            "http://localhost:5000";
+
+        const token =
+            localStorage.getItem("token");
+
+
+        // =================================================
+        // AUTH CHECK
+        // =================================================
+
+        if (!token) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        // =================================================
+        // ELEMENTS
+        // =================================================
+
+        const reviewForm =
+            document.getElementById(
+                "reviewForm"
+            );
+
+        const reviewMessage =
+            document.getElementById(
+                "reviewMessage"
+            );
+
+        const appointmentIdInput =
+            document.getElementById(
+                "appointmentId"
+            );
+
+        const ratingInput =
+            document.getElementById(
+                "rating"
+            );
+
+        const commentInput =
+            document.getElementById(
+                "comment"
+            );
+
+        const reviewsContainer =
+            document.getElementById(
+                "reviewsContainer"
+            );
+
+        const navUserName =
+            document.getElementById(
+                "navUserName"
+            );
+
+
+        // =================================================
+        // SHOW MESSAGE
+        // =================================================
+
+        function showMessage(
+            message,
+            type
+        ) {
+
+            reviewMessage.textContent =
+                message;
+
+            reviewMessage.className =
+                `review-message ${type}`;
+
+        }
+
+
+        // =================================================
+        // LOAD PROFILE
+        // =================================================
+
+        async function loadProfile() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/users/profile`,
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const user =
+                    data.user || data;
+
+
+                navUserName.textContent =
+                    user.name || "Customer";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Profile error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =================================================
+        // RATING STARS
+        // =================================================
+
+        const ratingStars =
+            document.querySelectorAll(
+                ".rating-star"
+            );
+
+
+        ratingStars.forEach(
+            star => {
+
+                star.addEventListener(
+                    "click",
+                    () => {
+
+                        const selectedRating =
+                            Number(
+                                star.dataset.rating
+                            );
+
+
+                        ratingInput.value =
+                            selectedRating;
+
+
+                        ratingStars.forEach(
+                            item => {
+
+                                const itemRating =
+                                    Number(
+                                        item.dataset.rating
+                                    );
+
+                                if (
+                                    itemRating <=
+                                    selectedRating
+                                ) {
+
+                                    item.classList.add(
+                                        "active"
+                                    );
+
+                                } else {
+
+                                    item.classList.remove(
+                                        "active"
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        // =================================================
+        // GET APPOINTMENT ID FROM URL
+        // =================================================
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const urlAppointmentId =
+            urlParams.get(
+                "appointmentId"
+            );
+
+
+        if (urlAppointmentId) {
+
+            appointmentIdInput.value =
+                urlAppointmentId;
+
+            loadAppointment(
+                urlAppointmentId
+            );
+
+        }
+
+
+        // =================================================
+        // LOAD APPOINTMENT
+        // =================================================
+
+        async function loadAppointment(
+            appointmentId
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/appointments/${appointmentId}`,
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    return;
+
+                }
+
+
+                const appointment =
+                    data.appointment ||
+                    data;
+
+
+                const appointmentInfo =
+                    document.getElementById(
+                        "appointmentInfo"
+                    );
+
+
+                appointmentInfo.innerHTML = `
+
+                    <p>
+                        <strong>Service:</strong>
+                        ${appointment.service_name || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Staff:</strong>
+                        ${appointment.staff_name || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Date:</strong>
+                        ${appointment.appointment_date || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        ${appointment.status || "-"}
+                    </p>
+
+                `;
+
+
+                appointmentInfo.style.display =
+                    "block";
+
+
+                const selectedAppointment =
+                    document.getElementById(
+                        "selectedAppointment"
+                    );
+
+                const selectedDetails =
+                    document.getElementById(
+                        "selectedAppointmentDetails"
+                    );
+
+
+                selectedDetails.innerHTML = `
+
+                    <p>
+                        <strong>Appointment ID:</strong>
+                        ${appointment.id || appointmentId}
+                    </p>
+
+                    <p>
+                        <strong>Service:</strong>
+                        ${appointment.service_name || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Staff:</strong>
+                        ${appointment.staff_name || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        ${appointment.status || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Payment:</strong>
+                        ${appointment.payment_status || "-"}
+                    </p>
+
+                `;
+
+
+                selectedAppointment.style.display =
+                    "block";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Appointment error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =================================================
+        // SUBMIT REVIEW
+        // =================================================
+
+        reviewForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const appointmentId =
+                    Number(
+                        appointmentIdInput.value
+                    );
+
+                const rating =
+                    Number(
+                        ratingInput.value
+                    );
+
+                const comment =
+                    commentInput.value.trim();
+
+
+                if (!appointmentId) {
+
+                    showMessage(
+                        "Please enter an appointment ID.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    rating < 1 ||
+                    rating > 5
+                ) {
+
+                    showMessage(
+                        "Please select a rating from 1 to 5 stars.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (!comment) {
+
+                    showMessage(
+                        "Please enter your review.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `${API_URL}/api/reviews`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        `Bearer ${token}`
+                                },
+
+                                body: JSON.stringify({
+                                    appointmentId:
+                                        appointmentId,
+
+                                    rating:
+                                        rating,
+
+                                    comment:
+                                        comment
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to submit review."
+                        );
+
+                    }
+
+
+                    showMessage(
+                        "Review submitted successfully!",
+                        "success"
+                    );
+
+
+                    reviewForm.reset();
+
+                    ratingInput.value =
+                        0;
+
+
+                    ratingStars.forEach(
+                        star =>
+                            star.classList.remove(
+                                "active"
+                            )
+                    );
+
+
+                    loadReviews();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Review submission error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message,
+                        "error"
+                    );
+
+                }
+
+            }
+        );
+
+
+        // =================================================
+        // LOAD REVIEWS
+        // =================================================
+
+        async function loadReviews() {
+
+            reviewsContainer.innerHTML = `
+
+                <div class="loading-reviews">
+                    Loading reviews...
+                </div>
+
+            `;
+
+
+            try {
+
+                /*
+                 * Load services first.
+                 * Then load reviews for each service.
+                 */
+
+                const servicesResponse =
+                    await fetch(
+                        `${API_URL}/api/services`
+                    );
+
+
+                const servicesData =
+                    await servicesResponse.json();
+
+
+                if (!servicesResponse.ok) {
+
+                    throw new Error(
+                        servicesData.message ||
+                        "Unable to load services."
+                    );
+
+                }
+
+
+                const services =
+                    Array.isArray(servicesData)
+                        ? servicesData
+                        : (
+                            servicesData.services ||
+                            servicesData.data ||
+                            []
+                        );
+
+
+                let html = "";
+
+                let hasReviews = false;
+
+
+                for (
+                    const service
+                    of services
+                ) {
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                `${API_URL}/api/reviews/service/${service.id}`
+                            );
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (!response.ok) {
+                            continue;
+                        }
+
+
+                        const reviews =
+                            Array.isArray(data)
+                                ? data
+                                : (
+                                    data.reviews ||
+                                    data.data ||
+                                    []
+                                );
+
+
+                        if (!reviews.length) {
+                            continue;
+                        }
+
+
+                        hasReviews = true;
+
+
+                        html += `
+
+                            <div class="service-review-section">
+
+                                <h3>
+                                    ${service.name}
+                                </h3>
+
+                        `;
+
+
+                        reviews.forEach(
+                            review => {
+
+                                const rating =
+                                    Number(
+                                        review.rating
+                                    );
+
+
+                                const stars =
+                                    "★".repeat(
+                                        rating
+                                    ) +
+                                    "☆".repeat(
+                                        5 - rating
+                                    );
+
+
+                                html += `
+
+                                    <div class="review-item">
+
+                                        <div class="review-top">
+
+                                            <span class="review-customer">
+                                                ${review.customer_name || review.user_name || "Customer"}
+                                            </span>
+
+                                            <span class="review-rating">
+                                                ${stars}
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="review-comment">
+
+                                            ${review.comment || "No comment"}
+
+                                        </div>
+
+
+                                        ${
+                                            review.staff_response
+                                                ? `
+                                                    <div class="staff-response">
+
+                                                        <strong>
+                                                            Staff Response
+                                                        </strong>
+
+                                                        <span>
+                                                            ${review.staff_response}
+                                                        </span>
+
+                                                    </div>
+                                                `
+                                                : ""
+                                        }
+
+                                    </div>
+
+                                `;
+
+                            }
+                        );
+
+
+                        html += `
+                            </div>
+                        `;
+
+
+                    } catch (error) {
+
+                        console.error(
+                            `Unable to load reviews for service ${service.id}:`,
+                            error
+                        );
+
+                    }
+
+                }
+
+
+                if (!hasReviews) {
+
+                    reviewsContainer.innerHTML = `
+
+                        <div class="no-reviews">
+
+                            <h3>
+                                No reviews yet
+                            </h3>
+
+                            <p>
+                                Be the first customer to share
+                                your salon experience.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                reviewsContainer.innerHTML =
+                    html;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Reviews loading error:",
+                    error
+                );
+
+
+                reviewsContainer.innerHTML = `
+
+                    <div class="no-reviews">
+
+                        <h3>
+                            Unable to load reviews
+                        </h3>
+
+                        <p>
+                            ${error.message}
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        // =================================================
+        // LOGOUT
+        // =================================================
+
+        function logout() {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            localStorage.removeItem(
+                "user"
+            );
+
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        document
+            .getElementById("mobileLogoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        // =================================================
+        // MOBILE MENU
+        // =================================================
+
+        const menuBtn =
+            document.getElementById(
+                "menuBtn"
+            );
+
+        const mobileMenu =
+            document.getElementById(
+                "mobileMenu"
+            );
+
+
+        menuBtn.addEventListener(
+            "click",
+            () => {
+
+                mobileMenu.classList.toggle(
+                    "show"
+                );
+
+
+                menuBtn.textContent =
+                    mobileMenu.classList.contains(
+                        "show"
+                    )
+                        ? "✕"
+                        : "☰";
+
+            }
+        );
+
+
+        // =================================================
+        // INITIAL LOAD
+        // =================================================
+
+        loadProfile();
+
+        loadReviews();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Dashboard - Salon Booking System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            color: #333;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 15px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar button {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            padding: 9px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .navbar button:hover {
+            background: #c0392b;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .welcome h1 {
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #666;
+        }
+
+        /* STATISTICS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            text-align: center;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card p {
+            color: #777;
+        }
+
+        /* SECTION */
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #f7f7f7;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .booked {
+            background: #dff0ff;
+            color: #1976d2;
+        }
+
+        .completed {
+            background: #dff7e8;
+            color: #18864b;
+        }
+
+        .cancelled {
+            background: #ffe1e1;
+            color: #d32f2f;
+        }
+
+        .rescheduled {
+            background: #fff0d5;
+            color: #b26a00;
+        }
+
+        .paid {
+            background: #dff7e8;
+            color: #18864b;
+        }
+
+        .pending {
+            background: #fff0d5;
+            color: #b26a00;
+        }
+
+        /* REVIEWS */
+
+        .review-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .customer-name {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .stars {
+            color: #f5b301;
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .review-service {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .review-comment {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .response-box {
+            background: #f7f7f7;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .response-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .reply-area {
+            margin-top: 12px;
+        }
+
+        .reply-area textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            resize: vertical;
+        }
+
+        .reply-btn {
+            margin-top: 8px;
+            background: #222;
+            color: white;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .reply-btn:hover {
+            background: #444;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            background: #f7f7f7;
+            color: #666;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+
+        .success {
+            background: #e4f8eb;
+            color: #18864b;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px;
+            }
+
+            .navbar-right {
+                gap: 10px;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <div class="navbar">
+
+        <h2>Salon Staff Dashboard</h2>
+
+        <div class="navbar-right">
+
+            <span id="staffName">Staff</span>
+
+            <button onclick="logout()">
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="container">
+
+        <!-- WELCOME -->
+
+        <div class="welcome">
+
+            <h1>Welcome, <span id="welcomeName">Staff</span> 👋</h1>
+
+            <p>
+                Manage your appointments and respond to customer reviews.
+            </p>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+
+                <h3 id="totalAppointments">
+                    0
+                </h3>
+
+                <p>
+                    Total Appointments
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3 id="bookedAppointments">
+                    0
+                </h3>
+
+                <p>
+                    Booked
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3 id="completedAppointments">
+                    0
+                </h3>
+
+                <p>
+                    Completed
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3 id="cancelledAppointments">
+                    0
+                </h3>
+
+                <p>
+                    Cancelled
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- APPOINTMENTS -->
+
+        <div class="section">
+
+            <h2>
+                My Appointments
+            </h2>
+
+            <div id="appointmentMessage"
+                 class="message"
+                 style="display:none;">
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Service
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Payment
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="appointmentsTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMER REVIEWS -->
+
+        <div class="section">
+
+            <h2>
+                Customer Reviews
+            </h2>
+
+            <div id="reviewMessage"
+                 class="message"
+                 style="display:none;">
+            </div>
+
+            <div id="reviewsContainer">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+<script>
+
+    const API_URL = "http://localhost:5000";
+
+    const token = localStorage.getItem("token");
+
+    /*
+        Rahul's staff ID.
+
+        From the database:
+        Rahul -> user_id = 2
+        Rahul -> staff_id = 1
+    */
+
+    const STAFF_ID = 1;
+
+
+    // Check login
+
+    if (!token) {
+
+        window.location.href = "index.html";
+
+    }
+
+
+    /*
+        LOGOUT
+    */
+
+    function logout() {
+
+        localStorage.removeItem("token");
+
+        window.location.href = "index.html";
+
+    }
+
+
+    /*
+        SHOW MESSAGE
+    */
+
+    function showMessage(elementId, message, type = "") {
+
+        const element = document.getElementById(elementId);
+
+        element.textContent = message;
+
+        element.className = "message " + type;
+
+        element.style.display = "block";
+
+    }
+
+
+    /*
+        LOAD STAFF PROFILE
+    */
+
+    async function loadProfile() {
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/api/users/profile`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load staff profile"
+                );
+
+            }
+
+
+            const user = await response.json();
+
+
+            document.getElementById("staffName").textContent =
+                user.name || "Staff";
+
+
+            document.getElementById("welcomeName").textContent =
+                user.name || "Staff";
+
+
+        } catch (error) {
+
+            console.error(
+                "Profile error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+        LOAD APPOINTMENTS
+    */
+
+    async function loadAppointments() {
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/api/appointments/staff/${STAFF_ID}`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            if (!response.ok) {
+
+                const errorData =
+                    await response.json();
+
+                throw new Error(
+                    errorData.message ||
+                    "Unable to load appointments"
+                );
+
+            }
+
+
+            const appointments =
+                await response.json();
+
+
+            displayAppointments(
+                appointments
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Appointment error:",
+                error
+            );
+
+
+            showMessage(
+                "appointmentMessage",
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /*
+        DISPLAY APPOINTMENTS
+    */
+
+    function displayAppointments(
+        appointments
+    ) {
+
+        const table =
+            document.getElementById(
+                "appointmentsTable"
+            );
+
+
+        table.innerHTML = "";
+
+
+        /*
+            Statistics
+        */
+
+        document.getElementById(
+            "totalAppointments"
+        ).textContent =
+            appointments.length;
+
+
+        document.getElementById(
+            "bookedAppointments"
+        ).textContent =
+            appointments.filter(
+                appointment =>
+                    appointment.status === "BOOKED"
+            ).length;
+
+
+        document.getElementById(
+            "completedAppointments"
+        ).textContent =
+            appointments.filter(
+                appointment =>
+                    appointment.status === "COMPLETED"
+            ).length;
+
+
+        document.getElementById(
+            "cancelledAppointments"
+        ).textContent =
+            appointments.filter(
+                appointment =>
+                    appointment.status === "CANCELLED"
+            ).length;
+
+
+        if (appointments.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="8">
+                        No appointments found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        appointments.forEach(
+            appointment => {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${appointment.id}
+                    </td>
+
+                    <td>
+                        ${appointment.customer_name}
+                    </td>
+
+                    <td>
+                        ${appointment.customer_email}
+                    </td>
+
+                    <td>
+                        ${appointment.service_name}
+                    </td>
+
+                    <td>
+                        ${formatDate(
+                            appointment.appointment_date
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatTime(
+                            appointment.start_time
+                        )}
+                        -
+                        ${formatTime(
+                            appointment.end_time
+                        )}
+                    </td>
+
+                    <td>
+                        <span class="status ${getStatusClass(
+                            appointment.status
+                        )}">
+                            ${appointment.status}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="status ${getPaymentClass(
+                            appointment.payment_status
+                        )}">
+                            ${appointment.payment_status}
+                        </span>
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            }
+        );
+
+    }
+
+
+    /*
+        LOAD STAFF REVIEWS
+
+        IMPORTANT:
+        This is no longer using:
+
+        /api/admin/reviews
+
+        Instead it uses:
+
+        /api/reviews/staff/my
+    */
+
+    async function loadReviews() {
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/api/reviews/staff/my`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            if (!response.ok) {
+
+                const errorData =
+                    await response.json();
+
+                throw new Error(
+                    errorData.message ||
+                    "Unable to load reviews"
+                );
+
+            }
+
+
+            const reviews =
+                await response.json();
+
+
+            displayReviews(
+                reviews
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Review error:",
+                error
+            );
+
+
+            showMessage(
+                "reviewMessage",
+                error.message,
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /*
+        DISPLAY REVIEWS
+    */
+
+    function displayReviews(
+        reviews
+    ) {
+
+        const container =
+            document.getElementById(
+                "reviewsContainer"
+            );
+
+
+        container.innerHTML = "";
+
+
+        if (reviews.length === 0) {
+
+            container.innerHTML = `
+                <div class="message">
+                    No customer reviews yet.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        reviews.forEach(
+            review => {
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className =
+                    "review-card";
+
+
+                /*
+                    Generate stars
+
+                    Example:
+                    rating = 5
+                    ★★★★★
+
+                    rating = 3
+                    ★★★☆☆
+                */
+
+                const stars =
+                    "★".repeat(
+                        Number(review.rating)
+                    ) +
+                    "☆".repeat(
+                        5 - Number(review.rating)
+                    );
+
+
+                let responseHTML = "";
+
+
+                /*
+                    If staff has already responded,
+                    display the response.
+                */
+
+                if (
+                    review.staff_response &&
+                    review.staff_response.trim() !== ""
+                ) {
+
+                    responseHTML = `
+
+                        <div class="response-box">
+
+                            <strong>
+                                Your Response:
+                            </strong>
+
+                            ${escapeHTML(
+                                review.staff_response
+                            )}
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                card.innerHTML = `
+
+                    <div class="review-header">
+
+                        <span class="customer-name">
+                            ${escapeHTML(
+                                review.customer_name
+                            )}
+                        </span>
+
+                        <span class="stars">
+                            ${stars}
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-service">
+
+                        Service:
+                        ${escapeHTML(
+                            review.service_name
+                        )}
+
+                    </div>
+
+
+                    <div class="review-comment">
+
+                        ${escapeHTML(
+                            review.comment ||
+                            "No comment provided."
+                        )}
+
+                    </div>
+
+
+                    ${responseHTML}
+
+
+                    <div class="reply-area">
+
+                        <textarea
+                            id="reply-${review.id}"
+                            placeholder="${
+                                review.staff_response
+                                ? "Update your response..."
+                                : "Write a response to the customer..."
+                            }"
+                        ></textarea>
+
+
+                        <button
+                            class="reply-btn"
+                            onclick="replyToReview(${review.id})"
+                        >
+
+                            ${
+                                review.staff_response
+                                ? "Update Response"
+                                : "Reply to Customer"
+                            }
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+        REPLY TO REVIEW
+    */
+
+    async function replyToReview(
+        reviewId
+    ) {
+
+        const textarea =
+            document.getElementById(
+                `reply-${reviewId}`
+            );
+
+
+        const responseText =
+            textarea.value.trim();
+
+
+        if (!responseText) {
+
+            alert(
+                "Please enter a response."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/api/reviews/${reviewId}/respond`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        Authorization:
+                            `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        response: responseText
+                    })
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to respond to review"
+                );
+
+            }
+
+
+            alert(
+                data.message ||
+                "Response submitted successfully."
+            );
+
+
+            /*
+                Reload reviews so that
+                the new response appears.
+            */
+
+            loadReviews();
+
+
+        } catch (error) {
+
+            console.error(
+                "Reply error:",
+                error
+            );
+
+
+            alert(
+                error.message
+            );
+
+        }
+
+    }
+
+
+    /*
+        FORMAT DATE
+    */
+
+    function formatDate(
+        date
+    ) {
+
+        if (!date) {
+            return "";
+        }
+
+
+        const d =
+            new Date(date);
+
+
+        return d.toLocaleDateString(
+            "en-IN"
+        );
+
+    }
+
+
+    /*
+        FORMAT TIME
+    */
+
+    function formatTime(
+        time
+    ) {
+
+        if (!time) {
+            return "";
+        }
+
+
+        /*
+            MySQL can return:
+
+            HH:MM:SS
+
+            We only display:
+
+            HH:MM
+        */
+
+        return time.substring(
+            0,
+            5
+        );
+
+    }
+
+
+    /*
+        STATUS CSS CLASS
+    */
+
+    function getStatusClass(
+        status
+    ) {
+
+        if (
+            status === "BOOKED"
+        ) {
+            return "booked";
+        }
+
+
+        if (
+            status === "COMPLETED"
+        ) {
+            return "completed";
+        }
+
+
+        if (
+            status === "CANCELLED"
+        ) {
+            return "cancelled";
+        }
+
+
+        if (
+            status === "RESCHEDULED"
+        ) {
+            return "rescheduled";
+        }
+
+
+        return "";
+
+    }
+
+
+    /*
+        PAYMENT CSS CLASS
+    */
+
+    function getPaymentClass(
+        status
+    ) {
+
+        if (
+            status === "PAID"
+        ) {
+            return "paid";
+        }
+
+
+        return "pending";
+
+    }
+
+
+    /*
+        BASIC HTML ESCAPING
+
+        This prevents customer comments
+        from being directly inserted as HTML.
+    */
+
+    function escapeHTML(
+        value
+    ) {
+
+        if (value === null ||
+            value === undefined) {
+
+            return "";
+
+        }
+
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /*
+        LOAD EVERYTHING
+    */
+
+    loadProfile();
+
+    loadAppointments();
+
+    loadReviews();
+
+</script>
+
+</body>
+</html>
