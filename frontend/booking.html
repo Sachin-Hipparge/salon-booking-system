@@ -959,145 +959,119 @@
         }
 
 
-        // =================================================
-        // LOAD STAFF
-        // =================================================
+       // =================================================
+// LOAD STAFF FOR SELECTED SERVICE
+// =================================================
 
-        async function loadStaff() {
-
-            try {
-
-                const response =
-                    await fetch(
-                        `${API_URL}/api/staff`,
-                        {
-                            headers: {
-                                "Authorization":
-                                    `Bearer ${token}`
-                            }
-                        }
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        data.message ||
-                        "Unable to load professionals"
-                    );
-
+async function loadStaff() {
+    try {
+        const response = await fetch(
+            `${API_URL}/api/staff/service/${serviceId}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
-
-
-                let staffList =
-                    Array.isArray(data)
-                        ? data
-                        : (
-                            data.staff ||
-                            data.data ||
-                            []
-                        );
-
-
-                /*
-                    Only show active staff.
-                */
-
-                staffList =
-                    staffList.filter(
-                        staff =>
-                            !staff.status ||
-                            staff.status === "ACTIVE"
-                    );
-
-
-                staffSelect.innerHTML = `
-                    <option value="">
-                        Select a professional
-                    </option>
-                `;
-
-
-                if (!staffList.length) {
-
-                    staffSelect.innerHTML = `
-                        <option value="">
-                            No professionals available
-                        </option>
-                    `;
-
-                    return;
-
-                }
-
-
-                staffList.forEach(
-                    staff => {
-
-                        const id =
-                            staff.id ||
-                            staff.staff_id;
-
-
-                        const name =
-                            staff.name ||
-                            staff.staff_name ||
-                            "Salon Professional";
-
-
-                        const specialization =
-                            staff.specialization
-                                ? ` — ${staff.specialization}`
-                                : "";
-
-
-                        const option =
-                            document.createElement(
-                                "option"
-                            );
-
-
-                        option.value =
-                            id;
-
-                        option.textContent =
-                            `${name}${specialization}`;
-
-
-                        staffSelect.appendChild(
-                            option
-                        );
-
-                    }
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Staff error:",
-                    error
-                );
-
-
-                /*
-                    Don't hide the whole booking page
-                    if the staff endpoint has an issue.
-                */
-
-                staffSelect.innerHTML = `
-                    <option value="">
-                        Unable to load professionals
-                    </option>
-                `;
-
             }
+        );
 
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message ||
+                "Unable to load professionals"
+            );
         }
+
+        let staffList = Array.isArray(data)
+            ? data
+            : (
+                data.staff ||
+                data.data ||
+                []
+            );
+
+        // Only show active staff
+        staffList = staffList.filter(
+            staff =>
+                !staff.status ||
+                staff.status === "ACTIVE"
+        );
+
+        // Clear existing options
+        staffSelect.innerHTML = `
+            <option value="">
+                Select a professional
+            </option>
+        `;
+
+        // No staff assigned to this service
+        if (!staffList.length) {
+            staffSelect.innerHTML = `
+                <option value="">
+                    No professionals available for this service
+                </option>
+            `;
+
+            document.getElementById(
+                "summaryStaff"
+            ).textContent = "Not selected";
+
+            return;
+        }
+
+        // Add only staff assigned to this service
+        staffList.forEach(staff => {
+
+            const id =
+                staff.id ||
+                staff.staff_id;
+
+            const name =
+                staff.name ||
+                staff.staff_name ||
+                "Salon Professional";
+
+            const specialization =
+                staff.specialization
+                    ? ` — ${staff.specialization}`
+                    : "";
+
+            const option =
+                document.createElement("option");
+
+            option.value = id;
+
+            option.textContent =
+                `${name}${specialization}`;
+
+            staffSelect.appendChild(option);
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Staff loading error:",
+            error
+        );
+
+        staffSelect.innerHTML = `
+            <option value="">
+                Unable to load professionals
+            </option>
+        `;
+
+        document.getElementById(
+            "summaryStaff"
+        ).textContent = "Not selected";
+
+        showMessage(
+            error.message ||
+            "Unable to load professionals.",
+            "error"
+        );
+    }
+}
 
 
         // =================================================

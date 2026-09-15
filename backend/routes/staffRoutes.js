@@ -13,7 +13,8 @@ const {
     deleteStaff,
     assignServiceToStaff,
     getStaffServices,
-    removeServiceFromStaff
+    removeServiceFromStaff,
+    getStaffByService
 } = require("../controllers/staffController");
 
 
@@ -23,6 +24,12 @@ const {
 
 // Get all active staff
 router.get("/", getAllStaff);
+
+router.get(
+    "/service/:serviceId",
+    authenticateUser,
+    getStaffByService
+);
 
 // Get one staff member
 router.get("/:id", getStaffById);
@@ -74,6 +81,8 @@ router.delete(
     authorizeAdmin,
     removeServiceFromStaff
 );
+
+
 
 
 module.exports = router;

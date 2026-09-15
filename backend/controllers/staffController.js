@@ -624,6 +624,52 @@ const removeServiceFromStaff = (req, res) => {
     );
 };
 
+// GET STAFF BY SERVICE
+const getStaffByService = (req, res) => {
+    const serviceId = req.params.serviceId;
+
+    if (!serviceId) {
+        return res.status(400).json({
+            message: "Service ID is required"
+        });
+    }
+
+    const sql = `
+        SELECT
+            st.id,
+            st.user_id,
+            u.name,
+            u.email,
+            st.specialization,
+            st.bio,
+            st.status
+        FROM staff st
+        JOIN users u
+            ON st.user_id = u.id
+        JOIN staff_services ss
+            ON st.id = ss.staff_id
+        WHERE ss.service_id = ?
+        AND st.status = 'ACTIVE'
+        AND u.role = 'STAFF'
+        ORDER BY u.name ASC
+    `;
+
+    db.execute(
+        sql,
+        [serviceId],
+        (err, result) => {
+
+            if (err) {
+                return res.status(500).json({
+                    message: "Database error",
+                    error: err
+                });
+            }
+
+            return res.status(200).json(result);
+        }
+    );
+};
 
 // =========================================
 // EXPORT CONTROLLERS
@@ -637,5 +683,6 @@ module.exports = {
     deleteStaff,
     assignServiceToStaff,
     getStaffServices,
-    removeServiceFromStaff
+    removeServiceFromStaff,
+    getStaffByService
 };
