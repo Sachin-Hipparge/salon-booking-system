@@ -22,6 +22,51 @@
         rel="stylesheet"
     >
 
+    <style>
+
+        /* =========================================
+           DISABLED TIME SLOTS
+        ========================================= */
+
+        .time-slot:disabled {
+
+            opacity: 0.35 !important;
+
+            cursor: not-allowed !important;
+
+            pointer-events: none;
+
+        }
+
+
+        .availability-disabled {
+
+            opacity: 0.35 !important;
+
+            cursor: not-allowed !important;
+
+        }
+
+
+        .leave-disabled {
+
+            opacity: 0.35 !important;
+
+            cursor: not-allowed !important;
+
+        }
+
+
+        .past-disabled {
+
+            opacity: 0.35 !important;
+
+            cursor: not-allowed !important;
+
+        }
+
+    </style>
+
 </head>
 
 
@@ -731,7 +776,7 @@
         function formatTime(time) {
 
             const parts =
-                time.split(":");
+                String(time).split(":");
 
             let hour =
                 parseInt(parts[0]);
@@ -959,696 +1004,1079 @@
         }
 
 
-       // =================================================
-// LOAD STAFF FOR SELECTED SERVICE
-// =================================================
+        // =================================================
+        // LOAD STAFF FOR SELECTED SERVICE
+        // =================================================
 
-async function loadStaff() {
-    try {
-        const response = await fetch(
-            `${API_URL}/api/staff/service/${serviceId}`,
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`
+        async function loadStaff() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/staff/service/${serviceId}`,
+                        {
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load professionals"
+                    );
+
                 }
+
+
+                let staffList =
+                    Array.isArray(data)
+                        ? data
+                        : (
+                            data.staff ||
+                            data.data ||
+                            []
+                        );
+
+
+                // Only show active staff
+                staffList =
+                    staffList.filter(
+                        staff =>
+                            !staff.status ||
+                            staff.status === "ACTIVE"
+                    );
+
+
+                // Clear existing options
+
+                staffSelect.innerHTML = `
+                    <option value="">
+                        Select a professional
+                    </option>
+                `;
+
+
+                // No staff assigned to this service
+
+                if (!staffList.length) {
+
+                    staffSelect.innerHTML = `
+                        <option value="">
+                            No professionals available for this service
+                        </option>
+                    `;
+
+                    document.getElementById(
+                        "summaryStaff"
+                    ).textContent =
+                        "Not selected";
+
+                    resetTimeSlots();
+
+                    return;
+                }
+
+
+                // Add staff
+
+                staffList.forEach(
+                    staff => {
+
+                        const id =
+                            staff.id ||
+                            staff.staff_id;
+
+
+                        const name =
+                            staff.name ||
+                            staff.staff_name ||
+                            "Salon Professional";
+
+
+                        const specialization =
+                            staff.specialization
+                                ? ` — ${staff.specialization}`
+                                : "";
+
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        option.value =
+                            id;
+
+
+                        option.textContent =
+                            `${name}${specialization}`;
+
+
+                        staffSelect.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Staff loading error:",
+                    error
+                );
+
+
+                staffSelect.innerHTML = `
+                    <option value="">
+                        Unable to load professionals
+                    </option>
+                `;
+
+
+                document.getElementById(
+                    "summaryStaff"
+                ).textContent =
+                    "Not selected";
+
+
+                resetTimeSlots();
+
+
+                showMessage(
+                    error.message ||
+                    "Unable to load professionals.",
+                    "error"
+                );
+
             }
-        );
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(
-                data.message ||
-                "Unable to load professionals"
-            );
         }
-
-        let staffList = Array.isArray(data)
-            ? data
-            : (
-                data.staff ||
-                data.data ||
-                []
-            );
-
-        // Only show active staff
-        staffList = staffList.filter(
-            staff =>
-                !staff.status ||
-                staff.status === "ACTIVE"
-        );
-
-        // Clear existing options
-        staffSelect.innerHTML = `
-            <option value="">
-                Select a professional
-            </option>
-        `;
-
-        // No staff assigned to this service
-        if (!staffList.length) {
-            staffSelect.innerHTML = `
-                <option value="">
-                    No professionals available for this service
-                </option>
-            `;
-
-            document.getElementById(
-                "summaryStaff"
-            ).textContent = "Not selected";
-
-            return;
-        }
-
-        // Add only staff assigned to this service
-        staffList.forEach(staff => {
-
-            const id =
-                staff.id ||
-                staff.staff_id;
-
-            const name =
-                staff.name ||
-                staff.staff_name ||
-                "Salon Professional";
-
-            const specialization =
-                staff.specialization
-                    ? ` — ${staff.specialization}`
-                    : "";
-
-            const option =
-                document.createElement("option");
-
-            option.value = id;
-
-            option.textContent =
-                `${name}${specialization}`;
-
-            staffSelect.appendChild(option);
-        });
-
-    } catch (error) {
-
-        console.error(
-            "Staff loading error:",
-            error
-        );
-
-        staffSelect.innerHTML = `
-            <option value="">
-                Unable to load professionals
-            </option>
-        `;
-
-        document.getElementById(
-            "summaryStaff"
-        ).textContent = "Not selected";
-
-        showMessage(
-            error.message ||
-            "Unable to load professionals.",
-            "error"
-        );
-    }
-}
 
 
         // =================================================
         // STAFF CHANGE
         // =================================================
-staffSelect.addEventListener(
-    "change",
-    async () => {
 
-        const option =
-            staffSelect.options[
-                staffSelect.selectedIndex
-            ];
+        staffSelect.addEventListener(
+            "change",
+            async () => {
 
-        document.getElementById(
-            "summaryStaff"
-        ).textContent =
-            staffSelect.value
-                ? option.textContent
-                : "Not selected";
+                const option =
+                    staffSelect.options[
+                        staffSelect.selectedIndex
+                    ];
 
 
-        await checkStaffLeave();
+                document.getElementById(
+                    "summaryStaff"
+                ).textContent =
+                    staffSelect.value
+                        ? option.textContent
+                        : "Not selected";
 
-    }
-);
+
+                /*
+                 * When staff changes, check:
+                 *
+                 * 1. Weekly availability
+                 * 2. Approved leave
+                 * 3. Past time
+                 */
+
+                await checkStaffAvailability();
+
+            }
+        );
 
 
         // =================================================
         // DATE CHANGE
         // =================================================
 
-       appointmentDate.addEventListener(
-    "change",
-    async () => {
+        appointmentDate.addEventListener(
+            "change",
+            async () => {
 
-        document.getElementById(
-            "summaryDate"
-        ).textContent =
-            formatDate(
-                appointmentDate.value
-            );
-
-
-        await checkStaffLeave();
-
-    }
-);
-
-// =================================================
-// CHECK STAFF LEAVE
-// =================================================
-
-async function checkStaffLeave() {
-
-    const staffId =
-        staffSelect.value;
-
-    const selectedDate =
-        appointmentDate.value;
+                document.getElementById(
+                    "summaryDate"
+                ).textContent =
+                    formatDate(
+                        appointmentDate.value
+                    );
 
 
-    // If staff or date is not selected,
-    // enable all time slots
-    if (!staffId || !selectedDate) {
+                /*
+                 * When date changes, check:
+                 *
+                 * 1. Weekly availability
+                 * 2. Approved leave
+                 * 3. Past time
+                 */
 
-        resetTimeSlots();
+                await checkStaffAvailability();
 
-        return;
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_URL}/api/leaves/staff/${staffId}?date=${selectedDate}`
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.message ||
-                "Unable to check staff leave"
-            );
-        }
-
-
-        const leaves =
-            Array.isArray(data)
-                ? data
-                : (data.leaves || []);
-
-
-        console.log(
-            "Approved staff leaves:",
-            leaves
+            }
         );
 
 
-        updateTimeSlots(
-            leaves
-        );
+        // =================================================
+        // CHECK STAFF WEEKLY AVAILABILITY + LEAVE
+        // =================================================
+
+        async function checkStaffAvailability() {
+
+            const staffId =
+                staffSelect.value;
 
 
-    } catch (error) {
-
-        console.error(
-            "Staff leave check error:",
-            error
-        );
-
-        // If leave API fails,
-        // reset slots instead of blocking everything
-        resetTimeSlots();
-    }
-}
+            const selectedDate =
+                appointmentDate.value;
 
 
-// =================================================
-// UPDATE TIME SLOTS
-// =================================================
-function updateTimeSlots(leaves) {
-
-    const slots =
-        document.querySelectorAll(".time-slot");
-
-
-    // Clear previously selected time
-    selectedTime = null;
-
-    document.getElementById(
-        "summaryTime"
-    ).textContent = "Not selected";
-
-
-    // ==========================================
-    // GET TODAY'S DATE
-    // ==========================================
-
-    const today =
-        new Date();
-
-    const todayDate =
-        today.getFullYear() +
-        "-" +
-        String(
-            today.getMonth() + 1
-        ).padStart(2, "0") +
-        "-" +
-        String(
-            today.getDate()
-        ).padStart(2, "0");
-
-
-    const selectedDate =
-        appointmentDate.value;
-
-
-    // ==========================================
-    // CURRENT TIME IN MINUTES
-    // ==========================================
-
-    const currentMinutes =
-        today.getHours() * 60 +
-        today.getMinutes();
-
-
-    slots.forEach(
-        slot => {
-
-            const slotTime =
-                slot.dataset.time;
-
-
-            const slotMinutes =
-                convertTimeToMinutes(
-                    slotTime
-                );
-
-
-            // Reset previous state
-            slot.classList.remove(
-                "leave-disabled"
-            );
-
-            slot.classList.remove(
-                "past-disabled"
-            );
-
-            slot.classList.remove(
-                "selected"
-            );
-
-            slot.disabled = false;
-
-
-            // ==========================================
-            // CHECK PAST TIME
-            // ==========================================
+            // If staff or date not selected
 
             if (
-                selectedDate === todayDate &&
-                slotMinutes <= currentMinutes
+                !staffId ||
+                !selectedDate
             ) {
 
-                slot.classList.add(
-                    "past-disabled"
-                );
-
-                slot.disabled = true;
+                resetTimeSlots();
 
                 return;
             }
 
 
-            // ==========================================
-            // CHECK STAFF LEAVE
-            // ==========================================
+            try {
 
-            const isOnLeave =
-                leaves.some(
-                    leave =>
-                        isTimeWithinLeave(
-                            slotTime,
-                            leave.start_time,
-                            leave.end_time
-                        )
-                );
+                // ==========================================
+                // GET WEEKLY AVAILABILITY
+                // ==========================================
+
+                const availabilityResponse =
+                    await fetch(
+                        `${API_URL}/api/availability/staff/${staffId}`
+                    );
 
 
-            if (isOnLeave) {
-
-                slot.classList.add(
-                    "leave-disabled"
-                );
-
-                slot.disabled = true;
-            }
-
-        }
-    );
-}
+                const availabilityData =
+                    await availabilityResponse.json();
 
 
-// =================================================
-// CHECK TIME AGAINST LEAVE
-// =================================================
+                if (!availabilityResponse.ok) {
 
-function isTimeWithinLeave(
-    slotTime,
-    leaveStart,
-    leaveEnd
-) {
+                    throw new Error(
+                        availabilityData.message ||
+                        "Unable to check staff availability"
+                    );
 
-    const slot =
-        convertTimeToMinutes(
-            slotTime
-        );
+                }
 
 
-    const start =
-        convertTimeToMinutes(
-            leaveStart
-        );
-
-
-    const end =
-        convertTimeToMinutes(
-            leaveEnd
-        );
-
-
-    return (
-        slot >= start &&
-        slot < end
-    );
-}
-
-
-// =================================================
-// CONVERT TIME TO MINUTES
-// =================================================
-
-function convertTimeToMinutes(
-    time
-) {
-
-    const parts =
-        String(time)
-            .substring(0, 5)
-            .split(":");
-
-
-    return (
-        Number(parts[0]) * 60 +
-        Number(parts[1])
-    );
-}
-
-
-// =================================================
-// RESET TIME SLOTS
-// =================================================
-
-function resetTimeSlots() {
-
-    selectedTime =
-        null;
-
-
-    document.getElementById(
-        "summaryTime"
-    ).textContent =
-        "Not selected";
-
-
-    document
-        .querySelectorAll(
-            ".time-slot"
-        )
-        .forEach(
-            slot => {
-
-                slot.disabled =
-                    false;
-
-
-                slot.classList.remove(
-                    "leave-disabled"
-                );
-
-
-                slot.classList.remove(
-                    "selected"
-                );
-
-            }
-        );
-}
-
-
-// =================================================
-// TIME SLOT
-// =================================================
-
-document
-    .querySelectorAll(
-        ".time-slot"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    // Don't allow disabled slots
-                    if (button.disabled) {
-                        return;
-                    }
-
-
-                    document
-                        .querySelectorAll(
-                            ".time-slot"
-                        )
-                        .forEach(
-                            slot =>
-                                slot.classList.remove(
-                                    "selected"
-                                )
+                const availability =
+                    Array.isArray(
+                        availabilityData
+                    )
+                        ? availabilityData
+                        : (
+                            availabilityData.availability ||
+                            availabilityData.data ||
+                            []
                         );
 
 
-                    button.classList.add(
+                console.log(
+                    "Staff weekly availability:",
+                    availability
+                );
+
+
+                // ==========================================
+                // FIND SELECTED DAY
+                // ==========================================
+
+                const selectedDateObject =
+                    new Date(
+                        `${selectedDate}T00:00:00`
+                    );
+
+
+                const dayNames = [
+                    "SUNDAY",
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY"
+                ];
+
+
+                const selectedDay =
+                    dayNames[
+                        selectedDateObject.getDay()
+                    ];
+
+
+                console.log(
+                    "Selected day:",
+                    selectedDay
+                );
+
+
+                // ==========================================
+                // FIND STAFF AVAILABILITY FOR THIS DAY
+                // ==========================================
+
+                const dayAvailability =
+                    availability.find(
+                        item => {
+
+                            const itemDay =
+                                String(
+                                    item.day_of_week
+                                )
+                                .trim()
+                                .toUpperCase();
+
+
+                            const isAvailable =
+                                item.is_available === true ||
+                                item.is_available === 1 ||
+                                item.is_available === "1";
+
+
+                            return (
+                                itemDay ===
+                                selectedDay &&
+                                isAvailable
+                            );
+
+                        }
+                    );
+
+
+                console.log(
+                    "Availability for selected day:",
+                    dayAvailability
+                );
+
+
+                // ==========================================
+                // GET STAFF LEAVE
+                // ==========================================
+
+                const leaveResponse =
+                    await fetch(
+                        `${API_URL}/api/leaves/staff/${staffId}?date=${selectedDate}`
+                    );
+
+
+                const leaveData =
+                    await leaveResponse.json();
+
+
+                let leaves = [];
+
+
+                if (leaveResponse.ok) {
+
+                    leaves =
+                        Array.isArray(
+                            leaveData
+                        )
+                            ? leaveData
+                            : (
+                                leaveData.leaves ||
+                                []
+                            );
+
+                }
+
+
+                console.log(
+                    "Approved staff leaves:",
+                    leaves
+                );
+
+
+                // ==========================================
+                // UPDATE TIME SLOTS
+                // ==========================================
+
+                updateTimeSlots(
+                    dayAvailability,
+                    leaves
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Staff availability check error:",
+                    error
+                );
+
+
+                resetTimeSlots();
+
+            }
+
+        }
+
+
+        // =================================================
+        // UPDATE TIME SLOTS
+        // WEEKLY AVAILABILITY + LEAVE + PAST TIME
+        // =================================================
+
+        function updateTimeSlots(
+            availability,
+            leaves
+        ) {
+
+            const slots =
+                document.querySelectorAll(
+                    ".time-slot"
+                );
+
+
+            // Clear previous selection
+
+            selectedTime =
+                null;
+
+
+            document.getElementById(
+                "summaryTime"
+            ).textContent =
+                "Not selected";
+
+
+            // ==========================================
+            // TODAY'S DATE
+            // ==========================================
+
+            const today =
+                new Date();
+
+
+            const todayDate =
+                today.getFullYear() +
+                "-" +
+                String(
+                    today.getMonth() + 1
+                ).padStart(2, "0") +
+                "-" +
+                String(
+                    today.getDate()
+                ).padStart(2, "0");
+
+
+            const selectedDate =
+                appointmentDate.value;
+
+
+            // ==========================================
+            // CURRENT TIME
+            // ==========================================
+
+            const currentMinutes =
+                today.getHours() * 60 +
+                today.getMinutes();
+
+
+            // ==========================================
+            // PROCESS EACH SLOT
+            // ==========================================
+
+            slots.forEach(
+                slot => {
+
+                    const slotTime =
+                        slot.dataset.time;
+
+
+                    const slotMinutes =
+                        convertTimeToMinutes(
+                            slotTime
+                        );
+
+
+                    // Reset previous state
+
+                    slot.disabled =
+                        false;
+
+
+                    slot.classList.remove(
+                        "availability-disabled"
+                    );
+
+
+                    slot.classList.remove(
+                        "leave-disabled"
+                    );
+
+
+                    slot.classList.remove(
+                        "past-disabled"
+                    );
+
+
+                    slot.classList.remove(
                         "selected"
                     );
 
 
-                    selectedTime =
-                        button.dataset.time;
+                    // ======================================
+                    // CHECK PAST TIME
+                    // ======================================
 
+                    if (
+                        selectedDate ===
+                            todayDate &&
+                        slotMinutes <=
+                            currentMinutes
+                    ) {
 
-                    document.getElementById(
-                        "summaryTime"
-                    ).textContent =
-                        formatTime(
-                            selectedTime
+                        slot.classList.add(
+                            "past-disabled"
                         );
+
+                        slot.disabled =
+                            true;
+
+                        return;
+
+                    }
+
+
+                    // ======================================
+                    // CHECK WEEKLY AVAILABILITY
+                    // ======================================
+
+                    if (!availability) {
+
+                        /*
+                         * No availability row means
+                         * staff does not work on this day.
+                         */
+
+                        slot.classList.add(
+                            "availability-disabled"
+                        );
+
+                        slot.disabled =
+                            true;
+
+                        return;
+
+                    }
+
+
+                    const staffStartMinutes =
+                        convertTimeToMinutes(
+                            availability.start_time
+                        );
+
+
+                    const staffEndMinutes =
+                        convertTimeToMinutes(
+                            availability.end_time
+                        );
+
+
+                    // ======================================
+                    // SERVICE DURATION
+                    // ======================================
+
+                    const serviceDuration =
+                        selectedService
+                            ? Number(
+                                selectedService.duration
+                            )
+                            : 0;
+
+
+                    const appointmentEndMinutes =
+                        slotMinutes +
+                        serviceDuration;
+
+
+                    /*
+                     * Disable if appointment:
+                     *
+                     * starts before staff working time
+                     * OR
+                     * ends after staff working time
+                     */
+
+                    if (
+                        slotMinutes <
+                            staffStartMinutes ||
+                        appointmentEndMinutes >
+                            staffEndMinutes
+                    ) {
+
+                        slot.classList.add(
+                            "availability-disabled"
+                        );
+
+                        slot.disabled =
+                            true;
+
+                        return;
+
+                    }
+
+
+                    // ======================================
+                    // CHECK APPROVED LEAVE
+                    // ======================================
+
+                    const isOnLeave =
+                        Array.isArray(
+                            leaves
+                        ) &&
+                        leaves.some(
+                            leave =>
+                                isTimeWithinLeave(
+                                    slotTime,
+                                    leave.start_time,
+                                    leave.end_time
+                                )
+                        );
+
+
+                    if (isOnLeave) {
+
+                        slot.classList.add(
+                            "leave-disabled"
+                        );
+
+                        slot.disabled =
+                            true;
+
+                    }
 
                 }
             );
 
         }
-    );
 
-// =================================================
-// CREATE APPOINTMENT
-// =================================================
 
-confirmBookingBtn.addEventListener(
-    "click",
-    async () => {
+        // =================================================
+        // CHECK TIME AGAINST LEAVE
+        // =================================================
 
-        // Validate service
-        if (!selectedService) {
+        function isTimeWithinLeave(
+            slotTime,
+            leaveStart,
+            leaveEnd
+        ) {
 
-            showMessage(
-                "Please select a valid service."
+            const slot =
+                convertTimeToMinutes(
+                    slotTime
+                );
+
+
+            const start =
+                convertTimeToMinutes(
+                    leaveStart
+                );
+
+
+            const end =
+                convertTimeToMinutes(
+                    leaveEnd
+                );
+
+
+            return (
+                slot >= start &&
+                slot < end
             );
 
-            return;
         }
 
 
-        // Validate staff
-        if (!staffSelect.value) {
+        // =================================================
+        // CONVERT TIME TO MINUTES
+        // =================================================
 
-            showMessage(
-                "Please select a professional."
+        function convertTimeToMinutes(
+            time
+        ) {
+
+            const parts =
+                String(time)
+                    .substring(0, 5)
+                    .split(":");
+
+
+            return (
+                Number(parts[0]) * 60 +
+                Number(parts[1])
             );
 
-            staffSelect.focus();
-
-            return;
         }
 
 
-        // Validate date
-        if (!appointmentDate.value) {
+        // =================================================
+        // RESET TIME SLOTS
+        // =================================================
 
-            showMessage(
-                "Please select an appointment date."
-            );
+        function resetTimeSlots() {
 
-            appointmentDate.focus();
-
-            return;
-        }
+            selectedTime =
+                null;
 
 
-        // Validate time
-        if (!selectedTime) {
-
-            showMessage(
-                "Please select an appointment time."
-            );
-
-            return;
-        }
+            document.getElementById(
+                "summaryTime"
+            ).textContent =
+                "Not selected";
 
 
-        // Disable button while booking
-        confirmBookingBtn.disabled = true;
+            document
+                .querySelectorAll(
+                    ".time-slot"
+                )
+                .forEach(
+                    slot => {
 
-        confirmBookingBtn.innerHTML =
-            "Booking appointment...";
+                        slot.disabled =
+                            false;
 
 
-        try {
+                        slot.classList.remove(
+                            "availability-disabled"
+                        );
 
-            const response =
-                await fetch(
-                    `${API_URL}/api/appointments`,
-                    {
-                        method: "POST",
 
-                        headers: {
-                            "Content-Type":
-                                "application/json",
+                        slot.classList.remove(
+                            "leave-disabled"
+                        );
 
-                            "Authorization":
-                                `Bearer ${token}`
-                        },
 
-                        body: JSON.stringify({
+                        slot.classList.remove(
+                            "past-disabled"
+                        );
 
-                            staff_id:
-                                Number(
-                                    staffSelect.value
-                                ),
 
-                            service_id:
-                                Number(
-                                    serviceId
-                                ),
+                        slot.classList.remove(
+                            "selected"
+                        );
 
-                            appointment_date:
-                                appointmentDate.value,
-
-                            start_time:
-                                selectedTime
-
-                        })
                     }
                 );
 
-
-            const data =
-                await response.json();
+        }
 
 
-            if (!response.ok) {
+        // =================================================
+        // TIME SLOT CLICK
+        // =================================================
 
-                throw new Error(
-                    data.message ||
-                    "Unable to book appointment"
-                );
+        document
+            .querySelectorAll(
+                ".time-slot"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            // Don't allow disabled slots
+
+                            if (
+                                button.disabled
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            document
+                                .querySelectorAll(
+                                    ".time-slot"
+                                )
+                                .forEach(
+                                    slot =>
+                                        slot.classList.remove(
+                                            "selected"
+                                        )
+                                );
+
+
+                            button.classList.add(
+                                "selected"
+                            );
+
+
+                            selectedTime =
+                                button.dataset.time;
+
+
+                            document.getElementById(
+                                "summaryTime"
+                            ).textContent =
+                                formatTime(
+                                    selectedTime
+                                );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        // =================================================
+        // CREATE APPOINTMENT
+        // =================================================
+
+        confirmBookingBtn.addEventListener(
+            "click",
+            async () => {
+
+                // Validate service
+
+                if (!selectedService) {
+
+                    showMessage(
+                        "Please select a valid service."
+                    );
+
+                    return;
+
+                }
+
+
+                // Validate staff
+
+                if (!staffSelect.value) {
+
+                    showMessage(
+                        "Please select a professional."
+                    );
+
+                    staffSelect.focus();
+
+                    return;
+
+                }
+
+
+                // Validate date
+
+                if (!appointmentDate.value) {
+
+                    showMessage(
+                        "Please select an appointment date."
+                    );
+
+                    appointmentDate.focus();
+
+                    return;
+
+                }
+
+
+                // Validate time
+
+                if (!selectedTime) {
+
+                    showMessage(
+                        "Please select an appointment time."
+                    );
+
+                    return;
+
+                }
+
+
+                // Extra safety:
+                // selected time must belong to
+                // an enabled button.
+
+                const selectedButton =
+                    document.querySelector(
+                        `.time-slot[data-time="${selectedTime}"]`
+                    );
+
+
+                if (
+                    !selectedButton ||
+                    selectedButton.disabled
+                ) {
+
+                    selectedTime =
+                        null;
+
+
+                    document.getElementById(
+                        "summaryTime"
+                    ).textContent =
+                        "Not selected";
+
+
+                    showMessage(
+                        "Please select an available appointment time."
+                    );
+
+                    return;
+
+                }
+
+
+                // Disable button while booking
+
+                confirmBookingBtn.disabled =
+                    true;
+
+
+                confirmBookingBtn.innerHTML =
+                    "Booking appointment...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `${API_URL}/api/appointments`,
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        `Bearer ${token}`
+
+                                },
+
+                                body: JSON.stringify({
+
+                                    staff_id:
+                                        Number(
+                                            staffSelect.value
+                                        ),
+
+                                    service_id:
+                                        Number(
+                                            serviceId
+                                        ),
+
+                                    appointment_date:
+                                        appointmentDate.value,
+
+                                    start_time:
+                                        selectedTime
+
+                                })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to book appointment"
+                        );
+
+                    }
+
+
+                    const appointmentId =
+                        data.appointmentId ||
+                        data.appointment?.id;
+
+
+                    showMessage(
+                        data.message ||
+                        "Appointment booked successfully!",
+                        "success"
+                    );
+
+
+                    // Go to payment after booking
+
+                    setTimeout(
+                        () => {
+
+                            if (appointmentId) {
+
+                                window.location.href =
+                                    `payment.html?appointmentId=${appointmentId}`;
+
+                            } else {
+
+                                window.location.href =
+                                    "dashboard.html";
+
+                            }
+
+                        },
+                        1200
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Appointment booking error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message ||
+                        "Unable to book appointment.",
+                        "error"
+                    );
+
+
+                    // Enable button again
+
+                    confirmBookingBtn.disabled =
+                        false;
+
+
+                    confirmBookingBtn.innerHTML =
+                        'Confirm Appointment <span>→</span>';
+
+                }
 
             }
+        );
 
-
-            const appointmentId =
-                data.appointmentId ||
-                data.appointment?.id;
-
-
-            showMessage(
-                data.message ||
-                "Appointment booked successfully!",
-                "success"
-            );
-
-
-            // Go to payment after successful booking
-            setTimeout(
-                () => {
-
-                    if (appointmentId) {
-
-                        window.location.href =
-                            `payment.html?appointmentId=${appointmentId}`;
-
-                    } else {
-
-                        window.location.href =
-                            "dashboard.html";
-
-                    }
-
-                },
-                1200
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Appointment booking error:",
-                error
-            );
-
-
-            showMessage(
-                error.message ||
-                "Unable to book appointment.",
-                "error"
-            );
-
-
-            // Enable button again
-            confirmBookingBtn.disabled =
-                false;
-
-            confirmBookingBtn.innerHTML =
-                'Confirm Appointment <span>→</span>';
-
-        }
-
-    }
-);
 
         // =================================================
         // LOGOUT
@@ -1660,9 +2088,11 @@ confirmBookingBtn.addEventListener(
                 "token"
             );
 
+
             localStorage.removeItem(
                 "user"
             );
+
 
             window.location.href =
                 "login.html";
@@ -1694,6 +2124,7 @@ confirmBookingBtn.addEventListener(
             document.getElementById(
                 "menuBtn"
             );
+
 
         const mobileMenu =
             document.getElementById(

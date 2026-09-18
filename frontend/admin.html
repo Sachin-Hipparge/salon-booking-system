@@ -265,6 +265,383 @@
             color: #856404;
         }
 
+        /* =========================================
+   STAFF MANAGEMENT
+========================================= */
+
+.staff-management {
+    margin-top: 25px;
+}
+
+.staff-management h2 {
+    margin-bottom: 20px;
+}
+
+.staff-hire-card {
+    background: #f8f9fc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.staff-hire-card h3 {
+    margin-bottom: 18px;
+    font-size: 18px;
+}
+
+.staff-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.hire-btn {
+    margin-top: 18px;
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.hire-btn:hover {
+    background: #2980b9;
+}
+
+.staff-list-title {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Staff action buttons */
+
+.staff-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 190px;
+}
+
+.fire-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.fire-btn:hover {
+    background: #c0392b;
+}
+
+.assign-btn {
+    background: #8e44ad;
+    color: white;
+}
+
+.assign-btn:hover {
+    background: #71368a;
+}
+
+.remove-service-btn {
+    background: #95a5a6;
+    color: white;
+    padding: 5px 8px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.remove-service-btn:hover {
+    background: #7f8c8d;
+}
+
+/* Assigned services */
+
+.assigned-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.service-tag {
+    display: inline-flex;
+    align-items: center;
+    background: #eee6f5;
+    color: #6c3483;
+    border-radius: 15px;
+    padding: 5px 8px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Service assignment box */
+
+.service-assignment {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.service-assignment select {
+    min-width: 130px;
+}
+
+/* =========================================
+   WEEKLY STAFF AVAILABILITY
+========================================= */
+
+.weekly-availability-card {
+    background: #f8f9fc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.weekly-availability-card h3 {
+    margin-bottom: 18px;
+    font-size: 18px;
+}
+
+.availability-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.availability-staff-row {
+    max-width: 420px;
+}
+
+.day-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.day-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.day-checkbox input {
+    width: auto;
+    cursor: pointer;
+}
+
+.time-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 300px));
+    gap: 16px;
+}
+
+.availability-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.save-availability-btn {
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.save-availability-btn:hover {
+    background: #2980b9;
+}
+
+.clear-availability-btn {
+    background: #95a5a6;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.clear-availability-btn:hover {
+    background: #7f8c8d;
+}
+
+.availability-list {
+    margin-top: 25px;
+}
+
+.availability-list h4 {
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.availability-table table {
+    min-width: 700px;
+}
+
+.delete-availability-btn {
+    background: #e74c3c;
+    color: white;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.delete-availability-btn:hover {
+    background: #c0392b;
+}
+
+@media (max-width: 700px) {
+
+    .day-checkboxes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .time-row {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .staff-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .staff-actions {
+        min-width: 140px;
+    }
+
+}
+
+/* =========================================
+   STAFF MANAGEMENT ACTIONS
+========================================= */
+
+.staff-action-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 260px;
+}
+
+.assign-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.assign-box select {
+    flex: 1;
+    min-width: 140px;
+    padding: 9px 10px;
+    border: 1px solid #d5d8dc;
+    border-radius: 6px;
+    background: white;
+}
+
+.assign-btn {
+    background: #8e44ad;
+    color: white;
+    font-weight: 600;
+}
+
+.assign-btn:hover {
+    background: #71368a;
+}
+
+.fire-btn {
+    width: 100%;
+    background: #e74c3c;
+    color: white;
+    font-weight: 600;
+}
+
+.fire-btn:hover {
+    background: #c0392b;
+}
+
+.assigned-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.service-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0e6f7;
+    color: #71368a;
+    padding: 7px 9px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.remove-service-btn {
+    padding: 2px 7px;
+    border-radius: 50%;
+    background: #95a5a6;
+    color: white;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.remove-service-btn:hover {
+    background: #7f8c8d;
+}
+
+.inactive-text {
+    color: #777;
+    font-style: italic;
+}
+
         @media (max-width: 1000px) {
 
             .stats-grid {
@@ -553,38 +930,401 @@
     </div>
 
 
-    <!-- STAFF -->
+<!-- ==========================================
+     STAFF MANAGEMENT
+========================================== -->
 
-    <div class="section">
+<div class="section staff-management">
 
-        <h2>All Staff</h2>
+    <h2>Staff Management</h2>
 
-        <div class="table-container">
 
-            <table>
+    <!-- =====================================
+         HIRE NEW STAFF
+    ====================================== -->
 
-                <thead>
+    <div class="staff-hire-card">
 
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Specialization</th>
-                        <th>Status</th>
-                        <th>Services</th>
-                    </tr>
+        <h3>Hire New Staff</h3>
 
-                </thead>
+        <form id="staffForm">
 
-                <tbody id="staffTable"></tbody>
+            <div class="staff-form">
 
-            </table>
+                <div class="form-group">
 
-        </div>
+                    <label for="staffName">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="staffName"
+                        placeholder="Enter staff name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="staffEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="staffEmail"
+                        placeholder="Enter staff email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="staffPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="staffPassword"
+                        placeholder="Enter login password"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="staffPhone">
+                        Phone
+                    </label>
+
+                    <input
+                        type="text"
+                        id="staffPhone"
+                        placeholder="Enter phone number"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="staffSpecialization">
+                        Specialization
+                    </label>
+
+                    <input
+                        type="text"
+                        id="staffSpecialization"
+                        placeholder="Example: Hair Stylist"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="staffBio">
+                        Bio
+                    </label>
+
+                    <textarea
+                        id="staffBio"
+                        placeholder="Enter staff bio"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="hire-btn">
+
+                Hire Staff
+
+            </button>
+
+        </form>
 
     </div>
 
+
+    <!-- =====================================
+         CURRENT STAFF
+    ====================================== -->
+
+    <h3 class="staff-list-title">
+        Current Staff
+    </h3>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Name</th>
+
+                    <th>Email</th>
+
+                    <th>Phone</th>
+
+                    <th>Specialization</th>
+
+                    <th>Status</th>
+
+                    <th>Assigned Services</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="staffTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     WEEKLY STAFF AVAILABILITY
+=========================================== -->
+
+<details class="section weekly-availability-section">
+
+    <summary class="weekly-availability-summary">
+        <span>
+            <strong>Staff Weekly Availability</strong>
+            <small>Set or manage one staff member's weekly schedule</small>
+        </span>
+
+        <span class="weekly-toggle">▼</span>
+    </summary>
+
+    <div class="weekly-availability-card">
+
+        <h3>Set Weekly Working Schedule</h3>
+
+        <form id="availabilityForm">
+
+            <div class="availability-form">
+
+                <div class="form-group availability-staff-row">
+
+                    <label for="availabilityStaff">
+                        Staff
+                    </label>
+
+                    <select id="availabilityStaff" required>
+
+                        <option value="">
+                            Select Staff
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Working Days
+                    </label>
+
+                    <div class="day-checkboxes">
+
+                        <label class="day-checkbox">
+                            <input
+                                type="checkbox"
+                                name="workingDays"
+                                value="MONDAY"
+                            >
+                            Monday
+                        </label>
+
+                        <label class="day-checkbox">
+                            <input
+                                type="checkbox"
+                                name="workingDays"
+                                value="TUESDAY"
+                            >
+                            Tuesday
+                        </label>
+
+                        <label class="day-checkbox">
+                            <input
+                                type="checkbox"
+                                name="workingDays"
+                                value="WEDNESDAY"
+                            >
+                            Wednesday
+                        </label>
+
+                        <label class="day-checkbox">
+                            <input
+                                type="checkbox"
+                                name="workingDays"
+                                value="THURSDAY"
+                            >
+                            Thursday
+                        </label>
+
+                        <label class="day-checkbox">
+                            <input
+                                type="checkbox"
+                                name="workingDays"
+                                value="FRIDAY"
+                            >
+                            Friday
+                        </label>
+
+                        <label class="day-checkbox">
+                            <input
+                                type="checkbox"
+                                name="workingDays"
+                                value="SATURDAY"
+                            >
+                            Saturday
+                        </label>
+
+                        <label class="day-checkbox">
+                            <input
+                                type="checkbox"
+                                name="workingDays"
+                                value="SUNDAY"
+                            >
+                            Sunday
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="time-row">
+
+                    <div class="form-group">
+
+                        <label for="availabilityStart">
+                            Start Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="availabilityStart"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="availabilityEnd">
+                            End Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="availabilityEnd"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="availability-actions">
+
+                    <button
+                        type="submit"
+                        class="save-availability-btn"
+                    >
+                        Save Weekly Schedule
+                    </button>
+
+                    <button
+                        type="button"
+                        class="clear-availability-btn"
+                        onclick="clearAvailabilityForm()"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+        <div class="availability-list">
+
+            <h4>Current Weekly Schedule</h4>
+
+            <div class="table-container availability-table">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Day</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="availabilityTable">
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="no-data"
+                            >
+                                Select a staff member to view availability
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        </div>
+
+    </details>
+
+
+    <!-- STAFF LEAVE REQUESTS -->
 
     <!-- STAFF LEAVE REQUESTS -->
 
@@ -629,6 +1369,7 @@ const API_URL = "http://localhost:5000";
 
 const token = localStorage.getItem("token");
 
+let availableServices = [];
 
 /* =========================================
    AUTHENTICATION CHECK
@@ -749,7 +1490,9 @@ async function loadDashboard() {
 
         loadStaff(),
 
-        loadLeaves()
+        loadLeaves(),
+
+        loadAvailabilityStaff()
 
     ];
 
@@ -1452,26 +2195,181 @@ async function loadReviews() {
 
 }
 
-
 /* =========================================
    STAFF
 ========================================= */
+
+/* =========================================
+   STAFF MANAGEMENT
+========================================= */
+
+
+/* -----------------------------------------
+   LOAD AVAILABLE SERVICES
+----------------------------------------- */
+
+async function loadAvailableServices() {
+
+    try {
+
+        const data =
+            await apiRequest("/api/admin/services");
+
+        availableServices =
+            data.services || data || [];
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Load available services error:",
+            error
+        );
+
+        availableServices = [];
+
+    }
+
+}
+
+
+/* -----------------------------------------
+   HIRE NEW STAFF
+----------------------------------------- */
+
+document
+    .getElementById("staffForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("staffName")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("staffEmail")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("staffPassword")
+                    .value;
+
+
+            const phone =
+                document
+                    .getElementById("staffPhone")
+                    .value
+                    .trim();
+
+
+            const specialization =
+                document
+                    .getElementById("staffSpecialization")
+                    .value
+                    .trim();
+
+
+            const bio =
+                document
+                    .getElementById("staffBio")
+                    .value
+                    .trim();
+
+
+            try {
+
+                await apiRequest(
+                    "/api/staff",
+                    {
+
+                        method: "POST",
+
+                        body: JSON.stringify({
+
+                            name: name,
+
+                            email: email,
+
+                            password: password,
+
+                            phone:
+                                phone || null,
+
+                            specialization:
+                                specialization || null,
+
+                            bio:
+                                bio || null
+
+                        })
+
+                    }
+                );
+
+
+                showMessage(
+                    "Staff hired successfully",
+                    "success"
+                );
+
+
+                document
+                    .getElementById("staffForm")
+                    .reset();
+
+
+                await loadStaff();
+
+
+                await loadStatistics();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Hire staff error:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+/* -----------------------------------------
+   LOAD ALL STAFF
+----------------------------------------- */
 
 async function loadStaff() {
 
     const data =
         await apiRequest("/api/admin/staff");
 
-
     const staff =
         data.staff || data;
 
-
     const table =
-        document.getElementById(
-            "staffTable"
-        );
-
+        document.getElementById("staffTable");
 
     table.innerHTML = "";
 
@@ -1481,21 +2379,161 @@ async function loadStaff() {
         staff.length === 0
     ) {
 
-        table.innerHTML =
-            `
+        table.innerHTML = `
             <tr>
-                <td colspan="7" class="no-data">
+
+                <td
+                    colspan="8"
+                    class="no-data">
+
                     No staff found
+
                 </td>
+
             </tr>
-            `;
+        `;
 
         return;
 
     }
 
 
-    staff.forEach(member => {
+    /* -----------------------------------------
+       LOAD ACTIVE SERVICES
+    ----------------------------------------- */
+
+    let services = [];
+
+    try {
+
+        const serviceData =
+            await apiRequest("/api/services");
+
+        services =
+            serviceData.services || serviceData;
+
+        if (!Array.isArray(services)) {
+            services = [];
+        }
+
+        services =
+            services.filter(
+                service =>
+                    service.status === "ACTIVE"
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Load services error:",
+            error
+        );
+
+    }
+
+
+    /* -----------------------------------------
+       LOAD EACH STAFF MEMBER
+    ----------------------------------------- */
+
+    for (const member of staff) {
+
+        let assignedServices = [];
+
+
+        try {
+
+            const serviceData =
+                await apiRequest(
+                    `/api/staff/${member.staff_id}/services`
+                );
+
+            assignedServices =
+                serviceData.services || serviceData;
+
+            if (!Array.isArray(assignedServices)) {
+                assignedServices = [];
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                `Unable to load services for staff ${member.staff_id}:`,
+                error
+            );
+
+        }
+
+
+        /* -----------------------------------------
+           ASSIGNED SERVICES HTML
+        ----------------------------------------- */
+
+        let assignedServicesHTML =
+            "No services assigned";
+
+
+        if (assignedServices.length > 0) {
+
+            assignedServicesHTML =
+
+                assignedServices.map(service => `
+
+                    <span class="service-tag">
+
+                        ${service.name}
+
+                        <button
+                            class="remove-service-btn"
+                            onclick="removeService(
+                                ${member.staff_id},
+                                ${service.id}
+                            )">
+
+                            ×
+
+                        </button>
+
+                    </span>
+
+                `).join("");
+
+        }
+
+
+        /* -----------------------------------------
+           SERVICE DROPDOWN
+        ----------------------------------------- */
+
+        let serviceOptions = `
+            <option value="">
+                Select Service
+            </option>
+        `;
+
+
+        services.forEach(service => {
+
+            serviceOptions += `
+                <option value="${service.id}">
+                    ${service.name}
+                </option>
+            `;
+
+        });
+
+
+        const isActive =
+            member.status === "ACTIVE";
+
+
+        /* -----------------------------------------
+           CREATE ROW
+        ----------------------------------------- */
 
         table.innerHTML += `
 
@@ -1505,38 +2543,862 @@ async function loadStaff() {
                     ${member.staff_id}
                 </td>
 
+
                 <td>
                     ${member.name || "-"}
                 </td>
+
 
                 <td>
                     ${member.email || "-"}
                 </td>
 
+
                 <td>
                     ${member.phone || "-"}
                 </td>
+
 
                 <td>
                     ${member.specialization || "-"}
                 </td>
 
-                <td>
-                    ${member.status || "-"}
-                </td>
 
                 <td>
-                    ${member.services || "-"}
+
+                    <span
+                        class="status ${member.status}">
+
+                        ${member.status}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <div class="assigned-services">
+
+                        ${assignedServicesHTML}
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    ${
+                        isActive
+
+                        ?
+
+                        `
+
+                        <div class="staff-action-box">
+
+                            <div class="assign-box">
+
+                                <select
+                                    id="service-${member.staff_id}">
+
+                                    ${serviceOptions}
+
+                                </select>
+
+
+                                <button
+                                    class="assign-btn"
+                                    onclick="assignService(
+                                        ${member.staff_id}
+                                    )">
+
+                                    Assign
+
+                                </button>
+
+                            </div>
+
+
+                            <button
+                                class="fire-btn"
+                                onclick="fireStaff(
+                                    ${member.staff_id}
+                                )">
+
+                                Fire
+
+                            </button>
+
+                        </div>
+
+                        `
+
+                        :
+
+                        `
+
+                        <span class="inactive-text">
+                            Inactive
+                        </span>
+
+                        `
+                    }
+
                 </td>
 
             </tr>
 
         `;
 
-    });
+    }
 
 }
 
+/* -----------------------------------------
+   ASSIGN SERVICE TO STAFF
+----------------------------------------- */
+
+async function assignService(staffId) {
+
+    const select =
+        document.getElementById(
+            `service-${staffId}`
+        );
+
+
+    const serviceId =
+        select.value;
+
+
+    if (!serviceId) {
+
+        showMessage(
+            "Please select a service first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/staff/${staffId}/services`,
+            {
+
+                method: "POST",
+
+                body: JSON.stringify({
+
+                    serviceId:
+                        Number(serviceId)
+
+                })
+
+            }
+        );
+
+
+        showMessage(
+            "Service assigned successfully.",
+            "success"
+        );
+
+
+        await loadStaff();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Assign service error:",
+            error
+        );
+
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+/* -----------------------------------------
+   REMOVE SERVICE FROM STAFF
+----------------------------------------- */
+
+async function removeService(
+    staffId,
+    serviceId
+) {
+
+    const confirmed =
+        confirm(
+            "Remove this service from this staff member?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/staff/${staffId}/services/${serviceId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+
+        showMessage(
+            "Service removed successfully.",
+            "success"
+        );
+
+
+        await loadStaff();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Remove service error:",
+            error
+        );
+
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+
+/* -----------------------------------------
+   FIRE / DEACTIVATE STAFF
+----------------------------------------- */
+
+async function fireStaff(
+    staffId
+) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to deactivate this staff member?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/staff/${staffId}`,
+            {
+
+                method: "DELETE"
+
+            }
+        );
+
+
+        showMessage(
+            "Staff deactivated successfully",
+            "success"
+        );
+
+
+        await loadStaff();
+
+
+        await loadStatistics();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Fire staff error:",
+            error
+        );
+
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+/* =========================================
+   STAFF WEEKLY AVAILABILITY
+========================================= */
+
+
+/* -----------------------------------------
+   LOAD STAFF INTO AVAILABILITY DROPDOWN
+----------------------------------------- */
+
+async function loadAvailabilityStaff() {
+
+    const select =
+        document.getElementById("availabilityStaff");
+
+    if (!select) {
+        return;
+    }
+
+    try {
+
+        const data =
+            await apiRequest("/api/admin/staff");
+
+        const staff =
+            data.staff || data;
+
+        select.innerHTML = `
+            <option value="">
+                Select Staff
+            </option>
+        `;
+
+        if (!Array.isArray(staff)) {
+            return;
+        }
+
+        staff
+            .filter(
+                member =>
+                    member.status === "ACTIVE"
+            )
+            .forEach(member => {
+
+                select.innerHTML += `
+                    <option value="${member.staff_id}">
+                        ${member.name}
+                    </option>
+                `;
+
+            });
+
+    } catch (error) {
+
+        console.error(
+            "Load availability staff error:",
+            error
+        );
+
+    }
+
+}
+
+
+async function loadAvailability(staffId) {
+
+    const table =
+        document.getElementById(
+            "availabilityTable"
+        );
+
+    if (!table) {
+        return;
+    }
+
+    if (!staffId) {
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    class="no-data"
+                >
+                    Select a staff member to view availability
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    table.innerHTML = `
+        <tr>
+            <td
+                colspan="5"
+                class="loading"
+            >
+                Loading availability...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const data =
+            await apiRequest(
+                `/api/availability/staff/${staffId}`
+            );
+
+        const availability =
+            data.availability || data;
+
+        if (
+            !Array.isArray(availability) ||
+            availability.length === 0
+        ) {
+
+            table.innerHTML = `
+                <tr>
+                    <td
+                        colspan="5"
+                        class="no-data"
+                    >
+                        No availability configured
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        table.innerHTML =
+            availability.map(item => {
+
+                const day =
+                    String(
+                        item.day_of_week
+                    ).toUpperCase();
+
+                const formattedDay =
+                    day.charAt(0) +
+                    day.slice(1).toLowerCase();
+
+                return `
+                    <tr>
+
+                        <td>
+                            ${formattedDay}
+                        </td>
+
+                        <td>
+                            ${formatTime(
+                                item.start_time
+                            )}
+                        </td>
+
+                        <td>
+                            ${formatTime(
+                                item.end_time
+                            )}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="status ${
+                                    item.is_available
+                                        ? "ACTIVE"
+                                        : "INACTIVE"
+                                }"
+                            >
+
+                                ${
+                                    item.is_available
+                                        ? "AVAILABLE"
+                                        : "UNAVAILABLE"
+                                }
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="delete-availability-btn"
+                                onclick="deleteAvailability(
+                                    ${item.id},
+                                    ${staffId}
+                                )"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join("");
+
+    } catch (error) {
+
+        console.error(
+            "Load availability error:",
+            error
+        );
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    class="no-data"
+                >
+                    Unable to load availability
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* -----------------------------------------
+   STAFF SELECTION
+----------------------------------------- */
+
+document
+    .getElementById("availabilityStaff")
+    .addEventListener(
+        "change",
+        function() {
+
+            loadAvailability(
+                this.value
+            );
+
+        }
+    );
+
+
+/* -----------------------------------------
+   SAVE WEEKLY SCHEDULE
+----------------------------------------- */
+document
+    .getElementById("availabilityForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const staffId =
+                document.getElementById(
+                    "availabilityStaff"
+                ).value;
+
+            const startTime =
+                document.getElementById(
+                    "availabilityStart"
+                ).value;
+
+            const endTime =
+                document.getElementById(
+                    "availabilityEnd"
+                ).value;
+
+            const selectedDays =
+                Array.from(
+                    document.querySelectorAll(
+                        'input[name="workingDays"]:checked'
+                    )
+                ).map(
+                    checkbox =>
+                        checkbox.value
+                );
+
+
+            /* -----------------------------------------
+               VALIDATION
+            ----------------------------------------- */
+
+            if (!staffId) {
+
+                showMessage(
+                    "Please select a staff member.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (selectedDays.length === 0) {
+
+                showMessage(
+                    "Please select at least one working day.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (!startTime || !endTime) {
+
+                showMessage(
+                    "Please select start and end time.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (startTime >= endTime) {
+
+                showMessage(
+                    "End time must be later than start time.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            try {
+
+                /* -----------------------------------------
+                   GET EXISTING AVAILABILITY
+                ----------------------------------------- */
+
+                const existingData =
+                    await apiRequest(
+                        `/api/availability/staff/${staffId}`
+                    );
+
+                const existingAvailability =
+                    existingData.availability ||
+                    existingData ||
+                    [];
+
+
+                const existingDays =
+                    Array.isArray(
+                        existingAvailability
+                    )
+                        ? existingAvailability.map(
+                            item =>
+                                String(
+                                    item.day_of_week
+                                ).toUpperCase()
+                        )
+                        : [];
+
+
+                /* -----------------------------------------
+                   ADD ONLY NEW DAYS
+                ----------------------------------------- */
+
+                let addedCount = 0;
+                let skippedCount = 0;
+
+
+                for (
+                    const day
+                    of selectedDays
+                ) {
+
+                    /*
+                     * Do not create duplicate
+                     * availability for the same day.
+                     */
+
+                    if (
+                        existingDays.includes(day)
+                    ) {
+
+                        skippedCount++;
+
+                        continue;
+                    }
+
+
+                    await apiRequest(
+                        `/api/availability/staff/${staffId}`,
+                        {
+
+                            method: "POST",
+
+                            body: JSON.stringify({
+
+                                day_of_week:
+                                    day,
+
+                                start_time:
+                                    startTime,
+
+                                end_time:
+                                    endTime,
+
+                                is_available:
+                                    true
+
+                            })
+
+                        }
+                    );
+
+
+                    addedCount++;
+
+                }
+
+
+                /* -----------------------------------------
+                   SUCCESS MESSAGE
+                ----------------------------------------- */
+
+                if (
+                    addedCount > 0 &&
+                    skippedCount > 0
+                ) {
+
+                    showMessage(
+                        `${addedCount} day(s) added. ${skippedCount} day(s) already existed.`,
+                        "success"
+                    );
+
+                } else if (
+                    addedCount > 0
+                ) {
+
+                    showMessage(
+                        "Weekly availability saved successfully.",
+                        "success"
+                    );
+
+                } else {
+
+                    showMessage(
+                        "Selected days already have availability.",
+                        "success"
+                    );
+
+                }
+
+
+                clearAvailabilityForm();
+
+
+                await loadAvailability(
+                    staffId
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Save weekly availability error:",
+                    error
+                );
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+/* -----------------------------------------
+   CLEAR FORM
+----------------------------------------- */
+
+function clearAvailabilityForm() {
+
+    document
+        .getElementById(
+            "availabilityForm"
+        )
+        .reset();
+
+}
+
+
+/* -----------------------------------------
+   DELETE AVAILABILITY
+----------------------------------------- */
+
+async function deleteAvailability(
+    availabilityId,
+    staffId
+) {
+
+    const confirmed =
+        confirm(
+            "Delete this availability day?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/availability/${availabilityId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+
+        showMessage(
+            "Availability deleted successfully.",
+            "success"
+        );
+
+
+        await loadAvailability(
+            staffId
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Delete availability error:",
+            error
+        );
+
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+/* =========================================
+   STAFF LEAVE REQUESTS
+========================================= */
 
 /* =========================================
    STAFF LEAVE REQUESTS
