@@ -3,18 +3,31 @@ const express = require("express");
 const router = express.Router();
 
 const authenticateUser = require("../middleware/authMiddleware");
+
 const authorizeAdmin = require("../middleware/adminMiddleware");
 
 const {
+
     createStaff,
+
     getAllStaff,
+
     getStaffById,
+
     updateStaff,
+
     deleteStaff,
+
     assignServiceToStaff,
+
     getStaffServices,
+
     removeServiceFromStaff,
-    getStaffByService
+
+    getStaffByService,
+
+    getMyStaffProfile
+
 } = require("../controllers/staffController");
 
 
@@ -23,7 +36,14 @@ const {
 // =========================================
 
 // Get all active staff
-router.get("/", getAllStaff);
+
+router.get(
+    "/",
+    getAllStaff
+);
+
+
+// Get staff members by service
 
 router.get(
     "/service/:serviceId",
@@ -31,11 +51,38 @@ router.get(
     getStaffByService
 );
 
+
+// =========================================
+// AUTHENTICATED STAFF ROUTE
+// =========================================
+
+// Get currently logged-in staff profile
+
+router.get(
+    "/me",
+    authenticateUser,
+    getMyStaffProfile
+);
+
+
+// =========================================
+// GET STAFF BY ID
+// =========================================
+
 // Get one staff member
-router.get("/:id", getStaffById);
+
+router.get(
+    "/:id",
+    getStaffById
+);
+
 
 // Get services assigned to staff
-router.get("/:staffId/services", getStaffServices);
+
+router.get(
+    "/:staffId/services",
+    getStaffServices
+);
 
 
 // =========================================
@@ -43,6 +90,7 @@ router.get("/:staffId/services", getStaffServices);
 // =========================================
 
 // Create staff
+
 router.post(
     "/",
     authenticateUser,
@@ -50,7 +98,9 @@ router.post(
     createStaff
 );
 
+
 // Update staff
+
 router.put(
     "/:id",
     authenticateUser,
@@ -58,7 +108,9 @@ router.put(
     updateStaff
 );
 
-// Delete/deactivate staff
+
+// Delete / deactivate staff
+
 router.delete(
     "/:id",
     authenticateUser,
@@ -66,7 +118,9 @@ router.delete(
     deleteStaff
 );
 
+
 // Assign service to staff
+
 router.post(
     "/:staffId/services",
     authenticateUser,
@@ -74,15 +128,15 @@ router.post(
     assignServiceToStaff
 );
 
+
 // Remove service from staff
+
 router.delete(
     "/:staffId/services/:serviceId",
     authenticateUser,
     authorizeAdmin,
     removeServiceFromStaff
 );
-
-
 
 
 module.exports = router;

@@ -672,6 +672,58 @@ const getStaffByService = (req, res) => {
 };
 
 // =========================================
+// GET MY STAFF PROFILE
+// Logged-in staff only
+// =========================================
+
+const getMyStaffProfile = (req, res) => {
+
+    const userId = req.user.id;
+
+    const query = `
+        SELECT
+            s.id AS staff_id,
+            s.user_id,
+            u.name,
+            u.email,
+            u.phone,
+            s.specialization,
+            s.bio,
+            s.status
+        FROM staff s
+        INNER JOIN users u
+            ON s.user_id = u.id
+        WHERE s.user_id = ?
+          AND u.role = 'STAFF'
+    `;
+
+    db.execute(
+        query,
+        [userId],
+        (err, results) => {
+
+            if (err) {
+                console.error(err);
+
+                return res.status(500).json({
+                    message: "Failed to fetch staff profile"
+                });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({
+                    message: "Staff profile not found"
+                });
+            }
+
+            return res.status(200).json({
+                staff: results[0]
+            });
+        }
+    );
+};
+
+// =========================================
 // EXPORT CONTROLLERS
 // =========================================
 
@@ -684,5 +736,6 @@ module.exports = {
     assignServiceToStaff,
     getStaffServices,
     removeServiceFromStaff,
-    getStaffByService
+    getStaffByService,
+    getMyStaffProfile
 };

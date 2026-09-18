@@ -1,11 +1,12 @@
 const db = require("../config/db");
-const {
-    sendAppointmentConfirmation
-} = require("../services/emailService");
 
 
-// CREATE APPOINTMENT
+/* =========================================================
+   CREATE APPOINTMENT
+========================================================= */
+
 const createAppointment = (req, res) => {
+
     const userId = req.user.id;
 
     const {
@@ -15,13 +16,71 @@ const createAppointment = (req, res) => {
         start_time
     } = req.body;
 
+
     if (!staff_id || !service_id || !appointment_date || !start_time) {
+
         return res.status(400).json({
-            message: "staff_id, service_id, appointment_date and start_time are required"
+            message:
+                "staff_id, service_id, appointment_date and start_time are required"
         });
+
     }
 
-    // Check staff
+
+    /* =====================================================
+       CHECK PAST DATE / TIME
+    ===================================================== */
+
+    const now = new Date();
+
+    const todayDate =
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0");
+
+
+    if (appointment_date < todayDate) {
+
+        return res.status(400).json({
+            message:
+                "You cannot book an appointment for a past date"
+        });
+
+    }
+
+
+    if (appointment_date === todayDate) {
+
+        const currentMinutes =
+            now.getHours() * 60 +
+            now.getMinutes();
+
+        const timeParts =
+            start_time.substring(0, 5).split(":");
+
+        const appointmentMinutes =
+            Number(timeParts[0]) * 60 +
+            Number(timeParts[1]);
+
+
+        if (appointmentMinutes <= currentMinutes) {
+
+            return res.status(400).json({
+                message:
+                    "You cannot book an appointment for a past time"
+            });
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CHECK STAFF
+    ===================================================== */
+
     const staffSql = `
         SELECT id
         FROM staff
@@ -29,524 +88,462 @@ const createAppointment = (req, res) => {
         AND status = 'ACTIVE'
     `;
 
-    db.execute(staffSql, [staff_id], (err, staffResult) => {
-        if (err) {
-            return res.status(500).json({
-                message: "Database error",
-                error: err
-            });
-        }
 
-        if (staffResult.length === 0) {
-            return res.status(404).json({
-                message: "Staff not found or inactive"
-            });
-        }
+    db.execute(
+        staffSql,
+        [staff_id],
+        (err, staffResult) => {
 
-        // Get service
-        const serviceSql = `
-            SELECT id, name, duration, price
-            FROM services
-            WHERE id = ?
-            AND status = 'ACTIVE'
-        `;
-
-        db.execute(serviceSql, [service_id], (err, serviceResult) => {
             if (err) {
+
                 return res.status(500).json({
                     message: "Database error",
                     error: err
                 });
+
             }
 
-            if (serviceResult.length === 0) {
+
+            if (staffResult.length === 0) {
+
                 return res.status(404).json({
-                    message: "Service not found or inactive"
+                    message: "Staff not found or inactive"
                 });
+
             }
 
-            const service = serviceResult[0];
 
-            // Check staff-service assignment
-            const assignmentSql = `
-                SELECT *
-                FROM staff_services
-                WHERE staff_id = ?
-                AND service_id = ?
+            /* =====================================================
+               GET SERVICE
+            ===================================================== */
+
+            const serviceSql = `
+                SELECT id, name, duration, price
+                FROM services
+                WHERE id = ?
+                AND status = 'ACTIVE'
             `;
 
+
             db.execute(
-                assignmentSql,
-                [staff_id, service_id],
-                (err, assignmentResult) => {
+                serviceSql,
+                [service_id],
+                (err, serviceResult) => {
+
                     if (err) {
+
                         return res.status(500).json({
                             message: "Database error",
                             error: err
                         });
+
                     }
 
-                    if (assignmentResult.length === 0) {
-                        return res.status(400).json({
-                            message: "This service is not assigned to the selected staff"
+
+                    if (serviceResult.length === 0) {
+
+                        return res.status(404).json({
+                            message: "Service not found or inactive"
                         });
+
                     }
 
-                    // Find day of week
-                    const daySql = `
-                        SELECT DAYNAME(?) AS day_name
+
+                    const service = serviceResult[0];
+
+
+                    /* =====================================================
+                       CHECK STAFF-SERVICE ASSIGNMENT
+                    ===================================================== */
+
+                    const assignmentSql = `
+                        SELECT *
+                        FROM staff_services
+                        WHERE staff_id = ?
+                        AND service_id = ?
                     `;
 
+
                     db.execute(
-                        daySql,
-                        [appointment_date],
-                        (err, dayResult) => {
+                        assignmentSql,
+                        [staff_id, service_id],
+                        (err, assignmentResult) => {
+
                             if (err) {
+
                                 return res.status(500).json({
                                     message: "Database error",
                                     error: err
                                 });
+
                             }
 
-                            const dayOfWeek =
-                                dayResult[0].day_name.toUpperCase();
 
-                            // Check availability
-                            const availabilitySql = `
-                                SELECT
-                                    id,
-                                    start_time,
-                                    end_time,
-                                    is_available
-                                FROM availability
-                                WHERE staff_id = ?
-                                AND day_of_week = ?
-                                AND is_available = TRUE
-                                AND start_time <= ?
-                                AND end_time >= ?
+                            if (assignmentResult.length === 0) {
+
+                                return res.status(400).json({
+                                    message:
+                                        "This service is not assigned to the selected staff"
+                                });
+
+                            }
+
+
+                            /* =====================================================
+                               FIND DAY OF WEEK
+                            ===================================================== */
+
+                            const daySql = `
+                                SELECT DAYNAME(?) AS day_name
                             `;
 
+
                             db.execute(
-                                availabilitySql,
-                                [
-                                    staff_id,
-                                    dayOfWeek,
-                                    start_time,
-                                    start_time
-                                ],
-                                (err, availabilityResult) => {
+                                daySql,
+                                [appointment_date],
+                                (err, dayResult) => {
+
                                     if (err) {
+
                                         return res.status(500).json({
                                             message: "Database error",
                                             error: err
                                         });
+
                                     }
 
-                                    if (availabilityResult.length === 0) {
-                                        return res.status(400).json({
-                                            message:
-                                                "Staff is not available at this time"
-                                        });
-                                    }
 
-                                    const availability =
-                                        availabilityResult[0];
+                                    const dayOfWeek =
+                                        dayResult[0]
+                                            .day_name
+                                            .toUpperCase();
 
-                                    // Calculate end time
-                                    const startDate = new Date(
-                                        `1970-01-01T${start_time}`
-                                    );
 
-                                    startDate.setMinutes(
-                                        startDate.getMinutes() +
-                                        service.duration
-                                    );
+                                    /* =====================================================
+                                       CHECK AVAILABILITY
+                                    ===================================================== */
 
-                                    const endTime = startDate
-                                        .toTimeString()
-                                        .substring(0, 8);
-
-                                    // Check appointment fits inside availability
-                                    if (
-                                        endTime >
-                                        availability.end_time
-                                    ) {
-                                        return res.status(400).json({
-                                            message:
-                                                "Appointment exceeds staff availability"
-                                        });
-                                    }
-
-                                    // Check appointment conflict
-                                    const conflictSql = `
-                                        SELECT id
-                                        FROM appointments
+                                    const availabilitySql = `
+                                        SELECT
+                                            id,
+                                            start_time,
+                                            end_time,
+                                            is_available
+                                        FROM availability
                                         WHERE staff_id = ?
-                                        AND appointment_date = ?
-                                        AND status IN ('BOOKED', 'RESCHEDULED')
-                                        AND start_time < ?
-                                        AND end_time > ?
+                                        AND day_of_week = ?
+                                        AND is_available = TRUE
+                                        AND start_time <= ?
+                                        AND end_time >= ?
                                     `;
 
+
                                     db.execute(
-                                        conflictSql,
+                                        availabilitySql,
                                         [
                                             staff_id,
-                                            appointment_date,
-                                            endTime,
+                                            dayOfWeek,
+                                            start_time,
                                             start_time
                                         ],
-                                        (err, conflictResult) => {
+                                        (err, availabilityResult) => {
+
                                             if (err) {
+
                                                 return res.status(500).json({
                                                     message:
                                                         "Database error",
                                                     error: err
                                                 });
+
                                             }
+
 
                                             if (
-                                                conflictResult.length > 0
+                                                availabilityResult.length === 0
                                             ) {
-                                                return res.status(409).json({
+
+                                                return res.status(400).json({
                                                     message:
-                                                        "Staff already has an appointment during this time"
+                                                        "Staff is not available at this time"
                                                 });
+
                                             }
 
-                                            // Create appointment
-                                            const insertSql = `
-                                                INSERT INTO appointments
-                                                (
-                                                    user_id,
-                                                    staff_id,
-                                                    service_id,
-                                                    appointment_date,
-                                                    start_time,
-                                                    end_time,
-                                                    status,
-                                                    payment_status
-                                                )
-                                                VALUES
-                                                (
-                                                    ?,
-                                                    ?,
-                                                    ?,
-                                                    ?,
-                                                    ?,
-                                                    ?,
-                                                    'BOOKED',
-                                                    'PENDING'
-                                                )
+
+                                            const availability =
+                                                availabilityResult[0];
+
+
+                                            /* =====================================================
+                                               CALCULATE END TIME
+                                            ===================================================== */
+
+                                            const startDate = new Date(
+                                                `1970-01-01T${start_time}`
+                                            );
+
+
+                                            startDate.setMinutes(
+                                                startDate.getMinutes() +
+                                                service.duration
+                                            );
+
+
+                                            const endTime =
+                                                startDate
+                                                    .toTimeString()
+                                                    .substring(0, 8);
+
+
+                                            /* =====================================================
+                                               CHECK AVAILABILITY BOUNDARY
+                                            ===================================================== */
+
+                                            if (
+                                                endTime >
+                                                availability.end_time
+                                            ) {
+
+                                                return res.status(400).json({
+                                                    message:
+                                                        "Appointment exceeds staff availability"
+                                                });
+
+                                            }
+
+
+                                            /* =====================================================
+                                               CHECK APPROVED STAFF LEAVE
+                                            ===================================================== */
+
+                                            const leaveSql = `
+                                                SELECT id
+                                                FROM staff_leaves
+                                                WHERE staff_id = ?
+                                                AND leave_date = ?
+                                                AND status = 'APPROVED'
+                                                AND start_time < ?
+                                                AND end_time > ?
                                             `;
 
+
                                             db.execute(
-                                                insertSql,
+                                                leaveSql,
                                                 [
-                                                    userId,
                                                     staff_id,
-                                                    service_id,
                                                     appointment_date,
-                                                    start_time,
-                                                    endTime
+                                                    endTime,
+                                                    start_time
                                                 ],
-                                                (err, result) => {
+                                                (err, leaveResult) => {
+
                                                     if (err) {
+
                                                         return res.status(500).json({
                                                             message:
-                                                                "Database error",
+                                                                "Database error while checking staff leave",
                                                             error: err
                                                         });
+
                                                     }
 
-                                                    /*
-                                                     * Appointment has now
-                                                     * been successfully saved.
-                                                     *
-                                                     * Get customer, service
-                                                     * and staff details for
-                                                     * confirmation email.
-                                                     */
 
-                                                    const detailsSql = `
-                                                        SELECT
-                                                            u.name AS customer_name,
-                                                            u.email AS customer_email,
-                                                            s.name AS service_name,
-                                                            s.price,
-                                                            staffUser.name AS staff_name
-                                                        FROM appointments a
-                                                        JOIN users u
-                                                            ON a.user_id = u.id
-                                                        JOIN services s
-                                                            ON a.service_id = s.id
-                                                        JOIN staff st
-                                                            ON a.staff_id = st.id
-                                                        JOIN users staffUser
-                                                            ON st.user_id = staffUser.id
-                                                        WHERE a.id = ?
+                                                    if (
+                                                        leaveResult.length > 0
+                                                    ) {
+
+                                                        return res.status(409).json({
+                                                            message:
+                                                                "Staff is on approved leave during the selected time"
+                                                        });
+
+                                                    }
+
+
+                                                    /* =====================================================
+                                                       CHECK APPOINTMENT CONFLICT
+                                                    ===================================================== */
+
+                                                    const conflictSql = `
+                                                        SELECT id
+                                                        FROM appointments
+                                                        WHERE staff_id = ?
+                                                        AND appointment_date = ?
+                                                        AND status IN ('BOOKED', 'RESCHEDULED')
+                                                        AND start_time < ?
+                                                        AND end_time > ?
                                                     `;
 
+
                                                     db.execute(
-                                                        detailsSql,
-                                                        [result.insertId],
-                                                        async (
-                                                            err,
-                                                            detailsResult
-                                                        ) => {
+                                                        conflictSql,
+                                                        [
+                                                            staff_id,
+                                                            appointment_date,
+                                                            endTime,
+                                                            start_time
+                                                        ],
+                                                        (err, conflictResult) => {
+
                                                             if (err) {
-                                                                return res.status(201).json({
+
+                                                                return res.status(500).json({
                                                                     message:
-                                                                        "Appointment booked successfully, but confirmation email details could not be loaded",
-                                                                    appointmentId:
-                                                                        result.insertId,
-                                                                    appointment: {
-                                                                        staff_id,
-                                                                        service_id,
-                                                                        appointment_date,
-                                                                        start_time,
-                                                                        end_time:
-                                                                            endTime,
-                                                                        status:
-                                                                            "BOOKED",
-                                                                        payment_status:
-                                                                            "PENDING"
-                                                                    }
+                                                                        "Database error",
+                                                                    error: err
                                                                 });
+
                                                             }
 
-                                                            const details =
-                                                                detailsResult[0];
 
-                                                            try {
-                                                                // Send confirmation email
-                                                                await sendAppointmentConfirmation(
-                                                                    {
-                                                                        customerEmail:
-                                                                            details.customer_email,
+                                                            if (
+                                                                conflictResult.length > 0
+                                                            ) {
 
-                                                                        customerName:
-                                                                            details.customer_name,
+                                                                return res.status(409).json({
+                                                                    message:
+                                                                        "Staff already has an appointment during this time"
+                                                                });
+
+                                                            }
+
+
+                                                            /* =====================================================
+                                                               CREATE APPOINTMENT
+                                                            ===================================================== */
+
+                                                            const insertSql = `
+                                                                INSERT INTO appointments
+                                                                (
+                                                                    user_id,
+                                                                    staff_id,
+                                                                    service_id,
+                                                                    appointment_date,
+                                                                    start_time,
+                                                                    end_time,
+                                                                    status,
+                                                                    payment_status
+                                                                )
+                                                                VALUES
+                                                                (
+                                                                    ?,
+                                                                    ?,
+                                                                    ?,
+                                                                    ?,
+                                                                    ?,
+                                                                    ?,
+                                                                    'BOOKED',
+                                                                    'PENDING'
+                                                                )
+                                                            `;
+
+
+                                                            db.execute(
+                                                                insertSql,
+                                                                [
+                                                                    userId,
+                                                                    staff_id,
+                                                                    service_id,
+                                                                    appointment_date,
+                                                                    start_time,
+                                                                    endTime
+                                                                ],
+                                                                (err, result) => {
+
+                                                                    if (err) {
+
+                                                                        return res.status(500).json({
+                                                                            message:
+                                                                                "Database error",
+                                                                            error: err
+                                                                        });
+
+                                                                    }
+
+
+                                                                    /* =====================================================
+                                                                       RETURN APPOINTMENT
+                                                                       PAYMENT WILL HAPPEN NEXT
+                                                                    ===================================================== */
+
+                                                                    return res.status(201).json({
+
+                                                                        message:
+                                                                            "Appointment reserved successfully. Please complete payment.",
 
                                                                         appointmentId:
                                                                             result.insertId,
 
-                                                                        appointmentDate:
+                                                                        appointment: {
+
+                                                                            staff_id,
+
+                                                                            service_id,
+
                                                                             appointment_date,
 
-                                                                        startTime:
                                                                             start_time,
 
-                                                                        endTime:
-                                                                            endTime,
+                                                                            end_time:
+                                                                                endTime,
 
-                                                                        serviceName:
-                                                                            details.service_name,
+                                                                            status:
+                                                                                "BOOKED",
 
-                                                                        staffName:
-                                                                            details.staff_name,
+                                                                            payment_status:
+                                                                                "PENDING"
 
-                                                                        price:
-                                                                            details.price
-                                                                    }
-                                                                );
+                                                                        }
 
-                                                               // Get customer, service and staff details
-// for confirmation email
+                                                                    });
 
-const detailsSql = `
-    SELECT
-        u.name AS customer_name,
-        u.email AS customer_email,
-        s.name AS service_name,
-        s.price,
-        staffUser.name AS staff_name
-    FROM appointments a
-    JOIN users u
-        ON a.user_id = u.id
-    JOIN services s
-        ON a.service_id = s.id
-    JOIN staff st
-        ON a.staff_id = st.id
-    JOIN users staffUser
-        ON st.user_id = staffUser.id
-    WHERE a.id = ?
-`;
+                                                                }
+                                                            );
 
-db.execute(
-    detailsSql,
-    [result.insertId],
-    async (err, detailsResult) => {
-
-        if (err) {
-            return res.status(201).json({
-                message:
-                    "Appointment booked successfully, but confirmation email details could not be loaded",
-
-                appointmentId: result.insertId,
-
-                appointment: {
-                    staff_id,
-                    service_id,
-                    appointment_date,
-                    start_time,
-                    end_time: endTime,
-                    status: "BOOKED",
-                    payment_status: "PENDING"
-                }
-            });
-        }
-
-        const details = detailsResult[0];
-
-        try {
-
-            // Send confirmation email
-            await sendAppointmentConfirmation({
-
-                customerEmail:
-                    details.customer_email,
-
-                customerName:
-                    details.customer_name,
-
-                appointmentId:
-                    result.insertId,
-
-                appointmentDate:
-                    appointment_date,
-
-                startTime:
-                    start_time,
-
-                endTime:
-                    endTime,
-
-                serviceName:
-                    details.service_name,
-
-                staffName:
-                    details.staff_name,
-
-                price:
-                    details.price
-            });
-
-
-            // Email sent successfully
-            res.status(201).json({
-
-                message:
-                    "Appointment booked successfully and confirmation email sent",
-
-                appointmentId:
-                    result.insertId,
-
-                appointment: {
-                    staff_id,
-                    service_id,
-                    appointment_date,
-                    start_time,
-                    end_time: endTime,
-                    status: "BOOKED",
-                    payment_status: "PENDING"
-                }
-            });
-
-        } catch (emailError) {
-
-            console.error(
-                "Email sending failed:",
-                emailError
-            );
-
-
-            // Appointment is already saved.
-            // Email failure should not cancel it.
-
-            res.status(201).json({
-
-                message:
-                    "Appointment booked successfully, but confirmation email could not be sent",
-
-                appointmentId:
-                    result.insertId,
-
-                appointment: {
-                    staff_id,
-                    service_id,
-                    appointment_date,
-                    start_time,
-                    end_time: endTime,
-                    status: "BOOKED",
-                    payment_status: "PENDING"
-                }
-            });
-        }
-    }
-);
-
-                                                            } catch (emailError) {
-
-                                                                console.error(
-                                                                    "Email sending failed:",
-                                                                    emailError
-                                                                );
-
-                                                                /*
-                                                                 * Appointment is already
-                                                                 * saved successfully.
-                                                                 *
-                                                                 * Email failure should not
-                                                                 * cancel the appointment.
-                                                                 */
-
-                                                                res.status(201).json({
-                                                                    message:
-                                                                        "Appointment booked successfully, but confirmation email could not be sent",
-
-                                                                    appointmentId:
-                                                                        result.insertId,
-
-                                                                    appointment: {
-                                                                        staff_id,
-                                                                        service_id,
-                                                                        appointment_date,
-                                                                        start_time,
-                                                                        end_time:
-                                                                            endTime,
-                                                                        status:
-                                                                            "BOOKED",
-                                                                        payment_status:
-                                                                            "PENDING"
-                                                                    }
-                                                                });
-                                                            }
                                                         }
                                                     );
+
                                                 }
                                             );
+
                                         }
                                     );
+
                                 }
                             );
+
                         }
                     );
+
                 }
             );
-        });
-    });
+
+        }
+    );
+
 };
 
 
-// GET MY APPOINTMENTS
+
+/* =========================================================
+   GET MY APPOINTMENTS
+========================================================= */
+
 const getMyAppointments = (req, res) => {
+
     const userId = req.user.id;
+
 
     const sql = `
         SELECT
             a.id,
-            a.appointment_date,
+
+            DATE_FORMAT(
+                a.appointment_date,
+                '%Y-%m-%d'
+            ) AS appointment_date,
+
             a.start_time,
             a.end_time,
             a.status,
@@ -555,77 +552,131 @@ const getMyAppointments = (req, res) => {
             s.price,
             st.id AS staff_id,
             u.name AS staff_name
+
         FROM appointments a
+
         JOIN services s
             ON a.service_id = s.id
+
         JOIN staff st
             ON a.staff_id = st.id
+
         JOIN users u
             ON st.user_id = u.id
+
         WHERE a.user_id = ?
+
         ORDER BY
             a.appointment_date DESC,
             a.start_time DESC
     `;
 
-    db.execute(sql, [userId], (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: "Database error",
-                error: err
-            });
-        }
 
-        res.status(200).json(result);
-    });
+    db.execute(
+        sql,
+        [userId],
+        (err, result) => {
+
+            if (err) {
+
+                return res.status(500).json({
+                    message: "Database error",
+                    error: err
+                });
+
+            }
+
+
+            res.status(200).json(result);
+
+        }
+    );
+
 };
 
 
-// GET STAFF APPOINTMENTS
+
+/* =========================================================
+   GET STAFF APPOINTMENTS
+========================================================= */
+
 const getStaffAppointments = (req, res) => {
+
     const staffId = req.params.staffId;
+
 
     const sql = `
         SELECT
             a.id,
-            a.appointment_date,
+
+            DATE_FORMAT(
+                a.appointment_date,
+                '%Y-%m-%d'
+            ) AS appointment_date,
+
             a.start_time,
             a.end_time,
             a.status,
             a.payment_status,
+
             u.id AS customer_id,
             u.name AS customer_name,
             u.email AS customer_email,
+
             s.name AS service_name
+
         FROM appointments a
+
         JOIN users u
             ON a.user_id = u.id
+
         JOIN services s
             ON a.service_id = s.id
+
         WHERE a.staff_id = ?
+
         ORDER BY
             a.appointment_date DESC,
             a.start_time DESC
     `;
 
-    db.execute(sql, [staffId], (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: "Database error",
-                error: err
-            });
-        }
 
-        res.status(200).json(result);
-    });
+    db.execute(
+        sql,
+        [staffId],
+        (err, result) => {
+
+            if (err) {
+
+                return res.status(500).json({
+                    message: "Database error",
+                    error: err
+                });
+
+            }
+
+
+            res.status(200).json(result);
+
+        }
+    );
+
 };
 
 
-// GET APPOINTMENT BY ID
+
+/* =========================================================
+   GET APPOINTMENT BY ID
+========================================================= */
+
 const getAppointmentById = (req, res) => {
+
     const appointmentId = req.params.id;
+
     const userId = req.user.id;
+
     const userRole = req.user.role;
+
 
     const sql = `
         SELECT
@@ -633,72 +684,112 @@ const getAppointmentById = (req, res) => {
             a.user_id,
             a.staff_id,
             a.service_id,
-            a.appointment_date,
+
+            DATE_FORMAT(
+                a.appointment_date,
+                '%Y-%m-%d'
+            ) AS appointment_date,
+
             a.start_time,
             a.end_time,
             a.status,
             a.payment_status,
+
             u.name AS customer_name,
             u.email AS customer_email,
+
             s.name AS service_name,
             s.price,
+
             st.user_id AS staff_user_id
+
         FROM appointments a
+
         JOIN users u
             ON a.user_id = u.id
+
         JOIN services s
             ON a.service_id = s.id
+
         JOIN staff st
             ON a.staff_id = st.id
+
         WHERE a.id = ?
     `;
 
-    db.execute(sql, [appointmentId], (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: "Database error",
-                error: err
-            });
+
+    db.execute(
+        sql,
+        [appointmentId],
+        (err, result) => {
+
+            if (err) {
+
+                return res.status(500).json({
+                    message: "Database error",
+                    error: err
+                });
+
+            }
+
+
+            if (result.length === 0) {
+
+                return res.status(404).json({
+                    message: "Appointment not found"
+                });
+
+            }
+
+
+            const appointment = result[0];
+
+
+            if (
+                userRole === "CUSTOMER" &&
+                appointment.user_id !== userId
+            ) {
+
+                return res.status(403).json({
+                    message: "Access denied"
+                });
+
+            }
+
+
+            if (
+                userRole === "STAFF" &&
+                appointment.staff_user_id !== userId
+            ) {
+
+                return res.status(403).json({
+                    message: "Access denied"
+                });
+
+            }
+
+
+            res.status(200).json(appointment);
+
         }
+    );
 
-        if (result.length === 0) {
-            return res.status(404).json({
-                message: "Appointment not found"
-            });
-        }
-
-        const appointment = result[0];
-
-        // Customer can only see their own appointment
-        if (
-            userRole === "CUSTOMER" &&
-            appointment.user_id !== userId
-        ) {
-            return res.status(403).json({
-                message: "Access denied"
-            });
-        }
-
-        // Staff can only see appointments assigned to them
-        if (
-            userRole === "STAFF" &&
-            appointment.staff_user_id !== userId
-        ) {
-            return res.status(403).json({
-                message: "Access denied"
-            });
-        }
-
-        res.status(200).json(appointment);
-    });
 };
 
 
-// CANCEL APPOINTMENT
+
+/* =========================================================
+   CANCEL APPOINTMENT
+========================================================= */
+
 const cancelAppointment = (req, res) => {
+
     const appointmentId = req.params.id;
+
     const userId = req.user.id;
+
     const userRole = req.user.role;
+
 
     const findSql = `
         SELECT
@@ -710,125 +801,189 @@ const cancelAppointment = (req, res) => {
         WHERE id = ?
     `;
 
-    db.execute(findSql, [appointmentId], (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: "Database error",
-                error: err
-            });
-        }
 
-        if (result.length === 0) {
-            return res.status(404).json({
-                message: "Appointment not found"
-            });
-        }
+    db.execute(
+        findSql,
+        [appointmentId],
+        (err, result) => {
 
-        const appointment = result[0];
+            if (err) {
 
-        // Customer can cancel only their own appointment
-        if (
-            userRole === "CUSTOMER" &&
-            appointment.user_id !== userId
-        ) {
-            return res.status(403).json({
-                message:
-                    "You can only cancel your own appointment"
-            });
-        }
-
-        // Staff can cancel appointments assigned to them
-        if (userRole === "STAFF") {
-            const staffSql = `
-                SELECT id
-                FROM staff
-                WHERE id = ?
-                AND user_id = ?
-            `;
-
-            db.execute(
-                staffSql,
-                [appointment.staff_id, userId],
-                (err, staffResult) => {
-                    if (err) {
-                        return res.status(500).json({
-                            message: "Database error",
-                            error: err
-                        });
-                    }
-
-                    if (staffResult.length === 0) {
-                        return res.status(403).json({
-                            message:
-                                "You cannot cancel this appointment"
-                        });
-                    }
-
-                    performCancellation();
-                }
-            );
-        } else {
-            performCancellation();
-        }
-
-        function performCancellation() {
-
-            if (appointment.status === "CANCELLED") {
-                return res.status(400).json({
-                    message:
-                        "Appointment is already cancelled"
+                return res.status(500).json({
+                    message: "Database error",
+                    error: err
                 });
+
             }
 
-            const updateSql = `
-                UPDATE appointments
-                SET status = 'CANCELLED'
-                WHERE id = ?
-            `;
 
-            db.execute(
-                updateSql,
-                [appointmentId],
-                (err) => {
-                    if (err) {
-                        return res.status(500).json({
-                            message: "Database error",
-                            error: err
-                        });
+            if (result.length === 0) {
+
+                return res.status(404).json({
+                    message: "Appointment not found"
+                });
+
+            }
+
+
+            const appointment = result[0];
+
+
+            if (
+                userRole === "CUSTOMER" &&
+                appointment.user_id !== userId
+            ) {
+
+                return res.status(403).json({
+                    message:
+                        "You can only cancel your own appointment"
+                });
+
+            }
+
+
+            if (userRole === "STAFF") {
+
+                const staffSql = `
+                    SELECT id
+                    FROM staff
+                    WHERE id = ?
+                    AND user_id = ?
+                `;
+
+
+                db.execute(
+                    staffSql,
+                    [
+                        appointment.staff_id,
+                        userId
+                    ],
+                    (err, staffResult) => {
+
+                        if (err) {
+
+                            return res.status(500).json({
+                                message: "Database error",
+                                error: err
+                            });
+
+                        }
+
+
+                        if (staffResult.length === 0) {
+
+                            return res.status(403).json({
+                                message:
+                                    "You cannot cancel this appointment"
+                            });
+
+                        }
+
+
+                        performCancellation();
+
                     }
+                );
 
-                    res.status(200).json({
+            } else {
+
+                performCancellation();
+
+            }
+
+
+            function performCancellation() {
+
+                if (appointment.status === "CANCELLED") {
+
+                    return res.status(400).json({
                         message:
-                            "Appointment cancelled successfully",
-                        appointmentId: appointmentId,
-                        status: "CANCELLED"
+                            "Appointment is already cancelled"
                     });
+
                 }
-            );
+
+
+                const updateSql = `
+                    UPDATE appointments
+                    SET status = 'CANCELLED'
+                    WHERE id = ?
+                `;
+
+
+                db.execute(
+                    updateSql,
+                    [appointmentId],
+                    (err) => {
+
+                        if (err) {
+
+                            return res.status(500).json({
+                                message: "Database error",
+                                error: err
+                            });
+
+                        }
+
+
+                        res.status(200).json({
+
+                            message:
+                                "Appointment cancelled successfully",
+
+                            appointmentId:
+                                appointmentId,
+
+                            status:
+                                "CANCELLED"
+
+                        });
+
+                    }
+                );
+
+            }
+
         }
-    });
+    );
+
 };
 
 
-// RESCHEDULE APPOINTMENT
+
+/* =========================================================
+   RESCHEDULE APPOINTMENT
+========================================================= */
+
 const rescheduleAppointment = (req, res) => {
+
     const appointmentId = req.params.id;
+
     const userId = req.user.id;
+
     const userRole = req.user.role;
+
 
     const {
         appointment_date,
         start_time
     } = req.body;
 
+
     if (!appointment_date || !start_time) {
+
         return res.status(400).json({
             message:
                 "appointment_date and start_time are required"
         });
+
     }
 
-    // Get existing appointment
+
+    /* =====================================================
+       GET EXISTING APPOINTMENT
+    ===================================================== */
+
     const appointmentSql = `
         SELECT
             id,
@@ -840,38 +995,48 @@ const rescheduleAppointment = (req, res) => {
         WHERE id = ?
     `;
 
+
     db.execute(
         appointmentSql,
         [appointmentId],
         (err, appointmentResult) => {
 
             if (err) {
+
                 return res.status(500).json({
                     message: "Database error",
                     error: err
                 });
+
             }
 
+
             if (appointmentResult.length === 0) {
+
                 return res.status(404).json({
                     message: "Appointment not found"
                 });
+
             }
 
-            const appointment = appointmentResult[0];
 
-            // Customer can reschedule only their own appointment
+            const appointment =
+                appointmentResult[0];
+
+
             if (
                 userRole === "CUSTOMER" &&
                 appointment.user_id !== userId
             ) {
+
                 return res.status(403).json({
                     message:
                         "You can only reschedule your own appointment"
                 });
+
             }
 
-            // Staff can reschedule appointments assigned to them
+
             if (userRole === "STAFF") {
 
                 const staffSql = `
@@ -881,44 +1046,119 @@ const rescheduleAppointment = (req, res) => {
                     AND user_id = ?
                 `;
 
+
                 db.execute(
                     staffSql,
-                    [appointment.staff_id, userId],
+                    [
+                        appointment.staff_id,
+                        userId
+                    ],
                     (err, staffResult) => {
 
                         if (err) {
+
                             return res.status(500).json({
                                 message: "Database error",
                                 error: err
                             });
+
                         }
 
+
                         if (staffResult.length === 0) {
+
                             return res.status(403).json({
                                 message:
                                     "You cannot reschedule this appointment"
                             });
+
                         }
 
+
                         continueReschedule();
+
                     }
                 );
 
             } else {
+
                 continueReschedule();
+
             }
 
+
+            /* =====================================================
+               CONTINUE RESCHEDULE
+            ===================================================== */
 
             function continueReschedule() {
 
                 if (appointment.status === "CANCELLED") {
+
                     return res.status(400).json({
                         message:
                             "Cancelled appointment cannot be rescheduled"
                     });
+
                 }
 
-                // Get service duration
+
+                /* =====================================================
+                   CHECK PAST DATE / TIME
+                ===================================================== */
+
+                const now = new Date();
+
+                const todayDate =
+                    now.getFullYear() +
+                    "-" +
+                    String(now.getMonth() + 1).padStart(2, "0") +
+                    "-" +
+                    String(now.getDate()).padStart(2, "0");
+
+
+                if (appointment_date < todayDate) {
+
+                    return res.status(400).json({
+                        message:
+                            "You cannot reschedule to a past date"
+                    });
+
+                }
+
+
+                if (appointment_date === todayDate) {
+
+                    const currentMinutes =
+                        now.getHours() * 60 +
+                        now.getMinutes();
+
+                    const timeParts =
+                        start_time
+                            .substring(0, 5)
+                            .split(":");
+
+                    const appointmentMinutes =
+                        Number(timeParts[0]) * 60 +
+                        Number(timeParts[1]);
+
+
+                    if (appointmentMinutes <= currentMinutes) {
+
+                        return res.status(400).json({
+                            message:
+                                "You cannot reschedule to a past time"
+                        });
+
+                    }
+
+                }
+
+
+                /* =====================================================
+                   GET SERVICE DURATION
+                ===================================================== */
+
                 const serviceSql = `
                     SELECT duration
                     FROM services
@@ -926,32 +1166,44 @@ const rescheduleAppointment = (req, res) => {
                     AND status = 'ACTIVE'
                 `;
 
+
                 db.execute(
                     serviceSql,
                     [appointment.service_id],
                     (err, serviceResult) => {
 
                         if (err) {
+
                             return res.status(500).json({
                                 message: "Database error",
                                 error: err
                             });
+
                         }
 
+
                         if (serviceResult.length === 0) {
+
                             return res.status(404).json({
                                 message:
                                     "Service not found or inactive"
                             });
+
                         }
+
 
                         const duration =
                             serviceResult[0].duration;
 
-                        // Find day of week
+
+                        /* =====================================================
+                           FIND DAY OF WEEK
+                        ===================================================== */
+
                         const daySql = `
                             SELECT DAYNAME(?) AS day_name
                         `;
+
 
                         db.execute(
                             daySql,
@@ -959,19 +1211,26 @@ const rescheduleAppointment = (req, res) => {
                             (err, dayResult) => {
 
                                 if (err) {
+
                                     return res.status(500).json({
                                         message:
                                             "Database error",
                                         error: err
                                     });
+
                                 }
+
 
                                 const dayOfWeek =
                                     dayResult[0]
                                         .day_name
                                         .toUpperCase();
 
-                                // Check staff availability
+
+                                /* =====================================================
+                                   CHECK STAFF AVAILABILITY
+                                ===================================================== */
+
                                 const availabilitySql = `
                                     SELECT
                                         id,
@@ -986,6 +1245,7 @@ const rescheduleAppointment = (req, res) => {
                                     AND end_time >= ?
                                 `;
 
+
                                 db.execute(
                                     availabilitySql,
                                     [
@@ -997,160 +1257,273 @@ const rescheduleAppointment = (req, res) => {
                                     (err, availabilityResult) => {
 
                                         if (err) {
+
                                             return res.status(500).json({
                                                 message:
                                                     "Database error",
                                                 error: err
                                             });
+
                                         }
+
 
                                         if (
                                             availabilityResult.length === 0
                                         ) {
+
                                             return res.status(400).json({
                                                 message:
                                                     "Staff is not available at this time"
                                             });
+
                                         }
+
 
                                         const availability =
                                             availabilityResult[0];
 
-                                        // Calculate new end time
+
+                                        /* =====================================================
+                                           CALCULATE NEW END TIME
+                                        ===================================================== */
+
                                         const startDate =
                                             new Date(
                                                 `1970-01-01T${start_time}`
                                             );
+
 
                                         startDate.setMinutes(
                                             startDate.getMinutes() +
                                             duration
                                         );
 
+
                                         const endTime =
                                             startDate
                                                 .toTimeString()
                                                 .substring(0, 8);
 
-                                        // Check availability boundary
+
+                                        /* =====================================================
+                                           CHECK AVAILABILITY BOUNDARY
+                                        ===================================================== */
+
                                         if (
                                             endTime >
                                             availability.end_time
                                         ) {
+
                                             return res.status(400).json({
                                                 message:
                                                     "Appointment exceeds staff availability"
                                             });
+
                                         }
 
-                                        // Check conflicts
-                                        // Exclude current appointment
-                                        const conflictSql = `
+
+                                        /* =====================================================
+                                           CHECK APPROVED STAFF LEAVE
+                                        ===================================================== */
+
+                                        const leaveSql = `
                                             SELECT id
-                                            FROM appointments
+                                            FROM staff_leaves
                                             WHERE staff_id = ?
-                                            AND appointment_date = ?
-                                            AND id != ?
-                                            AND status IN ('BOOKED', 'RESCHEDULED')
+                                            AND leave_date = ?
+                                            AND status = 'APPROVED'
                                             AND start_time < ?
                                             AND end_time > ?
                                         `;
 
+
                                         db.execute(
-                                            conflictSql,
+                                            leaveSql,
                                             [
                                                 appointment.staff_id,
                                                 appointment_date,
-                                                appointmentId,
                                                 endTime,
                                                 start_time
                                             ],
-                                            (err, conflictResult) => {
+                                            (err, leaveResult) => {
 
                                                 if (err) {
+
                                                     return res.status(500).json({
                                                         message:
-                                                            "Database error",
+                                                            "Database error while checking staff leave",
                                                         error: err
                                                     });
+
                                                 }
+
 
                                                 if (
-                                                    conflictResult.length > 0
+                                                    leaveResult.length > 0
                                                 ) {
+
                                                     return res.status(409).json({
                                                         message:
-                                                            "Staff already has an appointment during this time"
+                                                            "Staff is on approved leave during the selected time"
                                                     });
+
                                                 }
 
-                                                // Update appointment
-                                                const updateSql = `
-                                                    UPDATE appointments
-                                                    SET
-                                                        appointment_date = ?,
-                                                        start_time = ?,
-                                                        end_time = ?,
-                                                        status = 'RESCHEDULED'
-                                                    WHERE id = ?
+
+                                                /* =====================================================
+                                                   CHECK CONFLICTS
+                                                ===================================================== */
+
+                                                const conflictSql = `
+                                                    SELECT id
+                                                    FROM appointments
+                                                    WHERE staff_id = ?
+                                                    AND appointment_date = ?
+                                                    AND id != ?
+                                                    AND status IN ('BOOKED', 'RESCHEDULED')
+                                                    AND start_time < ?
+                                                    AND end_time > ?
                                                 `;
 
+
                                                 db.execute(
-                                                    updateSql,
+                                                    conflictSql,
                                                     [
+                                                        appointment.staff_id,
                                                         appointment_date,
-                                                        start_time,
+                                                        appointmentId,
                                                         endTime,
-                                                        appointmentId
+                                                        start_time
                                                     ],
-                                                    (err) => {
+                                                    (err, conflictResult) => {
 
                                                         if (err) {
+
                                                             return res.status(500).json({
                                                                 message:
                                                                     "Database error",
                                                                 error: err
                                                             });
+
                                                         }
 
-                                                        res.status(200).json({
-                                                            message:
-                                                                "Appointment rescheduled successfully",
 
-                                                            appointmentId:
-                                                                appointmentId,
+                                                        if (
+                                                            conflictResult.length > 0
+                                                        ) {
 
-                                                            appointment: {
+                                                            return res.status(409).json({
+                                                                message:
+                                                                    "Staff already has an appointment during this time"
+                                                            });
+
+                                                        }
+
+
+                                                        /* =====================================================
+                                                           UPDATE APPOINTMENT
+                                                        ===================================================== */
+
+                                                        const updateSql = `
+                                                            UPDATE appointments
+                                                            SET
+                                                                appointment_date = ?,
+                                                                start_time = ?,
+                                                                end_time = ?,
+                                                                status = 'RESCHEDULED'
+                                                            WHERE id = ?
+                                                        `;
+
+
+                                                        db.execute(
+                                                            updateSql,
+                                                            [
                                                                 appointment_date,
                                                                 start_time,
-                                                                end_time:
-                                                                    endTime,
-                                                                status:
-                                                                    "RESCHEDULED"
+                                                                endTime,
+                                                                appointmentId
+                                                            ],
+                                                            (err) => {
+
+                                                                if (err) {
+
+                                                                    return res.status(500).json({
+                                                                        message:
+                                                                            "Database error",
+                                                                        error:
+                                                                            err
+                                                                    });
+
+                                                                }
+
+
+                                                                res.status(200).json({
+
+                                                                    message:
+                                                                        "Appointment rescheduled successfully",
+
+                                                                    appointmentId:
+                                                                        appointmentId,
+
+                                                                    appointment: {
+
+                                                                        appointment_date,
+
+                                                                        start_time,
+
+                                                                        end_time:
+                                                                            endTime,
+
+                                                                        status:
+                                                                            "RESCHEDULED"
+
+                                                                    }
+
+                                                                });
+
                                                             }
-                                                        });
+                                                        );
+
                                                     }
                                                 );
+
                                             }
                                         );
+
                                     }
                                 );
+
                             }
                         );
+
                     }
                 );
+
             }
+
         }
     );
+
 };
 
 
-// EXPORT FUNCTIONS
+
+/* =========================================================
+   EXPORT FUNCTIONS
+========================================================= */
+
 module.exports = {
+
     createAppointment,
+
     getMyAppointments,
+
     getStaffAppointments,
+
     getAppointmentById,
+
     cancelAppointment,
+
     rescheduleAppointment
+
 };

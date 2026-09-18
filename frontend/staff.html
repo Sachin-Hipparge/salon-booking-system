@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Staff Dashboard - Salon Booking System</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -15,10 +19,12 @@
             font-family: Arial, sans-serif;
         }
 
+
         body {
             background: #f5f6fa;
             color: #333;
         }
+
 
         /* NAVBAR */
 
@@ -32,15 +38,18 @@
             align-items: center;
         }
 
+
         .navbar h2 {
             margin: 0;
         }
+
 
         .navbar-right {
             display: flex;
             align-items: center;
             gap: 20px;
         }
+
 
         .navbar button {
             background: #e74c3c;
@@ -51,9 +60,11 @@
             cursor: pointer;
         }
 
+
         .navbar button:hover {
             background: #c0392b;
         }
+
 
         /* MAIN */
 
@@ -63,22 +74,26 @@
             margin: 30px auto;
         }
 
+
         .welcome {
             background: white;
             padding: 25px;
             border-radius: 10px;
             margin-bottom: 25px;
 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
+
 
         .welcome h1 {
             margin-bottom: 8px;
         }
 
+
         .welcome p {
             color: #666;
         }
+
 
         /* STATISTICS */
 
@@ -89,23 +104,27 @@
             margin-bottom: 30px;
         }
 
+
         .stat-card {
             background: white;
             padding: 22px;
             border-radius: 10px;
             text-align: center;
 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
+
 
         .stat-card h3 {
             font-size: 30px;
             margin-bottom: 8px;
         }
 
+
         .stat-card p {
             color: #777;
         }
+
 
         /* SECTION */
 
@@ -115,12 +134,14 @@
             border-radius: 10px;
             margin-bottom: 30px;
 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
+
 
         .section h2 {
             margin-bottom: 20px;
         }
+
 
         /* TABLE */
 
@@ -128,10 +149,12 @@
             overflow-x: auto;
         }
 
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
 
         th,
         td {
@@ -140,13 +163,16 @@
             text-align: left;
         }
 
+
         th {
             background: #f7f7f7;
         }
 
+
         tr:hover {
             background: #fafafa;
         }
+
 
         /* STATUS */
 
@@ -158,35 +184,184 @@
             font-weight: bold;
         }
 
+
         .booked {
             background: #dff0ff;
             color: #1976d2;
         }
+
 
         .completed {
             background: #dff7e8;
             color: #18864b;
         }
 
+
         .cancelled {
             background: #ffe1e1;
             color: #d32f2f;
         }
+
 
         .rescheduled {
             background: #fff0d5;
             color: #b26a00;
         }
 
+
         .paid {
             background: #dff7e8;
             color: #18864b;
         }
 
+
         .pending {
             background: #fff0d5;
             color: #b26a00;
         }
+
+
+        /* ==========================================
+           LEAVE MANAGEMENT
+        ========================================== */
+
+        .leave-form {
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+
+        .leave-form h3 {
+            margin-bottom: 20px;
+        }
+
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+
+        .full-day-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0 18px;
+        }
+
+
+        .full-day-container input {
+            width: 16px;
+            height: 16px;
+        }
+
+
+        .full-day-container label {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+        .leave-submit-btn {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        .leave-submit-btn:hover {
+            background: #444;
+        }
+
+
+        .leave-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        .leave-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+
+        .leave-message.success {
+            display: block;
+            background: #e4f8eb;
+            color: #18864b;
+        }
+
+
+        .leave-message.error {
+            display: block;
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+
+
+        .leave-status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        .leave-pending {
+            background: #fff0d5;
+            color: #b26a00;
+        }
+
+
+        .leave-approved {
+            background: #dff7e8;
+            color: #18864b;
+        }
+
+
+        .leave-rejected {
+            background: #ffe1e1;
+            color: #d32f2f;
+        }
+
+
+        .leave-cancelled {
+            background: #eeeeee;
+            color: #666;
+        }
+
 
         /* REVIEWS */
 
@@ -197,6 +372,7 @@
             margin-bottom: 15px;
         }
 
+
         .review-header {
             display: flex;
             justify-content: space-between;
@@ -204,10 +380,12 @@
             margin-bottom: 10px;
         }
 
+
         .customer-name {
             font-weight: bold;
             font-size: 17px;
         }
+
 
         .stars {
             color: #f5b301;
@@ -215,16 +393,19 @@
             letter-spacing: 2px;
         }
 
+
         .review-service {
             color: #777;
             font-size: 14px;
             margin-bottom: 10px;
         }
 
+
         .review-comment {
             margin-bottom: 15px;
             line-height: 1.5;
         }
+
 
         .response-box {
             background: #f7f7f7;
@@ -233,14 +414,17 @@
             margin-bottom: 12px;
         }
 
+
         .response-box strong {
             display: block;
             margin-bottom: 5px;
         }
 
+
         .reply-area {
             margin-top: 12px;
         }
+
 
         .reply-area textarea {
             width: 100%;
@@ -253,6 +437,7 @@
             resize: vertical;
         }
 
+
         .reply-btn {
             margin-top: 8px;
             background: #222;
@@ -263,9 +448,11 @@
             cursor: pointer;
         }
 
+
         .reply-btn:hover {
             background: #444;
         }
+
 
         .message {
             padding: 15px;
@@ -274,15 +461,18 @@
             color: #666;
         }
 
+
         .error {
             background: #ffe5e5;
             color: #c0392b;
         }
 
+
         .success {
             background: #e4f8eb;
             color: #18864b;
         }
+
 
         /* RESPONSIVE */
 
@@ -291,7 +481,9 @@
             .stats {
                 grid-template-columns: repeat(2, 1fr);
             }
+
         }
+
 
         @media (max-width: 600px) {
 
@@ -299,26 +491,40 @@
                 padding: 15px;
             }
 
+
             .navbar-right {
                 gap: 10px;
             }
+
 
             .container {
                 width: 95%;
             }
 
+
             .stats {
                 grid-template-columns: 1fr;
             }
 
+
             .section {
                 padding: 15px;
             }
+
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
         }
+
     </style>
+
 </head>
 
+
 <body>
+
 
     <!-- NAVBAR -->
 
@@ -343,14 +549,18 @@
 
     <div class="container">
 
+
         <!-- WELCOME -->
 
         <div class="welcome">
 
-            <h1>Welcome, <span id="welcomeName">Staff</span> 👋</h1>
+            <h1>
+                Welcome,
+                <span id="welcomeName">Staff</span> 👋
+            </h1>
 
             <p>
-                Manage your appointments and respond to customer reviews.
+                Manage your appointments, leave requests and respond to customer reviews.
             </p>
 
         </div>
@@ -414,7 +624,9 @@
         </div>
 
 
-        <!-- APPOINTMENTS -->
+        <!-- ==========================================
+             APPOINTMENTS
+        ========================================== -->
 
         <div class="section">
 
@@ -422,10 +634,13 @@
                 My Appointments
             </h2>
 
-            <div id="appointmentMessage"
-                 class="message"
-                 style="display:none;">
+
+            <div
+                id="appointmentMessage"
+                class="message"
+                style="display:none;">
             </div>
+
 
             <div class="table-wrapper">
 
@@ -435,41 +650,26 @@
 
                         <tr>
 
-                            <th>
-                                ID
-                            </th>
+                            <th>ID</th>
 
-                            <th>
-                                Customer
-                            </th>
+                            <th>Customer</th>
 
-                            <th>
-                                Email
-                            </th>
+                            <th>Email</th>
 
-                            <th>
-                                Service
-                            </th>
+                            <th>Service</th>
 
-                            <th>
-                                Date
-                            </th>
+                            <th>Date</th>
 
-                            <th>
-                                Time
-                            </th>
+                            <th>Time</th>
 
-                            <th>
-                                Status
-                            </th>
+                            <th>Status</th>
 
-                            <th>
-                                Payment
-                            </th>
+                            <th>Payment</th>
 
                         </tr>
 
                     </thead>
+
 
                     <tbody id="appointmentsTable">
 
@@ -482,7 +682,184 @@
         </div>
 
 
-        <!-- CUSTOMER REVIEWS -->
+        <!-- ==========================================
+             LEAVE MANAGEMENT
+        ========================================== -->
+
+        <div class="section">
+
+            <h2>
+                Leave Management
+            </h2>
+
+
+            <!-- APPLY FOR LEAVE -->
+
+            <div class="leave-form">
+
+                <h3>
+                    Apply for Leave
+                </h3>
+
+
+                <form id="leaveForm">
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="leaveDate">
+                                Leave Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="leaveDate"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="leaveReason">
+                                Reason
+                            </label>
+
+                            <input
+                                type="text"
+                                id="leaveReason"
+                                placeholder="Reason for leave"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FULL DAY OPTION -->
+
+                    <div class="full-day-container">
+
+                        <input
+                            type="checkbox"
+                            id="fullDayLeave"
+                        >
+
+                        <label for="fullDayLeave">
+                            Full Day Leave
+                        </label>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="leaveStartTime">
+                                Start Time
+                            </label>
+
+                            <input
+                                type="time"
+                                id="leaveStartTime"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="leaveEndTime">
+                                End Time
+                            </label>
+
+                            <input
+                                type="time"
+                                id="leaveEndTime"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="leave-submit-btn"
+                        id="leaveSubmitButton"
+                    >
+                        Apply for Leave
+                    </button>
+
+
+                    <div
+                        id="leaveMessage"
+                        class="leave-message">
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- LEAVE HISTORY -->
+
+            <h3 style="margin-bottom: 15px;">
+                My Leave Requests
+            </h3>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+
+                            <th>Start</th>
+
+                            <th>End</th>
+
+                            <th>Reason</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="leaveTableBody">
+
+                        <tr>
+
+                            <td colspan="5">
+                                Loading leave requests...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             CUSTOMER REVIEWS
+        ========================================== -->
 
         <div class="section">
 
@@ -490,10 +867,13 @@
                 Customer Reviews
             </h2>
 
-            <div id="reviewMessage"
-                 class="message"
-                 style="display:none;">
+
+            <div
+                id="reviewMessage"
+                class="message"
+                style="display:none;">
             </div>
+
 
             <div id="reviewsContainer">
 
@@ -506,22 +886,35 @@
 
 <script>
 
+
+    // ==========================================
+    // CONFIGURATION
+    // ==========================================
+
     const API_URL = "http://localhost:5000";
 
     const token = localStorage.getItem("token");
 
-    /*
-        Rahul's staff ID.
 
-        From the database:
-        Rahul -> user_id = 2
-        Rahul -> staff_id = 1
+    /*
+        Rahul's current staff ID.
+
+        Database:
+        Rahul user_id = 2
+        Rahul staff_id = 1
+
+        We will remove this hardcoded value
+        later when we make the dashboard dynamic.
     */
 
-    const STAFF_ID = 1;
+    // Staff ID is loaded dynamically from /api/staff/me
+// for the currently logged-in staff member.
+let currentStaffId = null;
 
 
-    // Check login
+    // ==========================================
+    // CHECK LOGIN
+    // ==========================================
 
     if (!token) {
 
@@ -530,73 +923,170 @@
     }
 
 
-    /*
-        LOGOUT
-    */
+    // ==========================================
+    // LOGOUT
+    // ==========================================
 
     function logout() {
 
         localStorage.removeItem("token");
+
+        localStorage.removeItem("user");
 
         window.location.href = "index.html";
 
     }
 
 
-    /*
-        SHOW MESSAGE
-    */
+    // ==========================================
+    // SHOW MESSAGE
+    // ==========================================
 
-    function showMessage(elementId, message, type = "") {
+    function showMessage(
+        elementId,
+        message,
+        type = ""
+    ) {
 
-        const element = document.getElementById(elementId);
+        const element =
+            document.getElementById(elementId);
 
-        element.textContent = message;
 
-        element.className = "message " + type;
+        if (!element) {
+            return;
+        }
 
-        element.style.display = "block";
+
+        element.textContent =
+            message;
+
+
+        element.className =
+            "message " + type;
+
+
+        element.style.display =
+            "block";
 
     }
 
+    // ==========================================
+// LOAD LOGGED-IN STAFF PROFILE
+// ==========================================
 
-    /*
-        LOAD STAFF PROFILE
-    */
+async function loadStaffProfile() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/staff/me`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load staff profile"
+            );
+
+        }
+
+        currentStaffId =
+            data.staff.staff_id;
+
+        console.log(
+            "Logged-in staff ID:",
+            currentStaffId
+        );
+
+        return data.staff;
+
+    } catch (error) {
+
+        console.error(
+            "Staff profile error:",
+            error
+        );
+
+        showMessage(
+            "appointmentMessage",
+            error.message,
+            "error"
+        );
+
+        return null;
+    }
+}
+
+    // ==========================================
+    // LOAD STAFF PROFILE
+    // ==========================================
 
     async function loadProfile() {
 
         try {
 
-            const response = await fetch(
-                `${API_URL}/api/users/profile`,
-                {
-                    method: "GET",
+            const response =
+                await fetch(
+                    `${API_URL}/api/users/profile`,
+                    {
+                        method: "GET",
 
-                    headers: {
-                        Authorization: `Bearer ${token}`
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
                     }
-                }
-            );
+                );
 
 
             if (!response.ok) {
 
+                const errorData =
+                    await response.json();
+
                 throw new Error(
+                    errorData.message ||
                     "Unable to load staff profile"
                 );
 
             }
 
 
-            const user = await response.json();
+            const data =
+                await response.json();
 
 
-            document.getElementById("staffName").textContent =
+            /*
+               Some APIs return the user directly.
+               Some return { user: ... }.
+            */
+
+            const user =
+                data.user || data;
+
+
+            document.getElementById(
+                "staffName"
+            ).textContent =
                 user.name || "Staff";
 
 
-            document.getElementById("welcomeName").textContent =
+            document.getElementById(
+                "welcomeName"
+            ).textContent =
                 user.name || "Staff";
 
 
@@ -612,24 +1102,30 @@
     }
 
 
-    /*
-        LOAD APPOINTMENTS
-    */
+    // ==========================================
+    // LOAD APPOINTMENTS
+    // ==========================================
 
     async function loadAppointments() {
 
         try {
+                if (!currentStaffId) {
+    throw new Error(
+        "Staff profile is not loaded yet."
+    );
+}
+            const response =
+                await fetch(
+                    `${API_URL}/api/appointments/staff/${currentStaffId}`,
+                    {
+                        method: "GET",
 
-            const response = await fetch(
-                `${API_URL}/api/appointments/staff/${STAFF_ID}`,
-                {
-                    method: "GET",
-
-                    headers: {
-                        Authorization: `Bearer ${token}`
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
                     }
-                }
-            );
+                );
 
 
             if (!response.ok) {
@@ -645,8 +1141,21 @@
             }
 
 
-            const appointments =
+            const data =
                 await response.json();
+
+
+            /*
+               Support both:
+               [appointments]
+               and
+               { appointments: [...] }
+            */
+
+            const appointments =
+                Array.isArray(data)
+                    ? data
+                    : (data.appointments || []);
 
 
             displayAppointments(
@@ -673,9 +1182,9 @@
     }
 
 
-    /*
-        DISPLAY APPOINTMENTS
-    */
+    // ==========================================
+    // DISPLAY APPOINTMENTS
+    // ==========================================
 
     function displayAppointments(
         appointments
@@ -689,10 +1198,6 @@
 
         table.innerHTML = "";
 
-
-        /*
-            Statistics
-        */
 
         document.getElementById(
             "totalAppointments"
@@ -756,15 +1261,21 @@
                     </td>
 
                     <td>
-                        ${appointment.customer_name}
+                        ${escapeHTML(
+                            appointment.customer_name
+                        )}
                     </td>
 
                     <td>
-                        ${appointment.customer_email}
+                        ${escapeHTML(
+                            appointment.customer_email
+                        )}
                     </td>
 
                     <td>
-                        ${appointment.service_name}
+                        ${escapeHTML(
+                            appointment.service_name
+                        )}
                     </td>
 
                     <td>
@@ -784,19 +1295,27 @@
                     </td>
 
                     <td>
-                        <span class="status ${getStatusClass(
-                            appointment.status
-                        )}">
+
+                        <span
+                            class="status ${getStatusClass(
+                                appointment.status
+                            )}"
+                        >
                             ${appointment.status}
                         </span>
+
                     </td>
 
                     <td>
-                        <span class="status ${getPaymentClass(
-                            appointment.payment_status
-                        )}">
-                            ${appointment.payment_status}
+
+                        <span
+                            class="status ${getPaymentClass(
+                                appointment.payment_status
+                            )}"
+                        >
+                            ${appointment.payment_status || "-"}
                         </span>
+
                     </td>
 
                 `;
@@ -810,33 +1329,482 @@
     }
 
 
-    /*
-        LOAD STAFF REVIEWS
+    // ==========================================
+    // FULL DAY LEAVE CHECKBOX
+    // ==========================================
 
-        IMPORTANT:
-        This is no longer using:
+    document
+        .getElementById("fullDayLeave")
+        .addEventListener(
+            "change",
+            function () {
 
-        /api/admin/reviews
+                const startTime =
+                    document.getElementById(
+                        "leaveStartTime"
+                    );
 
-        Instead it uses:
 
-        /api/reviews/staff/my
-    */
+                const endTime =
+                    document.getElementById(
+                        "leaveEndTime"
+                    );
+
+
+                if (this.checked) {
+
+                    startTime.value =
+                        "00:00";
+
+                    endTime.value =
+                        "23:59";
+
+                    startTime.disabled =
+                        true;
+
+                    endTime.disabled =
+                        true;
+
+                } else {
+
+                    startTime.value =
+                        "";
+
+                    endTime.value =
+                        "";
+
+                    startTime.disabled =
+                        false;
+
+                    endTime.disabled =
+                        false;
+
+                }
+
+            }
+        );
+
+
+    // ==========================================
+    // SET MINIMUM LEAVE DATE
+    // ==========================================
+
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+
+    document.getElementById(
+        "leaveDate"
+    ).min = today;
+
+
+    // ==========================================
+    // APPLY FOR LEAVE
+    // ==========================================
+
+    document
+        .getElementById("leaveForm")
+        .addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const leaveDate =
+                    document.getElementById(
+                        "leaveDate"
+                    ).value;
+
+
+                const startTime =
+                    document.getElementById(
+                        "leaveStartTime"
+                    ).value;
+
+
+                const endTime =
+                    document.getElementById(
+                        "leaveEndTime"
+                    ).value;
+
+
+                const reason =
+                    document.getElementById(
+                        "leaveReason"
+                    ).value.trim();
+
+
+                const message =
+                    document.getElementById(
+                        "leaveMessage"
+                    );
+
+
+                const submitButton =
+                    document.getElementById(
+                        "leaveSubmitButton"
+                    );
+
+
+                if (
+                    !leaveDate ||
+                    !startTime ||
+                    !endTime
+                ) {
+
+                    message.textContent =
+                        "Please fill all required leave details.";
+
+                    message.className =
+                        "leave-message error";
+
+                    return;
+
+                }
+
+
+                if (startTime >= endTime) {
+
+                    message.textContent =
+                        "End time must be after start time.";
+
+                    message.className =
+                        "leave-message error";
+
+                    return;
+
+                }
+
+
+                try {
+
+                    submitButton.disabled =
+                        true;
+
+
+                    submitButton.textContent =
+                        "Submitting...";
+
+
+                    const response =
+                        await fetch(
+                            `${API_URL}/api/leaves`,
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json",
+
+                                    Authorization:
+                                        `Bearer ${token}`
+
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        leave_date:
+                                            leaveDate,
+
+                                        start_time:
+                                            startTime,
+
+                                        end_time:
+                                            endTime,
+
+                                        reason:
+                                            reason
+
+                                    })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        message.textContent =
+                            data.message ||
+                            "Failed to apply for leave.";
+
+                        message.className =
+                            "leave-message error";
+
+                        return;
+
+                    }
+
+
+                    message.textContent =
+                        data.message ||
+                        "Leave request submitted successfully.";
+
+                    message.className =
+                        "leave-message success";
+
+
+                    document.getElementById(
+                        "leaveForm"
+                    ).reset();
+
+
+                    document.getElementById(
+                        "leaveStartTime"
+                    ).disabled =
+                        false;
+
+
+                    document.getElementById(
+                        "leaveEndTime"
+                    ).disabled =
+                        false;
+
+
+                    await loadMyLeaves();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Leave application error:",
+                        error
+                    );
+
+
+                    message.textContent =
+                        "Unable to submit leave request: " +
+                        error.message;
+
+                    message.className =
+                        "leave-message error";
+
+                } finally {
+
+                    submitButton.disabled =
+                        false;
+
+                    submitButton.textContent =
+                        "Apply for Leave";
+
+                }
+
+            }
+        );
+
+
+    // ==========================================
+    // LOAD MY LEAVES
+    // ==========================================
+
+    async function loadMyLeaves() {
+
+        const tableBody =
+            document.getElementById(
+                "leaveTableBody"
+            );
+
+
+        try {
+
+            console.log(
+                "Loading staff leave requests..."
+            );
+
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/leaves/my`,
+                    {
+
+                        method: "GET",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+
+                        }
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "Staff leave API response:",
+                response.status,
+                data
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    `Unable to load leave requests (${response.status})`
+                );
+
+            }
+
+
+            /*
+            ==========================================
+            IMPORTANT FIX
+
+            Backend returns:
+
+            {
+                leaves: [...]
+            }
+
+            So we must extract data.leaves.
+            ==========================================
+            */
+
+            const leaves =
+                Array.isArray(data)
+                    ? data
+                    : (data.leaves || []);
+
+
+            tableBody.innerHTML = "";
+
+
+            if (leaves.length === 0) {
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            No leave requests found.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            leaves.forEach(
+                leave => {
+
+                    const row =
+                        document.createElement("tr");
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${formatLeaveDate(
+                                leave.leave_date
+                            )}
+                        </td>
+
+                        <td>
+                            ${formatTime(
+                                leave.start_time
+                            )}
+                        </td>
+
+                        <td>
+                            ${formatTime(
+                                leave.end_time
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                leave.reason || "-"
+                            )}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="leave-status ${getLeaveStatusClass(
+                                    leave.status
+                                )}"
+                            >
+                                ${leave.status}
+                            </span>
+
+                        </td>
+
+                    `;
+
+
+                    tableBody.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Load leaves error:",
+                error
+            );
+
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        Unable to load leave requests:
+                        ${escapeHTML(
+                            error.message
+                        )}
+                    </td>
+                </tr>
+            `;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // LOAD STAFF REVIEWS
+    // ==========================================
 
     async function loadReviews() {
 
         try {
 
-            const response = await fetch(
-                `${API_URL}/api/reviews/staff/my`,
-                {
-                    method: "GET",
+            const response =
+                await fetch(
+                    `${API_URL}/api/reviews/staff/my`,
+                    {
 
-                    headers: {
-                        Authorization: `Bearer ${token}`
+                        method: "GET",
+
+                        headers: {
+
+                            Authorization:
+                                `Bearer ${token}`
+
+                        }
+
                     }
-                }
-            );
+                );
 
 
             if (!response.ok) {
@@ -852,8 +1820,14 @@
             }
 
 
-            const reviews =
+            const data =
                 await response.json();
+
+
+            const reviews =
+                Array.isArray(data)
+                    ? data
+                    : (data.reviews || []);
 
 
             displayReviews(
@@ -880,9 +1854,9 @@
     }
 
 
-    /*
-        DISPLAY REVIEWS
-    */
+    // ==========================================
+    // DISPLAY REVIEWS
+    // ==========================================
 
     function displayReviews(
         reviews
@@ -921,33 +1895,24 @@
                     "review-card";
 
 
-                /*
-                    Generate stars
-
-                    Example:
-                    rating = 5
-                    ★★★★★
-
-                    rating = 3
-                    ★★★☆☆
-                */
-
-                const stars =
-                    "★".repeat(
-                        Number(review.rating)
-                    ) +
-                    "☆".repeat(
-                        5 - Number(review.rating)
+                const rating =
+                    Number(
+                        review.rating
                     );
 
 
-                let responseHTML = "";
+                const stars =
+                    "★".repeat(
+                        rating
+                    ) +
+                    "☆".repeat(
+                        5 - rating
+                    );
 
 
-                /*
-                    If staff has already responded,
-                    display the response.
-                */
+                let responseHTML =
+                    "";
+
 
                 if (
                     review.staff_response &&
@@ -978,13 +1943,18 @@
                     <div class="review-header">
 
                         <span class="customer-name">
+
                             ${escapeHTML(
                                 review.customer_name
                             )}
+
                         </span>
 
+
                         <span class="stars">
+
                             ${stars}
+
                         </span>
 
                     </div>
@@ -1019,8 +1989,8 @@
                             id="reply-${review.id}"
                             placeholder="${
                                 review.staff_response
-                                ? "Update your response..."
-                                : "Write a response to the customer..."
+                                    ? "Update your response..."
+                                    : "Write a response to the customer..."
                             }"
                         ></textarea>
 
@@ -1032,8 +2002,8 @@
 
                             ${
                                 review.staff_response
-                                ? "Update Response"
-                                : "Reply to Customer"
+                                    ? "Update Response"
+                                    : "Reply to Customer"
                             }
 
                         </button>
@@ -1053,9 +2023,9 @@
     }
 
 
-    /*
-        REPLY TO REVIEW
-    */
+    // ==========================================
+    // REPLY TO REVIEW
+    // ==========================================
 
     async function replyToReview(
         reviewId
@@ -1084,24 +2054,31 @@
 
         try {
 
-            const response = await fetch(
-                `${API_URL}/api/reviews/${reviewId}/respond`,
-                {
-                    method: "PUT",
+            const response =
+                await fetch(
+                    `${API_URL}/api/reviews/${reviewId}/respond`,
+                    {
 
-                    headers: {
-                        "Content-Type":
-                            "application/json",
+                        method: "PUT",
 
-                        Authorization:
-                            `Bearer ${token}`
-                    },
+                        headers: {
 
-                    body: JSON.stringify({
-                        response: responseText
-                    })
-                }
-            );
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+
+                        },
+
+                        body:
+                            JSON.stringify({
+                                response:
+                                    responseText
+                            })
+
+                    }
+                );
 
 
             const data =
@@ -1124,12 +2101,7 @@
             );
 
 
-            /*
-                Reload reviews so that
-                the new response appears.
-            */
-
-            loadReviews();
+            await loadReviews();
 
 
         } catch (error) {
@@ -1149,93 +2121,118 @@
     }
 
 
-    /*
-        FORMAT DATE
-    */
+    // ==========================================
+    // FORMAT APPOINTMENT DATE
+    // ==========================================
 
-    function formatDate(
-        date
-    ) {
+    function formatDate(date) {
 
         if (!date) {
             return "";
         }
 
 
-        const d =
-            new Date(date);
+        /*
+           Handle MySQL DATE without
+           timezone conversion.
+        */
+
+        const dateString =
+            String(date)
+                .split("T")[0];
 
 
-        return d.toLocaleDateString(
-            "en-IN"
-        );
+        const parts =
+            dateString.split("-");
+
+
+        if (parts.length === 3) {
+
+            return (
+                `${parts[2]}-${parts[1]}-${parts[0]}`
+            );
+
+        }
+
+
+        return dateString;
 
     }
 
 
-    /*
-        FORMAT TIME
-    */
+    // ==========================================
+    // FORMAT LEAVE DATE
+    // ==========================================
 
-    function formatTime(
-        time
-    ) {
+    function formatLeaveDate(date) {
+
+        if (!date) {
+            return "";
+        }
+
+
+        const dateString =
+            String(date)
+                .split("T")[0];
+
+
+        const parts =
+            dateString.split("-");
+
+
+        if (parts.length === 3) {
+
+            return (
+                `${parts[2]}-${parts[1]}-${parts[0]}`
+            );
+
+        }
+
+
+        return dateString;
+
+    }
+
+
+    // ==========================================
+    // FORMAT TIME
+    // ==========================================
+
+    function formatTime(time) {
 
         if (!time) {
             return "";
         }
 
 
-        /*
-            MySQL can return:
-
-            HH:MM:SS
-
-            We only display:
-
-            HH:MM
-        */
-
-        return time.substring(
-            0,
-            5
-        );
+        return String(time)
+            .substring(0, 5);
 
     }
 
 
-    /*
-        STATUS CSS CLASS
-    */
+    // ==========================================
+    // APPOINTMENT STATUS CLASS
+    // ==========================================
 
-    function getStatusClass(
-        status
-    ) {
+    function getStatusClass(status) {
 
-        if (
-            status === "BOOKED"
-        ) {
+        if (status === "BOOKED") {
             return "booked";
         }
 
 
-        if (
-            status === "COMPLETED"
-        ) {
+        if (status === "COMPLETED") {
             return "completed";
         }
 
 
-        if (
-            status === "CANCELLED"
-        ) {
+        if (status === "CANCELLED") {
             return "cancelled";
         }
 
 
-        if (
-            status === "RESCHEDULED"
-        ) {
+        if (status === "RESCHEDULED") {
             return "rescheduled";
         }
 
@@ -1245,17 +2242,13 @@
     }
 
 
-    /*
-        PAYMENT CSS CLASS
-    */
+    // ==========================================
+    // PAYMENT STATUS CLASS
+    // ==========================================
 
-    function getPaymentClass(
-        status
-    ) {
+    function getPaymentClass(status) {
 
-        if (
-            status === "PAID"
-        ) {
+        if (status === "PAID") {
             return "paid";
         }
 
@@ -1265,19 +2258,47 @@
     }
 
 
-    /*
-        BASIC HTML ESCAPING
+    // ==========================================
+    // LEAVE STATUS CLASS
+    // ==========================================
 
-        This prevents customer comments
-        from being directly inserted as HTML.
-    */
+    function getLeaveStatusClass(status) {
 
-    function escapeHTML(
-        value
-    ) {
+        if (status === "PENDING") {
+            return "leave-pending";
+        }
 
-        if (value === null ||
-            value === undefined) {
+
+        if (status === "APPROVED") {
+            return "leave-approved";
+        }
+
+
+        if (status === "REJECTED") {
+            return "leave-rejected";
+        }
+
+
+        if (status === "CANCELLED") {
+            return "leave-cancelled";
+        }
+
+
+        return "";
+
+    }
+
+
+    // ==========================================
+    // BASIC HTML ESCAPING
+    // ==========================================
+
+    function escapeHTML(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
 
             return "";
 
@@ -1285,22 +2306,27 @@
 
 
         return String(value)
+
             .replace(
                 /&/g,
                 "&amp;"
             )
+
             .replace(
                 /</g,
                 "&lt;"
             )
+
             .replace(
                 />/g,
                 "&gt;"
             )
+
             .replace(
                 /"/g,
                 "&quot;"
             )
+
             .replace(
                 /'/g,
                 "&#039;"
@@ -1308,18 +2334,34 @@
 
     }
 
+// ==========================================
+// INITIAL LOAD
+// ==========================================
 
-    /*
-        LOAD EVERYTHING
-    */
+async function initializeDashboard() {
 
-    loadProfile();
+    const staff =
+        await loadStaffProfile();
 
-    loadAppointments();
+    if (!staff) {
+        return;
+    }
 
-    loadReviews();
+    await loadProfile();
+
+    await loadAppointments();
+
+    await loadMyLeaves();
+
+    await loadReviews();
+}
+
+initializeDashboard();
+
 
 </script>
 
+
 </body>
+
 </html>

@@ -6,6 +6,7 @@
     <title>Admin Dashboard - Salon Booking</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -43,6 +44,11 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .logout-btn {
@@ -153,11 +159,25 @@
             color: white;
         }
 
+        /* Leave Buttons */
+
+        .approve-btn {
+            background: #27ae60;
+            color: white;
+            margin-right: 5px;
+        }
+
+        .reject-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
         .status {
             padding: 5px 9px;
             border-radius: 15px;
             font-size: 12px;
             font-weight: bold;
+            display: inline-block;
         }
 
         .BOOKED {
@@ -190,11 +210,29 @@
             color: #922b21;
         }
 
+        /* Leave Status */
+
+        .PENDING {
+            background: #fcf3cf;
+            color: #7d6608;
+        }
+
+        .APPROVED {
+            background: #d5f5e3;
+            color: #196f3d;
+        }
+
+        .REJECTED {
+            background: #fadbd8;
+            color: #922b21;
+        }
+
         .message {
             padding: 12px;
             margin-bottom: 20px;
             border-radius: 5px;
             display: none;
+            white-space: pre-line;
         }
 
         .success {
@@ -213,13 +251,30 @@
             color: #777;
         }
 
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        .conflict-box {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 5px;
+            color: #856404;
+        }
+
         @media (max-width: 1000px) {
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
         }
 
         @media (max-width: 600px) {
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -235,34 +290,54 @@
             .container {
                 width: 92%;
             }
+
         }
+
     </style>
 </head>
+
 
 <body>
 
 <header>
+
     <h1>Salon Admin Dashboard</h1>
 
     <div class="header-right">
-        <button class="refresh-btn" onclick="loadDashboard()">
+
+        <button
+            class="refresh-btn"
+            onclick="loadDashboard()">
             Refresh
         </button>
 
-        <button class="logout-btn" onclick="logout()">
+        <button
+            class="logout-btn"
+            onclick="logout()">
             Logout
         </button>
+
     </div>
+
 </header>
+
 
 <div class="container">
 
     <div class="welcome">
+
         <h2>Admin Panel</h2>
-        <p>Manage salon bookings, users, services, payments and reviews.</p>
+
+        <p>
+            Manage salon bookings, users, services, payments,
+            reviews, staff and leave requests.
+        </p>
+
     </div>
 
+
     <div id="message" class="message"></div>
+
 
     <!-- DASHBOARD STATISTICS -->
 
@@ -322,6 +397,7 @@
             <table>
 
                 <thead>
+
                     <tr>
                         <th>ID</th>
                         <th>Customer</th>
@@ -333,11 +409,10 @@
                         <th>Payment</th>
                         <th>Update</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="appointmentsTable">
-
-                </tbody>
+                <tbody id="appointmentsTable"></tbody>
 
             </table>
 
@@ -357,6 +432,7 @@
             <table>
 
                 <thead>
+
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
@@ -365,11 +441,10 @@
                         <th>Role</th>
                         <th>Created</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="usersTable">
-
-                </tbody>
+                <tbody id="usersTable"></tbody>
 
             </table>
 
@@ -389,6 +464,7 @@
             <table>
 
                 <thead>
+
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
@@ -398,11 +474,10 @@
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="servicesTable">
-
-                </tbody>
+                <tbody id="servicesTable"></tbody>
 
             </table>
 
@@ -422,6 +497,7 @@
             <table>
 
                 <thead>
+
                     <tr>
                         <th>ID</th>
                         <th>Appointment</th>
@@ -432,11 +508,10 @@
                         <th>Amount</th>
                         <th>Status</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="paymentsTable">
-
-                </tbody>
+                <tbody id="paymentsTable"></tbody>
 
             </table>
 
@@ -456,6 +531,7 @@
             <table>
 
                 <thead>
+
                     <tr>
                         <th>ID</th>
                         <th>Customer</th>
@@ -465,11 +541,10 @@
                         <th>Comment</th>
                         <th>Staff Response</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="reviewsTable">
-
-                </tbody>
+                <tbody id="reviewsTable"></tbody>
 
             </table>
 
@@ -489,6 +564,7 @@
             <table>
 
                 <thead>
+
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
@@ -498,11 +574,45 @@
                         <th>Status</th>
                         <th>Services</th>
                     </tr>
+
                 </thead>
 
-                <tbody id="staffTable">
+                <tbody id="staffTable"></tbody>
 
-                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- STAFF LEAVE REQUESTS -->
+
+    <div class="section">
+
+        <h2>Staff Leave Requests</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Staff</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="leavesTable"></tbody>
 
             </table>
 
@@ -520,9 +630,9 @@ const API_URL = "http://localhost:5000";
 const token = localStorage.getItem("token");
 
 
-/* --------------------------------
+/* =========================================
    AUTHENTICATION CHECK
--------------------------------- */
+========================================= */
 
 if (!token) {
 
@@ -533,27 +643,29 @@ if (!token) {
 }
 
 
-/* --------------------------------
+/* =========================================
    COMMON FETCH FUNCTION
--------------------------------- */
+========================================= */
 
 async function apiRequest(url, options = {}) {
 
-    const response = await fetch(API_URL + url, {
+    const response = await fetch(
+        API_URL + url,
+        {
+            ...options,
 
-        ...options,
+            headers: {
 
-        headers: {
+                "Content-Type": "application/json",
 
-            "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
 
-            "Authorization": `Bearer ${token}`,
+                ...(options.headers || {})
 
-            ...(options.headers || {})
+            }
 
         }
-
-    });
+    );
 
 
     const data = await response.json();
@@ -561,9 +673,15 @@ async function apiRequest(url, options = {}) {
 
     if (!response.ok) {
 
-        throw new Error(
+        const error = new Error(
             data.message || "Something went wrong"
         );
+
+        error.status = response.status;
+
+        error.data = data;
+
+        throw error;
 
     }
 
@@ -573,17 +691,22 @@ async function apiRequest(url, options = {}) {
 }
 
 
-/* --------------------------------
+/* =========================================
    MESSAGE
--------------------------------- */
+========================================= */
 
 function showMessage(message, type = "success") {
 
-    const element = document.getElementById("message");
+    const element =
+        document.getElementById("message");
+
 
     element.textContent = message;
 
-    element.className = `message ${type}`;
+
+    element.className =
+        `message ${type}`;
+
 
     element.style.display = "block";
 
@@ -592,56 +715,69 @@ function showMessage(message, type = "success") {
 
         element.style.display = "none";
 
-    }, 3000);
+    }, 5000);
 
 }
 
 
-/* --------------------------------
+/* =========================================
    LOAD DASHBOARD
--------------------------------- */
+========================================= */
 
 async function loadDashboard() {
 
-    try {
+    /*
+       We load each section separately.
 
-        await Promise.all([
+       This means if leave loading fails,
+       the other dashboard sections can still load.
+    */
 
-            loadStatistics(),
+    const loaders = [
 
-            loadAppointments(),
+        loadStatistics(),
 
-            loadUsers(),
+        loadAppointments(),
 
-            loadServices(),
+        loadUsers(),
 
-            loadPayments(),
+        loadServices(),
 
-            loadReviews(),
+        loadPayments(),
 
-            loadStaff()
+        loadReviews(),
 
-        ]);
+        loadStaff(),
 
-    }
+        loadLeaves()
 
-    catch (error) {
+    ];
 
-        console.error(error);
 
-        showMessage(
-            error.message,
-            "error"
-        );
+    const results =
+        await Promise.allSettled(loaders);
 
-    }
+
+    results.forEach((result, index) => {
+
+        if (result.status === "rejected") {
+
+            console.error(
+                "Dashboard section error:",
+                index,
+                result.reason
+            );
+
+        }
+
+    });
 
 }
 
 
-/* --------------------------------
+/* =========================================
    STATISTICS
--------------------------------- */
+========================================= */
 
 async function loadStatistics() {
 
@@ -652,53 +788,63 @@ async function loadStatistics() {
     console.log("Dashboard:", data);
 
 
-    /*
-       Depending on backend response,
-       data may directly contain the statistics
-       or may contain them inside data.dashboard.
-    */
-
     const dashboard =
         data.dashboard || data;
 
 
-    document.getElementById("totalCustomers").textContent =
+    document.getElementById(
+        "totalCustomers"
+    ).textContent =
         dashboard.total_customers || 0;
 
 
-    document.getElementById("totalStaff").textContent =
+    document.getElementById(
+        "totalStaff"
+    ).textContent =
         dashboard.total_staff || 0;
 
 
-    document.getElementById("totalServices").textContent =
+    document.getElementById(
+        "totalServices"
+    ).textContent =
         dashboard.total_services || 0;
 
 
-    document.getElementById("totalAppointments").textContent =
+    document.getElementById(
+        "totalAppointments"
+    ).textContent =
         dashboard.total_appointments || 0;
 
 
-    document.getElementById("bookedAppointments").textContent =
+    document.getElementById(
+        "bookedAppointments"
+    ).textContent =
         dashboard.booked_appointments || 0;
 
 
-    document.getElementById("completedAppointments").textContent =
+    document.getElementById(
+        "completedAppointments"
+    ).textContent =
         dashboard.completed_appointments || 0;
 
 
-    document.getElementById("cancelledAppointments").textContent =
+    document.getElementById(
+        "cancelledAppointments"
+    ).textContent =
         dashboard.cancelled_appointments || 0;
 
 
-    document.getElementById("totalRevenue").textContent =
+    document.getElementById(
+        "totalRevenue"
+    ).textContent =
         "₹" + (dashboard.total_revenue || 0);
 
 }
 
 
-/* --------------------------------
+/* =========================================
    APPOINTMENTS
--------------------------------- */
+========================================= */
 
 async function loadAppointments() {
 
@@ -711,21 +857,27 @@ async function loadAppointments() {
 
 
     const table =
-        document.getElementById("appointmentsTable");
+        document.getElementById(
+            "appointmentsTable"
+        );
 
 
     table.innerHTML = "";
 
 
-    if (!Array.isArray(appointments) ||
-        appointments.length === 0) {
+    if (
+        !Array.isArray(appointments) ||
+        appointments.length === 0
+    ) {
 
         table.innerHTML =
-            `<tr>
-                <td colspan="9">
+            `
+            <tr>
+                <td colspan="9" class="no-data">
                     No appointments found
                 </td>
-             </tr>`;
+            </tr>
+            `;
 
         return;
 
@@ -738,7 +890,9 @@ async function loadAppointments() {
 
             <tr>
 
-                <td>${appointment.id}</td>
+                <td>
+                    ${appointment.id}
+                </td>
 
                 <td>
                     ${appointment.customer_name || "-"}
@@ -776,34 +930,50 @@ async function loadAppointments() {
 
                 <td>
 
-                    <select id="status-${appointment.id}">
+                    <select
+                        id="status-${appointment.id}">
 
-                        <option value="BOOKED"
-                            ${appointment.status === "BOOKED" ? "selected" : ""}>
+                        <option
+                            value="BOOKED"
+                            ${appointment.status === "BOOKED"
+                                ? "selected"
+                                : ""}>
                             BOOKED
                         </option>
 
-                        <option value="COMPLETED"
-                            ${appointment.status === "COMPLETED" ? "selected" : ""}>
+                        <option
+                            value="COMPLETED"
+                            ${appointment.status === "COMPLETED"
+                                ? "selected"
+                                : ""}>
                             COMPLETED
                         </option>
 
-                        <option value="CANCELLED"
-                            ${appointment.status === "CANCELLED" ? "selected" : ""}>
+                        <option
+                            value="CANCELLED"
+                            ${appointment.status === "CANCELLED"
+                                ? "selected"
+                                : ""}>
                             CANCELLED
                         </option>
 
-                        <option value="RESCHEDULED"
-                            ${appointment.status === "RESCHEDULED" ? "selected" : ""}>
+                        <option
+                            value="RESCHEDULED"
+                            ${appointment.status === "RESCHEDULED"
+                                ? "selected"
+                                : ""}>
                             RESCHEDULED
                         </option>
 
                     </select>
 
+
                     <button
                         class="update-btn"
                         onclick="updateAppointmentStatus(${appointment.id})">
+
                         Update
+
                     </button>
 
                 </td>
@@ -817,9 +987,9 @@ async function loadAppointments() {
 }
 
 
-/* --------------------------------
+/* =========================================
    UPDATE APPOINTMENT STATUS
--------------------------------- */
+========================================= */
 
 async function updateAppointmentStatus(
     appointmentId
@@ -831,7 +1001,8 @@ async function updateAppointmentStatus(
         );
 
 
-    const status = select.value;
+    const status =
+        select.value;
 
 
     try {
@@ -855,8 +1026,7 @@ async function updateAppointmentStatus(
         );
 
 
-        loadAppointments();
-
+        await loadAppointments();
 
     }
 
@@ -872,9 +1042,9 @@ async function updateAppointmentStatus(
 }
 
 
-/* --------------------------------
+/* =========================================
    USERS
--------------------------------- */
+========================================= */
 
 async function loadUsers() {
 
@@ -887,21 +1057,27 @@ async function loadUsers() {
 
 
     const table =
-        document.getElementById("usersTable");
+        document.getElementById(
+            "usersTable"
+        );
 
 
     table.innerHTML = "";
 
 
-    if (!Array.isArray(users) ||
-        users.length === 0) {
+    if (
+        !Array.isArray(users) ||
+        users.length === 0
+    ) {
 
         table.innerHTML =
-            `<tr>
-                <td colspan="6">
+            `
+            <tr>
+                <td colspan="6" class="no-data">
                     No users found
                 </td>
-             </tr>`;
+            </tr>
+            `;
 
         return;
 
@@ -914,17 +1090,29 @@ async function loadUsers() {
 
             <tr>
 
-                <td>${user.id}</td>
+                <td>
+                    ${user.id}
+                </td>
 
-                <td>${user.name}</td>
+                <td>
+                    ${user.name}
+                </td>
 
-                <td>${user.email}</td>
+                <td>
+                    ${user.email}
+                </td>
 
-                <td>${user.phone || "-"}</td>
+                <td>
+                    ${user.phone || "-"}
+                </td>
 
-                <td>${user.role}</td>
+                <td>
+                    ${user.role}
+                </td>
 
-                <td>${formatDate(user.created_at)}</td>
+                <td>
+                    ${formatDate(user.created_at)}
+                </td>
 
             </tr>
 
@@ -935,9 +1123,9 @@ async function loadUsers() {
 }
 
 
-/* --------------------------------
+/* =========================================
    SERVICES
--------------------------------- */
+========================================= */
 
 async function loadServices() {
 
@@ -950,21 +1138,27 @@ async function loadServices() {
 
 
     const table =
-        document.getElementById("servicesTable");
+        document.getElementById(
+            "servicesTable"
+        );
 
 
     table.innerHTML = "";
 
 
-    if (!Array.isArray(services) ||
-        services.length === 0) {
+    if (
+        !Array.isArray(services) ||
+        services.length === 0
+    ) {
 
         table.innerHTML =
-            `<tr>
-                <td colspan="7">
+            `
+            <tr>
+                <td colspan="7" class="no-data">
                     No services found
                 </td>
-             </tr>`;
+            </tr>
+            `;
 
         return;
 
@@ -977,15 +1171,25 @@ async function loadServices() {
 
             <tr>
 
-                <td>${service.id}</td>
+                <td>
+                    ${service.id}
+                </td>
 
-                <td>${service.name}</td>
+                <td>
+                    ${service.name}
+                </td>
 
-                <td>${service.description || "-"}</td>
+                <td>
+                    ${service.description || "-"}
+                </td>
 
-                <td>${service.duration} mins</td>
+                <td>
+                    ${service.duration} mins
+                </td>
 
-                <td>₹${service.price}</td>
+                <td>
+                    ₹${service.price}
+                </td>
 
                 <td>
 
@@ -1004,9 +1208,11 @@ async function loadServices() {
                             '${service.status}'
                         )">
 
-                        ${service.status === "ACTIVE"
-                            ? "Deactivate"
-                            : "Activate"}
+                        ${
+                            service.status === "ACTIVE"
+                                ? "Deactivate"
+                                : "Activate"
+                        }
 
                     </button>
 
@@ -1021,9 +1227,9 @@ async function loadServices() {
 }
 
 
-/* --------------------------------
+/* =========================================
    SERVICE STATUS
--------------------------------- */
+========================================= */
 
 async function toggleServiceStatus(
     serviceId,
@@ -1057,7 +1263,7 @@ async function toggleServiceStatus(
         );
 
 
-        loadServices();
+        await loadServices();
 
     }
 
@@ -1073,9 +1279,9 @@ async function toggleServiceStatus(
 }
 
 
-/* --------------------------------
+/* =========================================
    PAYMENTS
--------------------------------- */
+========================================= */
 
 async function loadPayments() {
 
@@ -1088,21 +1294,27 @@ async function loadPayments() {
 
 
     const table =
-        document.getElementById("paymentsTable");
+        document.getElementById(
+            "paymentsTable"
+        );
 
 
     table.innerHTML = "";
 
 
-    if (!Array.isArray(payments) ||
-        payments.length === 0) {
+    if (
+        !Array.isArray(payments) ||
+        payments.length === 0
+    ) {
 
         table.innerHTML =
-            `<tr>
-                <td colspan="8">
+            `
+            <tr>
+                <td colspan="8" class="no-data">
                     No payments found
                 </td>
-             </tr>`;
+            </tr>
+            `;
 
         return;
 
@@ -1115,21 +1327,37 @@ async function loadPayments() {
 
             <tr>
 
-                <td>${payment.id}</td>
+                <td>
+                    ${payment.id}
+                </td>
 
-                <td>${payment.appointment_id}</td>
+                <td>
+                    ${payment.appointment_id}
+                </td>
 
-                <td>${payment.customer_name || "-"}</td>
+                <td>
+                    ${payment.customer_name || "-"}
+                </td>
 
-                <td>${payment.service_name || "-"}</td>
+                <td>
+                    ${payment.service_name || "-"}
+                </td>
 
-                <td>${payment.payment_gateway || "-"}</td>
+                <td>
+                    ${payment.payment_gateway || "-"}
+                </td>
 
-                <td>${payment.transaction_id || "-"}</td>
+                <td>
+                    ${payment.transaction_id || "-"}
+                </td>
 
-                <td>₹${payment.amount || 0}</td>
+                <td>
+                    ₹${payment.amount || 0}
+                </td>
 
-                <td>${payment.status}</td>
+                <td>
+                    ${payment.status}
+                </td>
 
             </tr>
 
@@ -1140,9 +1368,9 @@ async function loadPayments() {
 }
 
 
-/* --------------------------------
+/* =========================================
    REVIEWS
--------------------------------- */
+========================================= */
 
 async function loadReviews() {
 
@@ -1155,21 +1383,27 @@ async function loadReviews() {
 
 
     const table =
-        document.getElementById("reviewsTable");
+        document.getElementById(
+            "reviewsTable"
+        );
 
 
     table.innerHTML = "";
 
 
-    if (!Array.isArray(reviews) ||
-        reviews.length === 0) {
+    if (
+        !Array.isArray(reviews) ||
+        reviews.length === 0
+    ) {
 
         table.innerHTML =
-            `<tr>
-                <td colspan="7">
+            `
+            <tr>
+                <td colspan="7" class="no-data">
                     No reviews found
                 </td>
-             </tr>`;
+            </tr>
+            `;
 
         return;
 
@@ -1182,21 +1416,33 @@ async function loadReviews() {
 
             <tr>
 
-                <td>${review.id}</td>
+                <td>
+                    ${review.id}
+                </td>
 
-                <td>${review.customer_name || "-"}</td>
+                <td>
+                    ${review.customer_name || "-"}
+                </td>
 
-                <td>${review.service_name || "-"}</td>
+                <td>
+                    ${review.service_name || "-"}
+                </td>
 
-                <td>${review.staff_name || "-"}</td>
+                <td>
+                    ${review.staff_name || "-"}
+                </td>
 
                 <td>
                     ${"⭐".repeat(review.rating)}
                 </td>
 
-                <td>${review.comment || "-"}</td>
+                <td>
+                    ${review.comment || "-"}
+                </td>
 
-                <td>${review.staff_response || "-"}</td>
+                <td>
+                    ${review.staff_response || "-"}
+                </td>
 
             </tr>
 
@@ -1207,9 +1453,9 @@ async function loadReviews() {
 }
 
 
-/* --------------------------------
+/* =========================================
    STAFF
--------------------------------- */
+========================================= */
 
 async function loadStaff() {
 
@@ -1222,21 +1468,27 @@ async function loadStaff() {
 
 
     const table =
-        document.getElementById("staffTable");
+        document.getElementById(
+            "staffTable"
+        );
 
 
     table.innerHTML = "";
 
 
-    if (!Array.isArray(staff) ||
-        staff.length === 0) {
+    if (
+        !Array.isArray(staff) ||
+        staff.length === 0
+    ) {
 
         table.innerHTML =
-            `<tr>
-                <td colspan="7">
+            `
+            <tr>
+                <td colspan="7" class="no-data">
                     No staff found
                 </td>
-             </tr>`;
+            </tr>
+            `;
 
         return;
 
@@ -1249,19 +1501,33 @@ async function loadStaff() {
 
             <tr>
 
-                <td>${member.staff_id}</td>
+                <td>
+                    ${member.staff_id}
+                </td>
 
-                <td>${member.name || "-"}</td>
+                <td>
+                    ${member.name || "-"}
+                </td>
 
-                <td>${member.email || "-"}</td>
+                <td>
+                    ${member.email || "-"}
+                </td>
 
-                <td>${member.phone || "-"}</td>
+                <td>
+                    ${member.phone || "-"}
+                </td>
 
-                <td>${member.specialization || "-"}</td>
+                <td>
+                    ${member.specialization || "-"}
+                </td>
 
-                <td>${member.status || "-"}</td>
+                <td>
+                    ${member.status || "-"}
+                </td>
 
-                <td>${member.services || "-"}</td>
+                <td>
+                    ${member.services || "-"}
+                </td>
 
             </tr>
 
@@ -1272,24 +1538,478 @@ async function loadStaff() {
 }
 
 
-/* --------------------------------
-   FORMAT DATE
--------------------------------- */
+/* =========================================
+   STAFF LEAVE REQUESTS
+========================================= */
 
-function formatDate(date) {
 
-    if (!date) {
-        return "-";
+/* -----------------------------------------
+   LOAD ALL LEAVE REQUESTS
+----------------------------------------- */
+
+async function loadLeaves() {
+
+    const table =
+        document.getElementById(
+            "leavesTable"
+        );
+
+
+    try {
+
+        console.log(
+            "Loading admin leave requests..."
+        );
+
+
+        const data =
+            await apiRequest(
+                "/api/leaves/admin"
+            );
+
+
+        console.log(
+            "Admin leaves response:",
+            data
+        );
+
+
+        const leaves =
+            data.leaves || data;
+
+
+        table.innerHTML = "";
+
+
+        if (
+            !Array.isArray(leaves) ||
+            leaves.length === 0
+        ) {
+
+            table.innerHTML =
+                `
+                <tr>
+                    <td colspan="9" class="no-data">
+                        No leave requests found
+                    </td>
+                </tr>
+                `;
+
+            return;
+
+        }
+
+
+        leaves.forEach(leave => {
+
+            const isPending =
+                leave.status === "PENDING";
+
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${leave.id}
+                    </td>
+
+                    <td>
+                        ${leave.staff_name || "-"}
+                    </td>
+
+                    <td>
+                        ${leave.staff_email || "-"}
+                    </td>
+
+                    <td>
+                        ${formatLeaveDate(
+                            leave.leave_date
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatTime(
+                            leave.start_time
+                        )}
+                    </td>
+
+                    <td>
+                        ${formatTime(
+                            leave.end_time
+                        )}
+                    </td>
+
+                    <td>
+                        ${leave.reason || "-"}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="status ${leave.status}">
+
+                            ${leave.status}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        ${
+                            isPending
+
+                            ?
+
+                            `
+                            <button
+                                class="approve-btn"
+                                onclick="updateLeaveStatus(
+                                    ${leave.id},
+                                    'APPROVED'
+                                )">
+
+                                Approve
+
+                            </button>
+
+                            <button
+                                class="reject-btn"
+                                onclick="updateLeaveStatus(
+                                    ${leave.id},
+                                    'REJECTED'
+                                )">
+
+                                Reject
+
+                            </button>
+                            `
+
+                            :
+
+                            "No action"
+                        }
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
     }
 
-    return new Date(date).toLocaleDateString();
+    catch (error) {
+
+        console.error(
+            "Load leaves error:",
+            error
+        );
+
+
+        table.innerHTML =
+            `
+            <tr>
+                <td colspan="9" class="no-data">
+                    Unable to load leave requests
+                </td>
+            </tr>
+            `;
+
+        /*
+           Do not throw the error here.
+           Other admin dashboard sections
+           should continue working.
+        */
+
+    }
 
 }
 
 
-/* --------------------------------
+/* =========================================
+   APPROVE / REJECT LEAVE
+========================================= */
+
+async function updateLeaveStatus(
+    leaveId,
+    status
+) {
+
+    const action =
+        status === "APPROVED"
+            ? "approve"
+            : "reject";
+
+
+    const confirmed =
+        confirm(
+            `Are you sure you want to ${action} this leave request?`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        console.log(
+            "Updating leave:",
+            leaveId,
+            status
+        );
+
+
+        const response =
+            await fetch(
+                `${API_URL}/api/leaves/admin/${leaveId}/status`,
+                {
+
+                    method: "PUT",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${token}`
+
+                    },
+
+                    body: JSON.stringify({
+                        status: status
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Update leave response:",
+            response.status,
+            data
+        );
+
+
+        /*
+        ==========================================
+        ERROR RESPONSE
+        ==========================================
+        */
+
+        if (!response.ok) {
+
+            let errorMessage =
+                data.message ||
+                "Failed to update leave request";
+
+
+            /*
+               If backend found appointment
+               conflicts, show them clearly.
+            */
+
+            if (
+                Array.isArray(data.conflicts) &&
+                data.conflicts.length > 0
+            ) {
+
+                const conflictDetails =
+                    data.conflicts
+                        .map(conflict => {
+
+                            return (
+                                `Appointment #${conflict.id}\n` +
+
+                                `Customer: ${
+                                    conflict.customer_name || "-"
+                                }\n` +
+
+                                `Service: ${
+                                    conflict.service_name || "-"
+                                }\n` +
+
+                                `Date: ${
+                                    formatLeaveDate(
+                                        conflict.appointment_date
+                                    )
+                                }\n` +
+
+                                `Time: ${
+                                    formatTime(
+                                        conflict.start_time
+                                    )
+                                } - ${
+                                    formatTime(
+                                        conflict.end_time
+                                    )
+                                }\n` +
+
+                                `Status: ${
+                                    conflict.status || "-"
+                                }`
+                            );
+
+                        })
+                        .join("\n\n");
+
+
+                errorMessage +=
+                    "\n\nExisting appointment conflict:\n\n" +
+                    conflictDetails;
+
+            }
+
+
+            alert(errorMessage);
+
+            return;
+
+        }
+
+
+        /*
+        ==========================================
+        SUCCESS
+        ==========================================
+        */
+
+        const successMessage =
+            data.message ||
+            `Leave request ${action}d successfully`;
+
+
+        showMessage(
+            successMessage,
+            "success"
+        );
+
+
+        /*
+           Reload leave table so the status
+           immediately changes from PENDING
+           to APPROVED / REJECTED.
+        */
+
+        await loadLeaves();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Update leave error:",
+            error
+        );
+
+
+        alert(
+            "Unable to update leave request.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   FORMAT LEAVE DATE
+========================================= */
+
+function formatLeaveDate(date) {
+
+    if (!date) {
+
+        return "-";
+
+    }
+
+
+    /*
+       MySQL DATE normally comes as:
+
+       YYYY-MM-DD
+
+       or sometimes:
+
+       YYYY-MM-DDTHH:mm:ss
+    */
+
+    const dateString =
+        String(date).split("T")[0];
+
+
+    const parts =
+        dateString.split("-");
+
+
+    if (parts.length === 3) {
+
+        return (
+            `${parts[2]}-${parts[1]}-${parts[0]}`
+        );
+
+    }
+
+
+    return dateString;
+
+}
+
+
+/* =========================================
+   FORMAT TIME
+========================================= */
+
+function formatTime(time) {
+
+    if (!time) {
+
+        return "-";
+
+    }
+
+
+    return String(time).substring(0, 5);
+
+}
+
+
+/* =========================================
+   FORMAT DATE
+========================================= */
+
+function formatDate(date) {
+
+    if (!date) {
+
+        return "-";
+
+    }
+
+
+    return new Date(
+        date
+    ).toLocaleDateString();
+
+}
+
+
+/* =========================================
    LOGOUT
--------------------------------- */
+========================================= */
 
 function logout() {
 
@@ -1297,14 +2017,15 @@ function logout() {
 
     localStorage.removeItem("user");
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
 
 }
 
 
-/* --------------------------------
+/* =========================================
    INITIAL LOAD
--------------------------------- */
+========================================= */
 
 loadDashboard();
 

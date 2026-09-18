@@ -1,9 +1,10 @@
 const db = require("../config/db");
 
 
-// ==========================================
-// ADMIN DASHBOARD
-// ==========================================
+
+/* =========================================================
+   ADMIN DASHBOARD
+========================================================= */
 
 const getDashboard = (req, res, next) => {
 
@@ -57,42 +58,70 @@ const getDashboard = (req, res, next) => {
             ) AS total_revenue
     `;
 
+
     db.execute(
         sql,
         (err, results) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             return res.status(200).json({
-                message: "Admin dashboard data fetched successfully",
-                dashboard: results[0]
+
+                message:
+                    "Admin dashboard data fetched successfully",
+
+                dashboard:
+                    results[0]
+
             });
+
         }
     );
+
 };
 
 
-// ==========================================
-// GET ALL APPOINTMENTS
-// ==========================================
+
+/* =========================================================
+   GET ALL APPOINTMENTS
+========================================================= */
 
 const getAllAppointments = (req, res, next) => {
 
     const sql = `
         SELECT
+
             a.id,
+
             u.name AS customer_name,
+
             su.name AS staff_name,
+
             s.name AS service_name,
-            a.appointment_date,
+
+            /* Keep appointment date as plain YYYY-MM-DD */
+            DATE_FORMAT(
+                a.appointment_date,
+                '%Y-%m-%d'
+            ) AS appointment_date,
+
             a.start_time,
+
             a.end_time,
+
             a.status,
+
             a.payment_status,
+
             a.payment_id,
+
             a.created_at
+
         FROM appointments a
 
         JOIN users u
@@ -112,51 +141,81 @@ const getAllAppointments = (req, res, next) => {
             a.start_time DESC
     `;
 
+
     db.execute(
         sql,
         (err, appointments) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             return res.status(200).json({
-                message: "Appointments fetched successfully",
+
+                message:
+                    "Appointments fetched successfully",
+
                 appointments
+
             });
+
         }
     );
+
 };
 
 
-// ==========================================
-// UPDATE APPOINTMENT STATUS
-// ==========================================
+
+/* =========================================================
+   UPDATE APPOINTMENT STATUS
+========================================================= */
 
 const updateAppointmentStatus = (req, res, next) => {
 
     const { appointmentId } = req.params;
+
     const { status } = req.body;
 
+
     const allowedStatuses = [
+
         "BOOKED",
+
         "COMPLETED",
+
         "CANCELLED",
+
         "RESCHEDULED"
+
     ];
 
+
     if (!status) {
+
         return res.status(400).json({
-            message: "Status is required"
+
+            message:
+                "Status is required"
+
         });
+
     }
 
+
     if (!allowedStatuses.includes(status)) {
+
         return res.status(400).json({
+
             message:
                 "Invalid status. Allowed values: BOOKED, COMPLETED, CANCELLED, RESCHEDULED"
+
         });
+
     }
+
 
     const checkSql = `
         SELECT id
@@ -164,20 +223,30 @@ const updateAppointmentStatus = (req, res, next) => {
         WHERE id = ?
     `;
 
+
     db.execute(
         checkSql,
         [appointmentId],
         (err, appointments) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             if (appointments.length === 0) {
+
                 return res.status(404).json({
-                    message: "Appointment not found"
+
+                    message:
+                        "Appointment not found"
+
                 });
+
             }
+
 
             const updateSql = `
                 UPDATE appointments
@@ -185,31 +254,44 @@ const updateAppointmentStatus = (req, res, next) => {
                 WHERE id = ?
             `;
 
+
             db.execute(
                 updateSql,
                 [status, appointmentId],
                 (err) => {
 
                     if (err) {
+
                         return next(err);
+
                     }
 
+
                     return res.status(200).json({
+
                         message:
                             "Appointment status updated successfully",
-                        appointmentId: Number(appointmentId),
+
+                        appointmentId:
+                            Number(appointmentId),
+
                         status
+
                     });
+
                 }
             );
+
         }
     );
+
 };
 
 
-// ==========================================
-// GET ALL USERS
-// ==========================================
+
+/* =========================================================
+   GET ALL USERS
+========================================================= */
 
 const getAllUsers = (req, res, next) => {
 
@@ -225,26 +307,37 @@ const getAllUsers = (req, res, next) => {
         ORDER BY created_at DESC
     `;
 
+
     db.execute(
         sql,
         (err, users) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             return res.status(200).json({
-                message: "Users fetched successfully",
+
+                message:
+                    "Users fetched successfully",
+
                 users
+
             });
+
         }
     );
+
 };
 
 
-// ==========================================
-// GET ALL SERVICES
-// ==========================================
+
+/* =========================================================
+   GET ALL SERVICES
+========================================================= */
 
 const getAllServices = (req, res, next) => {
 
@@ -262,44 +355,68 @@ const getAllServices = (req, res, next) => {
         ORDER BY created_at DESC
     `;
 
+
     db.execute(
         sql,
         (err, services) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             return res.status(200).json({
-                message: "Services fetched successfully",
+
+                message:
+                    "Services fetched successfully",
+
                 services
+
             });
+
         }
     );
+
 };
 
 
-// ==========================================
-// ACTIVATE / DEACTIVATE SERVICE
-// ==========================================
+
+/* =========================================================
+   ACTIVATE / DEACTIVATE SERVICE
+========================================================= */
 
 const updateServiceStatus = (req, res, next) => {
 
     const { serviceId } = req.params;
+
     const { status } = req.body;
 
+
     if (!status) {
+
         return res.status(400).json({
-            message: "Status is required"
+
+            message:
+                "Status is required"
+
         });
+
     }
 
+
     if (!["ACTIVE", "INACTIVE"].includes(status)) {
+
         return res.status(400).json({
+
             message:
                 "Invalid status. Allowed values: ACTIVE, INACTIVE"
+
         });
+
     }
+
 
     const checkSql = `
         SELECT id
@@ -307,20 +424,30 @@ const updateServiceStatus = (req, res, next) => {
         WHERE id = ?
     `;
 
+
     db.execute(
         checkSql,
         [serviceId],
         (err, services) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             if (services.length === 0) {
+
                 return res.status(404).json({
-                    message: "Service not found"
+
+                    message:
+                        "Service not found"
+
                 });
+
             }
+
 
             const updateSql = `
                 UPDATE services
@@ -328,31 +455,44 @@ const updateServiceStatus = (req, res, next) => {
                 WHERE id = ?
             `;
 
+
             db.execute(
                 updateSql,
                 [status, serviceId],
                 (err) => {
 
                     if (err) {
+
                         return next(err);
+
                     }
 
+
                     return res.status(200).json({
+
                         message:
                             "Service status updated successfully",
-                        serviceId: Number(serviceId),
+
+                        serviceId:
+                            Number(serviceId),
+
                         status
+
                     });
+
                 }
             );
+
         }
     );
+
 };
 
 
-// ==========================================
-// GET ALL PAYMENTS
-// ==========================================
+
+/* =========================================================
+   GET ALL PAYMENTS
+========================================================= */
 
 const getAllPayments = (req, res, next) => {
 
@@ -367,6 +507,7 @@ const getAllPayments = (req, res, next) => {
             p.amount,
             p.status,
             p.created_at
+
         FROM payments p
 
         JOIN appointments a
@@ -378,29 +519,41 @@ const getAllPayments = (req, res, next) => {
         JOIN services s
             ON a.service_id = s.id
 
-        ORDER BY p.created_at DESC
+        ORDER BY
+            p.created_at DESC
     `;
+
 
     db.execute(
         sql,
         (err, payments) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             return res.status(200).json({
-                message: "Payments fetched successfully",
+
+                message:
+                    "Payments fetched successfully",
+
                 payments
+
             });
+
         }
     );
+
 };
 
 
-// ==========================================
-// GET ALL REVIEWS
-// ==========================================
+
+/* =========================================================
+   GET ALL REVIEWS
+========================================================= */
 
 const getAllReviews = (req, res, next) => {
 
@@ -414,6 +567,7 @@ const getAllReviews = (req, res, next) => {
             s.name AS service_name,
             su.name AS staff_name,
             r.created_at
+
         FROM reviews r
 
         JOIN users u
@@ -428,43 +582,68 @@ const getAllReviews = (req, res, next) => {
         JOIN users su
             ON st.user_id = su.id
 
-        ORDER BY r.created_at DESC
+        ORDER BY
+            r.created_at DESC
     `;
+
 
     db.execute(
         sql,
         (err, reviews) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             return res.status(200).json({
-                message: "Reviews fetched successfully",
+
+                message:
+                    "Reviews fetched successfully",
+
                 reviews
+
             });
+
         }
     );
+
 };
 
 
-// ==========================================
-// GET ALL STAFF
-// ==========================================
+
+/* =========================================================
+   GET ALL STAFF
+========================================================= */
 
 const getAllStaff = (req, res, next) => {
 
     const sql = `
         SELECT
+
             st.id AS staff_id,
+
             u.id AS user_id,
+
             u.name,
+
             u.email,
+
             u.phone,
+
             st.specialization,
+
             st.bio,
+
             st.status,
-            GROUP_CONCAT(s.name SEPARATOR ', ') AS services
+
+            GROUP_CONCAT(
+                s.name
+                SEPARATOR ', '
+            ) AS services
+
         FROM staff st
 
         JOIN users u
@@ -477,43 +656,77 @@ const getAllStaff = (req, res, next) => {
             ON ss.service_id = s.id
 
         GROUP BY
+
             st.id,
+
             u.id,
+
             u.name,
+
             u.email,
+
             u.phone,
+
             st.specialization,
+
             st.bio,
+
             st.status
 
-        ORDER BY u.name
+        ORDER BY
+            u.name
     `;
+
 
     db.execute(
         sql,
         (err, staff) => {
 
             if (err) {
+
                 return next(err);
+
             }
 
+
             return res.status(200).json({
-                message: "Staff fetched successfully",
+
+                message:
+                    "Staff fetched successfully",
+
                 staff
+
             });
+
         }
     );
+
 };
 
 
+
+/* =========================================================
+   EXPORTS
+========================================================= */
+
 module.exports = {
+
     getDashboard,
+
     getAllAppointments,
+
     updateAppointmentStatus,
+
     getAllUsers,
+
     getAllServices,
+
     updateServiceStatus,
+
     getAllPayments,
+
     getAllReviews,
+
     getAllStaff
+
 };

@@ -3732,6 +3732,45 @@ h2 span {
     color: white;
 }
 
+.time-slot.leave-disabled {
+    background: #eeeeee;
+
+    color: #999999;
+
+    border-color: #dddddd;
+
+    cursor: not-allowed;
+
+    opacity: 0.5;
+
+    transform: none;
+}
+
+.time-slot.leave-disabled:hover {
+    background: #eeeeee;
+
+    color: #999999;
+
+    border-color: #dddddd;
+
+    transform: none;
+}
+
+.time-slot.past-disabled {
+    background: #eeeeee;
+    color: #999999;
+    border-color: #dddddd;
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+}
+
+.time-slot.past-disabled:hover {
+    background: #eeeeee;
+    color: #999999;
+    border-color: #dddddd;
+    transform: none;
+}
 
 /* ================= SUBMIT ================= */
 
