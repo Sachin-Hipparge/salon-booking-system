@@ -1,0 +1,655 @@
+/* =====================================================
+   ADMIN DASHBOARD
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f6fa;
+    color: #222;
+}
+
+header {
+    background: #222;
+    color: white;
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 24px;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+button {
+    border: none;
+    padding: 9px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.logout-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.refresh-btn {
+    background: #3498db;
+    color: white;
+}
+
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 25px auto;
+}
+
+.welcome {
+    margin-bottom: 20px;
+}
+
+.welcome h2 {
+    margin-bottom: 5px;
+}
+
+/* ================= DASHBOARD CARDS ================= */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card h3 {
+    font-size: 15px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* ================= SECTIONS ================= */
+
+.section {
+    background: white;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.section h2 {
+    margin-bottom: 15px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+th,
+td {
+    padding: 11px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    font-size: 14px;
+}
+
+th {
+    background: #f1f1f1;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+select {
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.update-btn {
+    background: #27ae60;
+    color: white;
+    margin-left: 5px;
+}
+
+.service-btn {
+    background: #8e44ad;
+    color: white;
+}
+
+/* ================= LEAVE BUTTONS ================= */
+
+.approve-btn {
+    background: #27ae60;
+    color: white;
+    margin-right: 5px;
+}
+
+.reject-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+/* ================= STATUS ================= */
+
+.status {
+    padding: 5px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.BOOKED {
+    background: #d6eaf8;
+    color: #21618c;
+}
+
+.COMPLETED {
+    background: #d5f5e3;
+    color: #196f3d;
+}
+
+.CANCELLED {
+    background: #fadbd8;
+    color: #922b21;
+}
+
+.RESCHEDULED {
+    background: #fcf3cf;
+    color: #7d6608;
+}
+
+.ACTIVE {
+    background: #d5f5e3;
+    color: #196f3d;
+}
+
+.INACTIVE {
+    background: #fadbd8;
+    color: #922b21;
+}
+
+/* ================= LEAVE STATUS ================= */
+
+.PENDING {
+    background: #fcf3cf;
+    color: #7d6608;
+}
+
+.APPROVED {
+    background: #d5f5e3;
+    color: #196f3d;
+}
+
+.REJECTED {
+    background: #fadbd8;
+    color: #922b21;
+}
+
+.message {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    display: none;
+    white-space: pre-line;
+}
+
+.success {
+    background: #d5f5e3;
+    color: #196f3d;
+}
+
+.error {
+    background: #fadbd8;
+    color: #922b21;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+.conflict-box {
+    margin-top: 10px;
+    padding: 10px;
+    background: #fff3cd;
+    border-radius: 5px;
+    color: #856404;
+}
+
+/* =====================================================
+   STAFF MANAGEMENT
+===================================================== */
+
+.staff-management {
+    margin-top: 25px;
+}
+
+.staff-management h2 {
+    margin-bottom: 20px;
+}
+
+.staff-hire-card {
+    background: #f8f9fc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.staff-hire-card h3 {
+    margin-bottom: 18px;
+    font-size: 18px;
+}
+
+.staff-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.hire-btn {
+    margin-top: 18px;
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.hire-btn:hover {
+    background: #2980b9;
+}
+
+.staff-list-title {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.staff-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 190px;
+}
+
+.fire-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.fire-btn:hover {
+    background: #c0392b;
+}
+
+.assign-btn {
+    background: #8e44ad;
+    color: white;
+}
+
+.assign-btn:hover {
+    background: #71368a;
+}
+
+.remove-service-btn {
+    background: #95a5a6;
+    color: white;
+    padding: 5px 8px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.remove-service-btn:hover {
+    background: #7f8c8d;
+}
+
+.assigned-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.service-tag {
+    display: inline-flex;
+    align-items: center;
+    background: #eee6f5;
+    color: #6c3483;
+    border-radius: 15px;
+    padding: 5px 8px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.service-assignment {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.service-assignment select {
+    min-width: 130px;
+}
+
+/* =====================================================
+   WEEKLY STAFF AVAILABILITY
+===================================================== */
+
+.weekly-availability-card {
+    background: #f8f9fc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.weekly-availability-card h3 {
+    margin-bottom: 18px;
+    font-size: 18px;
+}
+
+.availability-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.availability-staff-row {
+    max-width: 420px;
+}
+
+.day-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.day-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.day-checkbox input {
+    width: auto;
+    cursor: pointer;
+}
+
+.time-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 300px));
+    gap: 16px;
+}
+
+.availability-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.save-availability-btn {
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.save-availability-btn:hover {
+    background: #2980b9;
+}
+
+.clear-availability-btn {
+    background: #95a5a6;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.clear-availability-btn:hover {
+    background: #7f8c8d;
+}
+
+.availability-list {
+    margin-top: 25px;
+}
+
+.availability-list h4 {
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.availability-table table {
+    min-width: 700px;
+}
+
+.delete-availability-btn {
+    background: #e74c3c;
+    color: white;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.delete-availability-btn:hover {
+    background: #c0392b;
+}
+
+/* =====================================================
+   STAFF MANAGEMENT ACTIONS
+===================================================== */
+
+.staff-action-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 260px;
+}
+
+.assign-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.assign-box select {
+    flex: 1;
+    min-width: 140px;
+    padding: 9px 10px;
+    border: 1px solid #d5d8dc;
+    border-radius: 6px;
+    background: white;
+}
+
+.assign-btn {
+    background: #8e44ad;
+    color: white;
+    font-weight: 600;
+}
+
+.assign-btn:hover {
+    background: #71368a;
+}
+
+.fire-btn {
+    width: 100%;
+    background: #e74c3c;
+    color: white;
+    font-weight: 600;
+}
+
+.fire-btn:hover {
+    background: #c0392b;
+}
+
+.assigned-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.service-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0e6f7;
+    color: #71368a;
+    padding: 7px 9px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.remove-service-btn {
+    padding: 2px 7px;
+    border-radius: 50%;
+    background: #95a5a6;
+    color: white;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.remove-service-btn:hover {
+    background: #7f8c8d;
+}
+
+.inactive-text {
+    color: #777;
+    font-style: italic;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 700px) {
+
+    .day-checkboxes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .time-row {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .staff-actions {
+        min-width: 140px;
+    }
+}
+
+@media (max-width: 1000px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 19px;
+    }
+
+    .container {
+        width: 92%;
+    }
+}

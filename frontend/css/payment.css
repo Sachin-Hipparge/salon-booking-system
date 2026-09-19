@@ -1,0 +1,509 @@
+/* =====================================================
+   PAYMENT PAGE
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f7f3ef;
+
+    color: #2d2926;
+}
+
+.page {
+    min-height: 100vh;
+
+    padding: 55px 5%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.checkout {
+    width: 1200px;
+
+    max-width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        1.45fr
+        0.9fr;
+
+    gap: 32px;
+}
+
+
+/* =====================================================
+   LEFT SIDE - PAYMENT
+===================================================== */
+
+.payment-card {
+    background: #fff;
+
+    border: 1px solid #e8dfd7;
+
+    padding: 55px;
+}
+
+.small-title {
+    color: #ad7c4d;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 28px;
+}
+
+h1 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 48px;
+
+    margin: 0 0 18px;
+
+    font-weight: 500;
+
+    line-height: 1.1;
+}
+
+.description {
+    color: #766e68;
+
+    font-size: 16px;
+
+    margin-bottom: 38px;
+}
+
+.notice {
+    padding: 18px 20px;
+
+    background: #f5eee8;
+
+    border: 1px solid #e8ddd3;
+
+    margin-bottom: 30px;
+
+    font-size: 14px;
+
+    color: #665c55;
+}
+
+
+/* =====================================================
+   PAYMENT DETAILS
+===================================================== */
+
+.detail {
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 25px 0;
+
+    border-top: 1px solid #e7ded7;
+}
+
+.icon {
+    width: 58px;
+    height: 58px;
+
+    border-radius: 50%;
+
+    background: #f0e6dc;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+
+    flex-shrink: 0;
+}
+
+.detail-label {
+    font-size: 11px;
+
+    color: #a18f82;
+
+    letter-spacing: 2px;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+}
+
+.detail-value {
+    font-size: 17px;
+
+    font-weight: bold;
+
+    color: #282421;
+}
+
+
+/* =====================================================
+   PAY SECTION
+===================================================== */
+
+.pay-section {
+    margin-top: 32px;
+
+    padding-top: 30px;
+
+    border-top: 1px solid #e7ded7;
+}
+
+.pay-button {
+    width: 100%;
+
+    padding: 18px;
+
+    border: none;
+
+    background: #b27d4d;
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.pay-button:hover {
+    background: #95643b;
+}
+
+.pay-button:disabled {
+    background: #bdb5ae;
+
+    cursor: not-allowed;
+}
+
+.secure-text {
+    text-align: center;
+
+    margin-top: 15px;
+
+    font-size: 12px;
+
+    color: #8c827a;
+}
+
+
+/* =====================================================
+   RIGHT SIDE - ORDER SUMMARY
+===================================================== */
+
+.summary-card {
+    background: #fff;
+
+    border: 1px solid #e8dfd7;
+
+    padding: 42px;
+}
+
+.summary-title {
+    color: #ad7c4d;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 28px;
+}
+
+.summary-card h2 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 38px;
+
+    font-weight: 500;
+
+    margin: 0 0 35px;
+}
+
+
+/* =====================================================
+   SERVICE HEADER
+===================================================== */
+
+.service-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding-bottom: 28px;
+
+    border-bottom: 1px solid #e7ded7;
+}
+
+.service-icon {
+    width: 65px;
+    height: 65px;
+
+    border-radius: 50%;
+
+    background: #f0e6dc;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+}
+
+.service-name {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 23px;
+
+    font-weight: bold;
+}
+
+.service-subtitle {
+    color: #8b8179;
+
+    font-size: 13px;
+
+    margin-top: 7px;
+}
+
+
+/* =====================================================
+   SUMMARY ROWS
+===================================================== */
+
+.summary-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 0;
+
+    border-bottom: 1px solid #e7ded7;
+
+    font-size: 14px;
+}
+
+.summary-row .label {
+    color: #776d65;
+}
+
+.summary-row .value {
+    font-weight: bold;
+
+    text-align: right;
+}
+
+.status {
+    color: #a66d2e;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   AMOUNT
+===================================================== */
+
+.amount-row {
+    padding: 32px 0;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.amount-label {
+    color: #776d65;
+
+    font-size: 14px;
+}
+
+.amount {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 30px;
+
+    color: #8c6545;
+}
+
+
+/* =====================================================
+   RAZORPAY
+===================================================== */
+
+.razorpay-box {
+    background: #f6f1ed;
+
+    padding: 20px;
+
+    display: flex;
+
+    gap: 15px;
+
+    align-items: flex-start;
+}
+
+.check {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+
+    background: #e9ddd1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #8e6748;
+
+    font-weight: bold;
+
+    flex-shrink: 0;
+}
+
+.razorpay-title {
+    font-weight: bold;
+
+    font-size: 14px;
+
+    margin-bottom: 7px;
+}
+
+.razorpay-text {
+    font-size: 12px;
+
+    color: #81766e;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+#message {
+    margin-top: 20px;
+
+    padding: 14px;
+
+    font-size: 14px;
+
+    display: none;
+}
+
+#message.success {
+    display: block;
+
+    background: #e9f5eb;
+
+    color: #26733b;
+
+    border: 1px solid #c9e5ce;
+}
+
+#message.error {
+    display: block;
+
+    background: #fbeaea;
+
+    color: #a63a3a;
+
+    border: 1px solid #efd0d0;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 850px) {
+
+    .checkout {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-card {
+        padding: 35px 25px;
+    }
+
+    .summary-card {
+        padding: 30px 25px;
+    }
+
+    h1 {
+        font-size: 38px;
+    }
+
+    .summary-card h2 {
+        font-size: 32px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .page {
+        padding: 20px 12px;
+    }
+
+    .payment-card,
+    .summary-card {
+        padding: 25px 20px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+}

@@ -1,0 +1,338 @@
+/* =====================================================
+   SERVICES PAGE
+===================================================== */
+
+
+/* ================= HERO ================= */
+
+.services-hero {
+    padding: 85px 0 75px;
+
+    background:
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(155, 115, 88, 0.10),
+            transparent 35%
+        ),
+        var(--cream);
+
+    border-bottom: 1px solid var(--border);
+}
+
+.services-hero h1 {
+    max-width: 700px;
+
+    margin: 12px 0 20px;
+
+    font-size: 58px;
+
+    line-height: 1.08;
+}
+
+.services-hero h1 span {
+    display: block;
+
+    color: var(--primary);
+}
+
+.services-hero p {
+    max-width: 560px;
+
+    color: var(--brown-light);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* ================= MAIN ================= */
+
+.services-main {
+    padding: 70px 0 80px;
+
+    background: white;
+}
+
+
+/* ================= LOADING ================= */
+
+.services-loading {
+    min-height: 220px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+
+    color: var(--brown-light);
+
+    font-size: 12px;
+}
+
+
+/* ================= SERVICE GRID ================= */
+
+.services-page-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* ================= SERVICE CARD ================= */
+
+.service-page-card {
+    position: relative;
+
+    min-height: 420px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 28px;
+
+    background: var(--cream);
+
+    border: 1px solid var(--border);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.service-page-card:hover {
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 22px 50px rgba(55,43,34,0.10);
+}
+
+
+/* ================= CARD TOP ================= */
+
+.service-page-top {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 35px;
+}
+
+.service-page-number {
+    color: #b3a9a1;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.service-page-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color: var(--primary);
+
+    font-size: 24px;
+
+    box-shadow:
+        0 8px 25px rgba(55,43,34,0.06);
+}
+
+
+/* ================= CARD CONTENT ================= */
+
+.service-page-content {
+    flex: 1;
+}
+
+.service-page-content h2 {
+    margin-bottom: 13px;
+
+    font-size: 27px;
+
+    line-height: 1.2;
+}
+
+.service-page-content p {
+    color: var(--brown-light);
+
+    font-size: 12px;
+
+    line-height: 1.8;
+}
+
+
+/* ================= INFO ================= */
+
+.service-page-info {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+
+    margin: 25px 0 20px;
+
+    padding: 17px 0;
+
+    border-top: 1px solid var(--border);
+
+    border-bottom: 1px solid var(--border);
+}
+
+.service-page-info span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #9d958e;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+    font-weight: 700;
+}
+
+.service-page-info strong {
+    font-size: 12px;
+}
+
+
+/* ================= BOOK BUTTON ================= */
+
+.service-book-btn {
+    width: 100%;
+
+    border: none;
+
+    cursor: pointer;
+}
+
+
+/* ================= CTA ================= */
+
+.services-cta {
+    padding: 20px 0 100px;
+
+    background: white;
+}
+
+.services-cta-box {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    padding: 50px 55px;
+
+    background: var(--cream-dark);
+
+    border: 1px solid var(--border);
+}
+
+.services-cta-box h2 {
+    margin: 8px 0;
+
+    font-size: 36px;
+
+    line-height: 1.15;
+}
+
+.services-cta-box h2 span {
+    color: var(--primary);
+}
+
+.services-cta-box p {
+    color: var(--brown-light);
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   SERVICES RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .services-page-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .services-hero {
+        padding: 65px 0;
+    }
+
+    .services-hero h1 {
+        font-size: 45px;
+    }
+
+    .services-page-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-page-card {
+        min-height: 380px;
+    }
+
+    .services-cta-box {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 40px 30px;
+    }
+
+    .services-cta-box h2 {
+        font-size: 31px;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .services-hero h1 {
+        font-size: 38px;
+    }
+
+    .services-main {
+        padding: 50px 0 60px;
+    }
+
+    .service-page-card {
+        padding: 23px;
+
+        min-height: 370px;
+    }
+
+}
