@@ -6,7 +6,8 @@ const {
     createReview,
     getReviewsByService,
     respondToReview,
-    getStaffReviews
+    getStaffReviews,
+    getMyReviews
 } = require("../controllers/reviewController");
 
 const authenticateUser = require("../middleware/authMiddleware");
@@ -32,6 +33,12 @@ router.put(
     "/:reviewId/respond",
     authenticateUser,
     respondToReview
+);
+
+router.get(
+    "/my",
+    authenticateUser,
+    getMyReviews
 );
 
 router.get("/staff/my", authenticateUser, getStaffReviews);

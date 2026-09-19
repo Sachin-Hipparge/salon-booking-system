@@ -1,4 +1,8 @@
-        const API_URL = "http://localhost:5000";
+     const API_URL =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+        ? "http://localhost:5000"
+        : "";
 
         const token = localStorage.getItem("token");
 
@@ -361,6 +365,7 @@
         }
 
 
+
         // =================================================
         // UPDATE STATS
         // =================================================
@@ -404,20 +409,69 @@
             ).textContent = paid;
 
 
-            const reviews =
-                appointments.filter(
-                    appointment =>
-                        appointment.review_id ||
-                        appointment.has_review === true
-                ).length;
 
-
-            document.getElementById(
-                "reviewCount"
-            ).textContent = reviews;
 
         }
 
+        // =================================================
+// LOAD CUSTOMER REVIEW COUNT
+// =================================================
+
+async function loadReviewCount() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/reviews/my`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load reviews"
+            );
+
+        }
+
+
+        const reviews =
+            data.reviews || [];
+
+
+        document.getElementById(
+            "reviewCount"
+        ).textContent = reviews.length;
+
+
+    } catch (error) {
+
+        console.error(
+            "Review count error:",
+            error
+        );
+
+        document.getElementById(
+            "reviewCount"
+        ).textContent = 0;
+
+    }
+
+}
 
         // =================================================
         // RENDER APPOINTMENTS
@@ -903,7 +957,8 @@
         // =================================================
         // INITIAL LOAD
         // =================================================
+loadProfile();
 
-        loadProfile();
+loadAppointments();
 
-        loadAppointments();
+loadReviewCount();

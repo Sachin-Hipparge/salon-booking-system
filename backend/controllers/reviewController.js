@@ -311,9 +311,46 @@ const getStaffReviews = (req, res) => {
     });
 };
 
+// GET REVIEWS FOR LOGGED-IN CUSTOMER
+const getMyReviews = (req, res, next) => {
+
+    const userId = req.user.id;
+
+    const sql = `
+        SELECT
+            r.id,
+            r.appointment_id,
+            r.service_id,
+            r.staff_id,
+            r.rating,
+            r.comment,
+            r.staff_response,
+            r.created_at
+        FROM reviews r
+        WHERE r.user_id = ?
+        ORDER BY r.created_at DESC
+    `;
+
+    db.execute(
+        sql,
+        [userId],
+        (err, reviews) => {
+
+            if (err) {
+                return next(err);
+            }
+
+            return res.status(200).json({
+                reviews
+            });
+        }
+    );
+};
+
 module.exports = {
     createReview,
     getReviewsByService,
     respondToReview,
-    getStaffReviews
+    getStaffReviews,
+    getMyReviews
 };
